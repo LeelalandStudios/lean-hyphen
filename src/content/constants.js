@@ -169,6 +169,24 @@ export const DRAWER_APP_ROWS = [
   ],
 ];
 
+/**
+ * Phone Explorer home screen — apps that appear in static story screens.
+ * See script.md + staticScreens.js. Decorative-only icons (Amazon, Ludo King,
+ * Paytm app, Camera, Gallery, Instagram, YouTube, Spotify) are omitted.
+ * @type {{ id: string, emoji: string, label: string }[]}
+ */
+export const EXPLORER_APPS = [
+  { id: "whatsapp", emoji: "💬", label: "WhatsApp" },
+  { id: "messages", emoji: "🗨️", label: "Messages" },
+  { id: "phonepe", emoji: "📱", label: "PhonePe" },
+  { id: "chrome", emoji: "🌐", label: "Chrome" },
+  { id: "phone", emoji: "📞", label: "Call log" },
+  { id: "mail", emoji: "📧", label: "Gmail" },
+  { id: "freefire", emoji: "🎮", label: "Free Fire" },
+  { id: "mlbb", emoji: "🎮", label: "MLBB" },
+  { id: "news", emoji: "📰", label: "News" },
+];
+
 export const RED_FLAG_OPTIONS = [
   "Unknown number",
   "Shortened link",

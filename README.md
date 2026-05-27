@@ -14,7 +14,16 @@ npm run dev
 
 Open the URL Vite prints (usually `http://localhost:5173`).
 
-You’ll see the **Static Screen Catalog** (Phase 1): pick any screen from the sidebar to preview it in the phone frame.
+You’ll land on the **lesson app** — sidebar with Act 1–4; **Act 3** opens the **Phone Explorer**. For the Screen Catalog (design review), add `?catalog=1`.
+
+## Terminology
+
+| Name | What it is |
+|------|------------|
+| **Phone Explorer** | Navigable phone OS in **Act 3**. `src/phone/PhoneExplorer.jsx` |
+| **Lesson app** | Default shell: Act 1–4 sidebar. `src/app/LessonApp.jsx` |
+| **Screen Catalog** | Dev sidebar to preview every static story screen. Entry: `/?catalog=1`. Code: `src/catalog/StaticScreenCatalog.jsx`. |
+| **Phone Shell** | The physical phone frame (notch, bezel). Shared by both above. Code: `src/components/phone/PhoneShell.jsx`. |
 
 ## Build
 

@@ -58,6 +58,10 @@ export default function StaticScreenCatalog() {
         </nav>
         <p className="shrink-0 border-t border-slate-800 p-3 font-mono text-[10px] text-slate-500">
           id: {entry.id}
+          <br />
+          <a href="/" className="text-emerald-600 hover:underline">
+            ← Back to lesson app
+          </a>
         </p>
       </aside>
 

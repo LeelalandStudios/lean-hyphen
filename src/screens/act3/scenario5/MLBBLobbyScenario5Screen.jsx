@@ -4,10 +4,19 @@ import {
 } from "../../../content/scenario5.js";
 import StatusBar from "../../../components/phone/StatusBar.jsx";
 
-export default function MLBBLobbyScenario5Screen() {
+export default function MLBBLobbyScenario5Screen({ onBack }) {
   return (
     <div className="relative h-full overflow-y-auto bg-gradient-to-b from-indigo-800 via-violet-900 to-slate-950 p-5 pt-16 text-white">
       <StatusBar />
+      {onBack && (
+        <button
+          type="button"
+          onClick={onBack}
+          className="absolute left-4 top-[54px] z-30 rounded-full bg-black/25 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur hover:bg-black/35"
+        >
+          ‹ Back
+        </button>
+      )}
       <div className="rounded-3xl border border-amber-400/50 bg-black/40 p-5">
         <h1 className="text-2xl font-bold tracking-wide">Mobile Legends</h1>
         <p className="mt-2 text-sm text-white/70">Lobby · Ranked ready</p>

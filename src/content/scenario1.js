@@ -1,5 +1,7 @@
 /** Act 3 — Scenario 1: PhonePe Cashback Trap (through choice only). */
 
+export const SCENARIO1_THREAD_ID = "scenario1_phonepe";
+
 /** Matches Zack hook — player wallet before the scam message. */
 export const PHONEPE_WALLET_BALANCE = 200;
 
@@ -35,6 +37,12 @@ export const ZACK_GIFT_HOOK_MESSAGES = [
 
 export const SCENARIO1_CHOICE_CONTEXT =
   "You're low on pocket money this month. ₹3,000 sounds perfect. You never entered any offer, but the timer says 5 minutes.";
+
+/** Act 2 — inner monologue after Scenario 1 notification. */
+export const ACT2_S1_THOUGHTS = [
+  "₹3,000. That's actually useful.",
+  "But I never signed up for anything...",
+];
 
 export const SCENARIO1_CHOICES = [
   {

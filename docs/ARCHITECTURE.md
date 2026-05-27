@@ -2,6 +2,14 @@
 
 Inspired by **A Normal Lost Phone** / **Another Lost Phone** style gameplay: a believable phone UI where story beats unfold through apps, messages, and notifications—driven by a script rather than hard-coded navigation.
 
+## Terminology
+
+| Name | Role |
+|------|------|
+| **Phone Explorer** | The live, navigable phone OS the player uses: lock → home → apps. Default app entry. `src/phone/PhoneExplorer.jsx` |
+| **Screen Catalog** | Dev tool: sidebar + preview of every static story screen. `/?catalog=1` · `src/catalog/StaticScreenCatalog.jsx` |
+| **Phone Shell** | Shared phone bezel/frame component. `src/components/phone/PhoneShell.jsx` |
+
 ## Three phases
 
 ### Phase 1 — Static screens (current)
@@ -10,10 +18,10 @@ Inspired by **A Normal Lost Phone** / **Another Lost Phone** style gameplay: a b
 - No story navigation; use the **Static Screen Catalog** in dev to browse all states.
 - Source of truth for copy: `src/content/script.md` (aligned to the `.docx`).
 
-### Phase 2 — Dynamic app interfaces
+### Phase 2 — Dynamic app interfaces (Phone Explorer)
 
-- Apps become interactive shells: Messages (inbox → thread), Phone (incoming call UI), Chrome (fake pages), WhatsApp, Free Fire lobby.
-- State lives inside each app; transitions are still manual or catalog-driven until Phase 3.
+- **Phone Explorer** is the default interface: interactive shells for Messages (inbox → thread), Phone, Chrome, WhatsApp, Free Fire lobby, etc.
+- State lives inside each app; story scripts will drive events on top of the Explorer later (Phase 3).
 
 ### Phase 3 — Script-driven flow
 
@@ -38,7 +46,8 @@ src/
   content/           script.md, copy, constants, static screen registry
   components/        phone chrome + shared UI
   screens/           one file per static screen (presentational)
-  catalog/           Phase 1 screen browser
-  engine/            Phase 2–3 (stubs + format spec)
-  game/              root shell (catalog for now)
+  catalog/           Screen Catalog (static screen browser)
+  phone/             Phone Explorer + app registry + phoneStore
+  engine/            Phase 3 script runners
+  game/              App root (Phone Explorer by default)
 ```

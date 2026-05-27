@@ -3,7 +3,7 @@ import InshortsCard from "../../components/news/InshortsCard.jsx";
 import StatusBar from "../../components/phone/StatusBar.jsx";
 
 /** Inshorts-style vertical news cards (static). */
-export default function NewsFeedScreen() {
+export default function NewsFeedScreen({ onBack }) {
   const featured = NEWS_FEED_ITEMS.find((item) => item.featured);
   const next = NEWS_FEED_ITEMS.find((item) => !item.featured);
 
@@ -13,6 +13,16 @@ export default function NewsFeedScreen() {
 
       <div className="flex shrink-0 items-center justify-between px-4 py-2 text-white">
         <div className="flex items-center gap-2">
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              className="mr-1 rounded-full bg-white/10 px-2 py-1 text-sm"
+              aria-label="Back"
+            >
+              ‹
+            </button>
+          )}
           <span className="grid h-7 w-7 place-items-center rounded-md bg-[#c41200] text-[10px] font-black">
             in
           </span>

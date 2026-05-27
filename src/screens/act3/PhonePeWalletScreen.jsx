@@ -2,9 +2,9 @@ import { PHONEPE_WALLET_BALANCE } from "../../content/scenario1.js";
 import AppScreen from "../../components/phone/AppScreen.jsx";
 
 /** Scenario 1 — player checks PhonePe wallet (low balance before scam). */
-export default function PhonePeWalletScreen() {
+export default function PhonePeWalletScreen({ onBack }) {
   return (
-    <AppScreen title="PhonePe" appIcon="📱">
+    <AppScreen title="PhonePe" appIcon="📱" onBack={onBack}>
       <div className="bg-[#5f259f] px-4 pb-8 pt-4 text-white">
         <p className="text-sm opacity-90">Wallet balance</p>
         <p className="mt-1 text-5xl font-bold">₹{PHONEPE_WALLET_BALANCE}</p>

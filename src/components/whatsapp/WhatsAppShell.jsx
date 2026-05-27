@@ -5,6 +5,7 @@ export default function WhatsAppShell({
   title,
   subtitle,
   showSearch = false,
+  onBack,
   children,
 }) {
   return (
@@ -12,7 +13,18 @@ export default function WhatsAppShell({
       <StatusBar dark />
       <header className="bg-[#075e54] shadow-md">
         <div className="flex items-center gap-3 px-4 pb-2 pt-1 text-white">
-          <span className="text-sm opacity-80">‹</span>
+          {onBack ? (
+            <button
+              type="button"
+              onClick={onBack}
+              className="text-sm opacity-90"
+              aria-label="Back"
+            >
+              ‹
+            </button>
+          ) : (
+            <span className="text-sm opacity-80">‹</span>
+          )}
           <div className="min-w-0 flex-1">
             <h1 className="truncate text-lg font-semibold">{title}</h1>
             {subtitle && (

@@ -2,8 +2,8 @@
 export const FRIENDS_GROUP = {
   id: "friends-group",
   type: "group",
-  title: "Aryan, Mei, Zack, Priya",
-  members: ["Aryan", "Mei", "Zack", "Priya"],
+  title: "🎮 Gang 4ever",
+  members: ["Aryan", "Diya", "Kabir", "Priya"],
   preview: "Priya: WAIT. Don't click that…",
   time: "3:50 PM",
   unread: 6,
@@ -67,8 +67,8 @@ export const WHATSAPP_INBOX = [FRIENDS_GROUP, ...WHATSAPP_OTHER_CHATS];
 /** Messages inside the friends group chat (static thread). */
 export const FRIENDS_GROUP_MESSAGES = [
   { sender: "Aryan", text: "Anyone free after tuition today?", time: "3:38 PM" },
-  { sender: "Mei", text: "I can join around 5", time: "3:39 PM" },
+  { sender: "Diya", text: "I can join around 5", time: "3:39 PM" },
   { sender: "Priya", text: "Same, but only for an hour 📚", time: "3:40 PM" },
-  { sender: "Zack", text: "See you all at 5? 🎮", time: "3:42 PM" },
+  { sender: "Kabir", text: "See you all at 5? 🎮", time: "3:42 PM" },
   { sender: "You", text: "Yep, I'll be there", time: "3:43 PM", mine: true },
 ];
