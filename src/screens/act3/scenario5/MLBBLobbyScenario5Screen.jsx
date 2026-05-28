@@ -3,8 +3,10 @@ import {
   MLBB_LOBBY_DIAMONDS,
 } from "../../../content/scenario5.js";
 import StatusBar from "../../../components/phone/StatusBar.jsx";
+import ScenarioChoiceFooter from "../../../components/messages/ScenarioChoiceFooter.jsx";
 
-export default function MLBBLobbyScenario5Screen({ onBack }) {
+export default function MLBBLobbyScenario5Screen({ onBack, phone }) {
+  const gate = phone?.state?.choiceGate ?? null;
   return (
     <div className="relative h-full overflow-y-auto bg-gradient-to-b from-indigo-800 via-violet-900 to-slate-950 p-5 pt-16 text-white">
       <StatusBar />
@@ -27,6 +29,16 @@ export default function MLBBLobbyScenario5Screen({ onBack }) {
         <p className="mt-2 text-sm font-semibold">{HOME_MLBB_NOTIFICATION}</p>
         <p className="mt-2 text-xs text-red-200/80">Tap to open admin message →</p>
       </div>
+
+      {gate && (!gate.targetAppId || gate.targetAppId === "mlbb") && (
+        <div className="absolute bottom-0 left-0 right-0">
+          <ScenarioChoiceFooter
+            title={gate.prompt}
+            choices={gate.options}
+            onChoose={(id) => phone.api.choose(id)}
+          />
+        </div>
+      )}
     </div>
   );
 }

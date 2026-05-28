@@ -16,7 +16,7 @@ export default function HomeScreen({
   onOpenApp,
   onOpenNotification,
   onNotificationDismiss,
-  notificationAutoDismissMs = 5500,
+  notificationAutoDismissMs = 2000,
 }) {
   const variantConfig = HOME_VARIANTS[variant] ?? HOME_VARIANTS.default;
   const notification =

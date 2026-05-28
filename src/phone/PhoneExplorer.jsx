@@ -1,14 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PhoneShell from "../components/phone/PhoneShell.jsx";
 import LockScreen from "../screens/LockScreen.jsx";
 import HomeScreen from "../screens/HomeScreen.jsx";
+import NotificationBanner from "../components/phone/NotificationBanner.jsx";
 import { EXPLORER_APPS } from "../content/constants.js";
 import { usePhoneStore } from "./phoneStore.js";
 import { appIdFromNotification, renderPhoneApp } from "./appRegistry.jsx";
 
 /**
  * Phone Explorer — the navigable phone OS (lock → home → apps).
- * @param {{ embedded?: boolean, phone?: ReturnType<typeof usePhoneStore>, onUnlocked?: () => void, onNotificationOpened?: () => void, scenarioThreadId?: string, openAppId?: string | null }} props
+ * @param {{ embedded?: boolean, phone?: ReturnType<typeof usePhoneStore>, onUnlocked?: () => void, onNotificationOpened?: (notification: { app?: string, from?: string, body?: string } | null) => void, scenarioThreadId?: string, onPhonepeClaim?: () => void, openAppId?: string | null }} props
  */
 export default function PhoneExplorer({
   embedded = false,
@@ -16,6 +17,7 @@ export default function PhoneExplorer({
   onUnlocked,
   onNotificationOpened,
   scenarioThreadId,
+  onPhonepeClaim,
   openAppId = null,
 }) {
   const internalPhone = usePhoneStore();
@@ -57,20 +59,22 @@ export default function PhoneExplorer({
 
   const latestNotification = phone.selectors.latestNotification;
   const totalUnreadSms = phone.selectors.totalUnreadSms;
-  const [homeBanner, setHomeBanner] = useState(null);
 
-  useEffect(() => {
-    if (!latestNotification) return;
-    setHomeBanner({
+  const banner = useMemo(() => {
+    if (!latestNotification) return null;
+    return {
+      id: latestNotification.id,
+      appId: latestNotification.appId,
       app: latestNotification.appLabel,
       from: latestNotification.from,
       body: latestNotification.body,
-    });
-  }, [latestNotification?.id]);
+    };
+  }, [latestNotification]);
 
-  const dismissHomeBanner = useCallback(() => {
-    setHomeBanner(null);
-  }, []);
+  const dismissBanner = useCallback(() => {
+    if (!banner?.id) return;
+    phone.api.dismissNotification(banner.id);
+  }, [phone.api, banner?.id]);
 
   const homeBadge = totalUnreadSms > 0;
 
@@ -83,20 +87,20 @@ export default function PhoneExplorer({
       <HomeScreen
         apps={EXPLORER_APPS}
         variant="default"
-        notification={homeBanner}
+        notification={banner}
         badge={homeBadge}
         badgeApp={homeBadge ? "messages" : undefined}
         onOpenApp={openApp}
         onOpenNotification={() => {
-          const appId = appIdFromNotification(homeBanner);
-          dismissHomeBanner();
-          onNotificationOpened?.();
-          if (scenarioThreadId) {
+          const appId = appIdFromNotification(banner);
+          dismissBanner();
+          onNotificationOpened?.(banner);
+          if (scenarioThreadId && appId === "messages") {
             phone.api.signal("open_messages_thread", scenarioThreadId);
           }
           openApp(appId);
         }}
-        onNotificationDismiss={dismissHomeBanner}
+        onNotificationDismiss={dismissBanner}
       />
     );
   } else if (route.screen === "app" && route.appId) {
@@ -106,6 +110,7 @@ export default function PhoneExplorer({
       onBackToHome: goHome,
       scenarioThreadId,
       onOpenScenarioThread: onNotificationOpened,
+      onPhonepeClaim,
     });
   }
 
@@ -121,6 +126,22 @@ export default function PhoneExplorer({
   const shell = (
     <PhoneShell>
       <div className="relative h-full">
+        {route.screen !== "lock" && route.screen !== "home" && (
+          <NotificationBanner
+            data={banner}
+            onClick={() => {
+              const appId = appIdFromNotification(banner);
+              dismissBanner();
+              onNotificationOpened?.(banner);
+              if (scenarioThreadId && appId === "messages") {
+                phone.api.signal("open_messages_thread", scenarioThreadId);
+              }
+              openApp(appId);
+            }}
+            autoDismissMs={banner ? 2000 : 0}
+            onDismiss={dismissBanner}
+          />
+        )}
         {content}
 
         {showHomeButton && (

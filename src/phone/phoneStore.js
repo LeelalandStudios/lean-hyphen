@@ -9,7 +9,7 @@ import { useCallback, useMemo, useReducer } from "react";
  * @property {PhoneNotification[]} notifications
  * @property {Record<string, SmsThread>} smsThreads
  * @property {string | null} choiceGateId
- * @property {{ prompt: string, options: { id: string, label: string, set?: Record<string, string>, goto?: string }[] } | null} choiceGate
+ * @property {{ prompt: string, options: { id: string, label: string, set?: Record<string, string>, goto?: string }[], targetAppId?: string, targetId?: string } | null} choiceGate
  * @property {Record<string, string>} vars
  * @property {Record<string, string>} signals
  */
@@ -66,6 +66,16 @@ function makeId(prefix) {
  */
 function reducer(state, action) {
   switch (action.type) {
+    case "notifications.clear": {
+      return { ...state, notifications: [] };
+    }
+
+    case "notifications.dismiss": {
+      const id = String(action.id ?? "");
+      if (!id) return state;
+      return { ...state, notifications: state.notifications.filter((n) => n.id !== id) };
+    }
+
     case "notify": {
       const n = /** @type {PhoneNotification} */ ({
         id: makeId("n"),
@@ -120,8 +130,17 @@ function reducer(state, action) {
       return {
         ...state,
         choiceGateId: action.id,
-        choiceGate: { prompt: action.prompt, options: action.options },
+        choiceGate: {
+          prompt: action.prompt,
+          options: action.options,
+          targetAppId: action.targetAppId,
+          targetId: action.targetId,
+        },
       };
+    }
+
+    case "choice.close": {
+      return { ...state, choiceGateId: null, choiceGate: null };
     }
 
     case "choice.choose": {
@@ -158,6 +177,12 @@ export function usePhoneStore() {
 
   const api = useMemo(() => {
     return {
+      clearNotifications() {
+        dispatch({ type: "notifications.clear" });
+      },
+      dismissNotification(id) {
+        dispatch({ type: "notifications.dismiss", id });
+      },
       notify(payload) {
         dispatch({ type: "notify", ...payload });
       },
@@ -169,6 +194,9 @@ export function usePhoneStore() {
       },
       openChoiceGate(payload) {
         dispatch({ type: "choice.open", ...payload });
+      },
+      closeChoiceGate() {
+        dispatch({ type: "choice.close" });
       },
       choose(optionId) {
         dispatch({ type: "choice.choose", optionId });

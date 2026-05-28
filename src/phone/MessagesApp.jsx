@@ -62,7 +62,9 @@ export default function MessagesApp({ phone, onBack, scenarioThreadId, onOpenSce
           ))}
         </div>
 
-        {state.choiceGate && (
+        {state.choiceGate &&
+          (!state.choiceGate.targetAppId || state.choiceGate.targetAppId === "messages") &&
+          (!state.choiceGate.targetId || state.choiceGate.targetId === activeThreadId) && (
           <ScenarioChoiceFooter
             title={state.choiceGate.prompt}
             choices={state.choiceGate.options}

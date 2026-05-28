@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 export default function NotificationBanner({
   data,
   onClick,
-  autoDismissMs = 5500,
+  autoDismissMs = 2000,
   onDismiss,
 }) {
   const [phase, setPhase] = useState("hidden");

@@ -11,7 +11,11 @@ const CHARACTERS = {
 
 // Act 1 dialogue (verbatim from the PDF)
 const SCRIPT = [
-  { speaker: "kabir", type: "text", text: "guys guys LOOK at this" },
+  {
+    speaker: "kabir",
+    type: "text",
+    text: "guys guys LOOK at this",
+  },
   {
     speaker: "kabir",
     type: "forwarded",
@@ -19,18 +23,43 @@ const SCRIPT = [
     body:
       "🎮 You've been selected for the Free Fire Diamond Giveaway! Claim 10,000 free Diamonds\nbefore it expires.\n→ bit.ly/ff-d1amonds-free\n⏰ Offer ends in 10 minutes.",
   },
-  { speaker: "aryan", type: "text", text: "YOO 10k diamonds!! tap it fast before it expires" },
-  { speaker: "kabir", type: "text", text: "should i just click it quick??" },
-  { speaker: "diya", type: "text", text: "...wait. something feels off" },
-  { speaker: "priya", type: "text", text: "Kabir don't tap it." },
-  { speaker: "kabir", type: "text", text: "why not?? free diamonds bro" },
+  {
+    speaker: "aryan",
+    type: "text",
+    text: "YOO 10k diamonds!! tap it fast before it expires",
+  },
+  {
+    speaker: "kabir",
+    type: "text",
+    text: "should i just click it quick??",
+  },
+  {
+    speaker: "diya",
+    type: "text",
+    text: "...wait. something feels off",
+  },
+  {
+    speaker: "priya",
+    type: "text",
+    text: "Kabir don't tap it.",
+  },
+  {
+    speaker: "kabir",
+    type: "text",
+    text: "why not?? free diamonds bro",
+  },
   {
     speaker: "priya",
     type: "text",
     text:
       "because I've seen how this ends. this is one of three scam tricks that show up constantly.\nyou're about to face all of them. let's see if you can spot them before they get you.",
   },
-  { speaker: "priya", type: "cta", text: "Let's go", label: "Let's go 💥" },
+  {
+    speaker: "priya",
+    type: "cta",
+    text: "Let's go",
+    label: "Let's go 💥",
+  },
 ];
 
 function Avatar({ id, active }) {

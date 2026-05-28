@@ -14,7 +14,14 @@ import MLBBLobbyScenario5Screen from "../screens/act3/scenario5/MLBBLobbyScenari
  * @param {{ phone: import('./phoneStore.js').ReturnType<typeof import('./phoneStore.js').usePhoneStore>, onBack: () => void, onBackToHome: () => void, scenarioThreadId?: string, onOpenScenarioThread?: () => void }} ctx
  */
 export function renderPhoneApp(appId, ctx) {
-  const { phone, onBack, onBackToHome, scenarioThreadId, onOpenScenarioThread } = ctx;
+  const {
+    phone,
+    onBack,
+    onBackToHome,
+    scenarioThreadId,
+    onOpenScenarioThread,
+    onPhonepeClaim,
+  } = ctx;
 
   switch (appId) {
     case "messages":
@@ -29,7 +36,7 @@ export function renderPhoneApp(appId, ctx) {
     case "whatsapp":
       return <WhatsAppApp onBackToHome={onBack} />;
     case "phonepe":
-      return <PhonePeWalletScreen onBack={onBack} />;
+      return <PhonePeWalletScreen onBack={onBack} onClaim={onPhonepeClaim} />;
     case "amazon":
       return (
         <GenericShellApp
@@ -152,9 +159,9 @@ export function renderPhoneApp(appId, ctx) {
         />
       );
     case "mail":
-      return <MailApp onBack={onBack} />;
+      return <MailApp onBack={onBack} phone={phone} />;
     case "mlbb":
-      return <MLBBLobbyScenario5Screen onBack={onBack} />;
+      return <MLBBLobbyScenario5Screen onBack={onBack} phone={phone} />;
     case "news":
       return <NewsFeedScreen onBack={onBack} />;
     default:

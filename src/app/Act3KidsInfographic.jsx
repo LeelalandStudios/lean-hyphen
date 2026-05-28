@@ -1,6 +1,12 @@
 import { useMemo, useRef, useState } from "react";
 import { INFOGRAPHIC_SRC } from "../content/act1Scene2.js";
 
+const INFOGRAPHIC_BY_SECTION_ID = {
+  links: "/act3-infographics/fake-links.png",
+  otp: "/act3-infographics/otp-scams.png",
+  gaming: "/act3-infographics/gaming-scams.png",
+};
+
 function Pill({ children, active, onClick, className = "" }) {
   return (
     <button
@@ -427,63 +433,11 @@ export default function Act3KidsInfographic() {
 
                     {/* Card body scrolls INSIDE the card */}
                     <div className="h-[560px] overflow-y-auto px-6 py-5">
-                      <div className="space-y-4">
-                        <Card
-                          title="BIG IDEA"
-                          accent="from-white to-white"
-                          icon={<BigIcon bg="bg-slate-100">{active.emoji}</BigIcon>}
-                        >
-                          <p className="text-xl font-extrabold text-slate-950">
-                            {active.headline}
-                          </p>
-                          <p className="mt-2 text-slate-700">{active.sub}</p>
-                        </Card>
-
-                        <Card
-                          title="HOW IT WORKS"
-                          accent="from-white to-white"
-                          icon={<BigIcon bg="bg-slate-100">🧩</BigIcon>}
-                        >
-                          <StepRow steps={active.how} />
-                        </Card>
-
-                        <Card
-                          title="RED FLAGS"
-                          accent="from-white to-white"
-                          icon={<BigIcon bg="bg-rose-100">🚩</BigIcon>}
-                        >
-                          <FlagList items={active.flags} />
-                        </Card>
-
-                        <Card
-                          title="WHAT TO DO"
-                          accent="from-white to-white"
-                          icon={<BigIcon bg="bg-emerald-100">🛡️</BigIcon>}
-                        >
-                          <DoList items={active.do} />
-                        </Card>
-
-                        <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-5 shadow-sm">
-                          <p className="text-xs font-extrabold uppercase tracking-wider text-emerald-700">
-                            Quick rule for kids
-                          </p>
-                          <p className="mt-1 text-sm text-slate-700">
-                            If it makes you feel <b>excited</b>, <b>rushed</b>, or{" "}
-                            <b>scared</b> — stop. That feeling is the warning.
-                          </p>
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            <span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white">
-                              🧠 Pause
-                            </span>
-                            <span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white">
-                              🗣️ Ask
-                            </span>
-                            <span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white">
-                              🛡️ Protect
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                      <img
+                        src={INFOGRAPHIC_BY_SECTION_ID[active.id]}
+                        alt={`${active.label} infographic`}
+                        className="w-full rounded-2xl border border-slate-200 bg-white object-contain"
+                      />
                     </div>
                   </div>
                 </div>
