@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getPuzzle } from "../../content/act4SpotTheIssue.js";
 
 function IssueButton({ issueId, found, onFound, children, className = "" }) {
@@ -127,9 +127,9 @@ function WhatsappPuzzleBody({ found, onFound }) {
 }
 
 /**
- * @param {{ puzzleId: string }} props
+ * @param {{ puzzleId: string, onAllFound?: () => void }} props
  */
-export default function SpotTheIssuePuzzle({ puzzleId }) {
+export default function SpotTheIssuePuzzle({ puzzleId, onAllFound }) {
   const puzzle = getPuzzle(puzzleId);
   const [found, setFound] = useState(() => new Set());
   const [lastFound, setLastFound] = useState(null);
@@ -146,6 +146,19 @@ export default function SpotTheIssuePuzzle({ puzzleId }) {
   };
 
   const complete = found.size >= puzzle.totalIssues;
+  const firedComplete = useRef(false);
+
+  useEffect(() => {
+    firedComplete.current = false;
+  }, [puzzleId]);
+
+  useEffect(() => {
+    if (!complete || !onAllFound || firedComplete.current) return;
+    firedComplete.current = true;
+    const id = window.setTimeout(onAllFound, 900);
+    return () => window.clearTimeout(id);
+  }, [complete, onAllFound]);
+
   const shellClass =
     puzzle.type === "whatsapp"
       ? "bg-gradient-to-b from-indigo-950 to-slate-900 text-white"

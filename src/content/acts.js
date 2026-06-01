@@ -5,13 +5,14 @@ export const ACTS = [
     id: "act1",
     number: 1,
     title: "Act 1",
-    subtitle: "Story & setup",
+    subtitle: "The Hook",
     summary:
-      "Meet the friends group on WhatsApp. Zack shares a Paytm cash scam; Priya warns the group and shares the SPOT THE SCAM! infographic.",
+      "Late-night WhatsApp group chat. Kabir tells the story of cousin Rohan's ₹12,000 PhonePe scam — then you're dropped into five waiting messages.",
     beats: [
-      "Lock screen → home → explore the phone",
-      "Friends group chat — Paytm scam arrives",
-      "Priya shares the infographic; save it to your phone",
+      "Black screen → notification sound",
+      "🔥 Squad Goals — Rohan's story unfolds in chat",
+      "Transition → phone with 5 messages waiting",
+      "Find out → into Act 2",
     ],
   },
   {

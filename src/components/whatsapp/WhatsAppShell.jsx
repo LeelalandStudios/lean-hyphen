@@ -6,12 +6,15 @@ export default function WhatsAppShell({
   subtitle,
   showSearch = false,
   onBack,
+  bodyRef,
+  onBodyScroll,
+  footer,
   children,
 }) {
   return (
     <div className="relative flex h-full flex-col bg-[#e5ddd5] pt-12">
       <StatusBar dark />
-      <header className="bg-[#075e54] shadow-md">
+      <header className="shrink-0 bg-[#075e54] shadow-md">
         <div className="flex items-center gap-3 px-4 pb-2 pt-1 text-white">
           {onBack ? (
             <button
@@ -42,7 +45,14 @@ export default function WhatsAppShell({
           </div>
         )}
       </header>
-      <div className="flex-1 overflow-y-auto">{children}</div>
+      <div
+        ref={bodyRef}
+        onScroll={onBodyScroll}
+        className="min-h-0 flex-1 overflow-y-auto"
+      >
+        {children}
+      </div>
+      {footer}
     </div>
   );
 }

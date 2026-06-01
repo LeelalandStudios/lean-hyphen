@@ -7,6 +7,7 @@ Inspired by **A Normal Lost Phone** / **Another Lost Phone** style gameplay: a b
 | Name | Role |
 |------|------|
 | **Phone Explorer** | The live, navigable phone OS the player uses: lock → home → apps. Default app entry. `src/phone/PhoneExplorer.jsx` |
+| **Scene index** | Dev tool: browse and preview playable scenes (live, legacy, planned). `/?index=1` · `src/catalog/SceneIndex.jsx` |
 | **Screen Catalog** | Dev tool: sidebar + preview of every static story screen. `/?catalog=1` · `src/catalog/StaticScreenCatalog.jsx` |
 | **Phone Shell** | Shared phone bezel/frame component. `src/components/phone/PhoneShell.jsx` |
 
@@ -46,7 +47,7 @@ src/
   content/           script.md, copy, constants, static screen registry
   components/        phone chrome + shared UI
   screens/           one file per static screen (presentational)
-  catalog/           Screen Catalog (static screen browser)
+  catalog/           Scene index + static screen catalog
   phone/             Phone Explorer + app registry + phoneStore
   engine/            Phase 3 script runners
   game/              App root (Phone Explorer by default)

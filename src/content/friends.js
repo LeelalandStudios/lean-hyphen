@@ -3,6 +3,7 @@ export const FRIENDS = [
   { id: "diya", name: "Diya", avatarSrc: "/avatars/diya.png" },
   { id: "kabir", name: "Kabir", avatarSrc: "/avatars/kabir.png" },
   { id: "priya", name: "Priya", avatarSrc: "/avatars/priya.png" },
+  { id: "meera", name: "Meera", avatarSrc: "/avatars/meera.png" },
 ];
 
 export const FRIEND_AVATAR_BY_NAME = Object.fromEntries(

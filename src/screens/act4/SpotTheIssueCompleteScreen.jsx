@@ -1,7 +1,10 @@
 import { SPOT_PUZZLES } from "../../content/act4SpotTheIssue.js";
 import StatusBar from "../../components/phone/StatusBar.jsx";
 
-export default function SpotTheIssueCompleteScreen() {
+/**
+ * @param {{ onDone?: () => void }} props
+ */
+export default function SpotTheIssueCompleteScreen({ onDone }) {
   return (
     <div className="relative flex h-full flex-col bg-emerald-950 pt-12 text-center text-white">
       <StatusBar />
@@ -14,9 +17,10 @@ export default function SpotTheIssueCompleteScreen() {
         </p>
         <button
           type="button"
+          onClick={onDone}
           className="mt-8 rounded-2xl bg-white px-8 py-3 font-bold text-emerald-950"
         >
-          Back to WhatsApp
+          {onDone ? "Review last round" : "Back to WhatsApp"}
         </button>
       </div>
     </div>

@@ -1,7 +1,10 @@
 import { SPOT_GAME_TITLE, SPOT_GAME_URL, SPOT_PUZZLES } from "../../content/act4SpotTheIssue.js";
 import StatusBar from "../../components/phone/StatusBar.jsx";
 
-export default function SpotTheIssueIntroScreen() {
+/**
+ * @param {{ onStart?: () => void }} props
+ */
+export default function SpotTheIssueIntroScreen({ onStart }) {
   return (
     <div className="relative flex h-full flex-col bg-gradient-to-b from-emerald-800 to-slate-950 pt-12 text-white">
       <StatusBar />
@@ -20,6 +23,7 @@ export default function SpotTheIssueIntroScreen() {
         </ul>
         <button
           type="button"
+          onClick={onStart}
           className="mt-8 w-full rounded-2xl bg-white py-4 font-bold text-emerald-900"
         >
           Start Round 1

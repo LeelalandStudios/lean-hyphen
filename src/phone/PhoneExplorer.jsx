@@ -165,12 +165,14 @@ export default function PhoneExplorer({
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 p-4">
       {shell}
 
-      <a
-        href="?catalog=1"
-        className="mt-4 text-[10px] text-slate-600 underline-offset-2 hover:text-slate-400 hover:underline"
-      >
-        Screen Catalog (design review)
-      </a>
+      <div className="mt-4 flex items-center gap-4 text-[10px] text-slate-600">
+        <a href="?index=1" className="underline-offset-2 hover:text-slate-400 hover:underline">
+          Scene index (dev)
+        </a>
+        <a href="?catalog=1" className="underline-offset-2 hover:text-slate-400 hover:underline">
+          Screen catalog (dev)
+        </a>
+      </div>
     </div>
   );
 }

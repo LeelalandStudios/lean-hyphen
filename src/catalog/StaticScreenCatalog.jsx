@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PhoneShell from "../components/phone/PhoneShell.jsx";
 import {
   DEFAULT_STATIC_SCREEN_ID,
@@ -6,28 +6,46 @@ import {
   STATIC_SCREENS,
 } from "../content/staticScreens.js";
 
+function screenIdFromSearch() {
+  if (typeof window === "undefined") return DEFAULT_STATIC_SCREEN_ID;
+  const param = new URLSearchParams(window.location.search).get("screen");
+  return STATIC_SCREENS.some((s) => s.id === param) ? param : DEFAULT_STATIC_SCREEN_ID;
+}
+
 function renderScreen(entry) {
   const { Component, props = {} } = entry;
   return <Component {...props} />;
 }
 
 export default function StaticScreenCatalog() {
-  const [screenId, setScreenId] = useState(DEFAULT_STATIC_SCREEN_ID);
+  const [screenId, setScreenId] = useState(screenIdFromSearch);
 
   const entry = useMemo(
     () => STATIC_SCREENS.find((s) => s.id === screenId) ?? STATIC_SCREENS[0],
     [screenId]
   );
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("catalog", "1");
+    url.searchParams.delete("index");
+    if (screenId === DEFAULT_STATIC_SCREEN_ID) {
+      url.searchParams.delete("screen");
+    } else {
+      url.searchParams.set("screen", screenId);
+    }
+    window.history.replaceState({}, "", url);
+  }, [screenId]);
+
   return (
     <div className="flex h-screen overflow-hidden bg-slate-950 text-slate-100">
       <aside className="flex h-full w-80 shrink-0 flex-col border-r border-slate-800 bg-slate-900">
         <div className="shrink-0 border-b border-slate-800 p-4">
           <h1 className="text-sm font-bold uppercase tracking-wide text-slate-400">
-            Phase 1 — Static screens
+            Screen catalog
           </h1>
           <p className="mt-1 text-xs text-slate-500">
-            Aligned to script.md · No story flow yet
+            Static story frames · Aligned to script.md
           </p>
         </div>
         <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
@@ -60,7 +78,11 @@ export default function StaticScreenCatalog() {
           id: {entry.id}
           <br />
           <a href="/" className="text-emerald-600 hover:underline">
-            ← Back to lesson app
+            ← Lesson app
+          </a>
+          <br />
+          <a href="?index=1" className="text-slate-600 hover:text-slate-400 hover:underline">
+            Scene index (playable scenes)
           </a>
         </p>
       </aside>

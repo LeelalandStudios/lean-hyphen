@@ -3,7 +3,7 @@ import PhoneExplorer from "../phone/PhoneExplorer.jsx";
 import ActPanel from "./ActPanel.jsx";
 import Act3Infographic from "./Act3Infographic.jsx";
 import Act3KidsInfographic from "./Act3KidsInfographic.jsx";
-import Act1RoomChat from "./Act1RoomChat.jsx";
+import Act1Hook from "./Act1Hook.jsx";
 import Act2PhoneSimulation from "./Act2PhoneSimulation.jsx";
 import { ACTS, DEFAULT_ACT_ID } from "../content/acts.js";
 
@@ -67,12 +67,18 @@ export default function LessonApp() {
           })}
         </nav>
 
-        <div className="shrink-0 border-t border-slate-800 p-3">
+        <div className="shrink-0 border-t border-slate-800 p-3 space-y-1.5">
+          <a
+            href="?index=1"
+            className="block text-[10px] text-slate-500 hover:text-slate-300 hover:underline"
+          >
+            Scene index (dev)
+          </a>
           <a
             href="?catalog=1"
-            className="text-[10px] text-slate-500 hover:text-slate-300 hover:underline"
+            className="block text-[10px] text-slate-500 hover:text-slate-300 hover:underline"
           >
-            Screen Catalog (dev)
+            Screen catalog (dev)
           </a>
         </div>
       </aside>
@@ -80,7 +86,7 @@ export default function LessonApp() {
       <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-slate-950">
         <div className="min-h-0 flex-1 overflow-hidden">
           {activeActId === "act1" ? (
-            <Act1RoomChat onComplete={() => setActiveActId("act2")} />
+            <Act1Hook onComplete={() => setActiveActId("act2")} />
           ) : activeActId === "act2" ? (
             <Act2PhoneSimulation />
           ) : activeActId === "act3" ? (

@@ -72,8 +72,9 @@ export default function ScriptDrivenGame() {
       )}
 
       <p className="max-w-md text-center text-[10px] text-slate-600">
-        Design catalog: add{" "}
-        <code className="text-slate-400">?catalog=1</code> to the URL
+        Design review:{" "}
+        <code className="text-slate-400">?index=1</code> (scenes) or{" "}
+        <code className="text-slate-400">?catalog=1</code> (static frames)
       </p>
     </div>
   );

@@ -12,6 +12,8 @@ export default function HomeScreen({
   notification: notificationOverride,
   badge: badgeOverride,
   badgeApp: badgeAppOverride,
+  badgeCount: badgeCountOverride,
+  badgePulse: badgePulseOverride,
   onOpenDrawer,
   onOpenApp,
   onOpenNotification,
@@ -26,6 +28,8 @@ export default function HomeScreen({
   const badge = badgeOverride !== undefined ? badgeOverride : variantConfig.badge;
   const badgeApp =
     badgeAppOverride !== undefined ? badgeAppOverride : variantConfig.badgeApp;
+  const badgeCount = badgeCountOverride ?? 1;
+  const badgePulse = badgePulseOverride ?? false;
   const { notice } = variantConfig;
 
   return (
@@ -58,6 +62,8 @@ export default function HomeScreen({
                   : (app.id === "messages" && variant !== "whatsapp_activity") ||
                     (app.id === "whatsapp" && variant === "whatsapp_activity"))
               }
+              badgeCount={badgeCount}
+              badgePulse={badgePulse}
             />
           ))}
         </div>
