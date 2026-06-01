@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import PhoneShell from "../components/phone/PhoneShell.jsx";
 import WhatsAppShell from "../components/whatsapp/WhatsAppShell.jsx";
+import WhatsAppTypingBubble from "../components/whatsapp/WhatsAppTypingBubble.jsx";
 import {
   ACT1_CTA_LABEL,
   ACT1_HOOK_BEATS,
@@ -21,10 +22,12 @@ function isAtBottom(el) {
 function pauseAfterMessage(text, overrideMs) {
   if (overrideMs != null) return overrideMs;
   const len = text.length;
-  if (len < 24) return 550;
-  if (len < 70) return 900;
-  if (len < 140) return 1300;
-  return 1700;
+  // Base gap + ~45ms per character so longer lines get time to read
+  const byReading = 900 + len * 45;
+  if (len < 24) return Math.max(1400, byReading);
+  if (len < 70) return Math.max(2200, byReading);
+  if (len < 140) return Math.max(3500, byReading);
+  return Math.max(5000, byReading);
 }
 
 function wait(ms) {
@@ -104,24 +107,6 @@ function playTypingClick() {
   } catch {
     // Audio unavailable.
   }
-}
-
-function TypingBubble({ speed = 1 }) {
-  return (
-    <div className="flex justify-start">
-      <div className="rounded-lg rounded-tl-none bg-white px-4 py-3 shadow-sm">
-        <div className="flex gap-1">
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="inline-block h-2 w-2 animate-bounce rounded-full bg-[#90a4ae]"
-              style={{ animationDuration: animDuration(1, speed), animationDelay: `${scaledMs(i * 150, speed) / 1000}s` }}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function MessageBubble({ msg, receipts }) {
@@ -635,10 +620,10 @@ export default function Act1Hook({ onComplete }) {
       const gone = messagesRef.current.find((m) => m.text === "it's gone");
       if (gone) {
         setReceiptMessageId(gone.id);
-        await scaledWait(250, speedRef);
+        await scaledWait(450, speedRef);
         if (!mountedRef.current || skipRef.current) return;
         setReceiptsVisible(true);
-        await scaledWait(1000, speedRef);
+        await scaledWait(2000, speedRef);
       }
       if (!mountedRef.current || skipRef.current) return;
       await waitUntilFollowing();
@@ -729,7 +714,7 @@ export default function Act1Hook({ onComplete }) {
               />
             ))}
 
-            {typing && <TypingBubble speed={speedMultiplier} />}
+            {typing && <WhatsAppTypingBubble speed={speedMultiplier} />}
           </div>
         </WhatsAppShell>
 

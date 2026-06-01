@@ -1,6 +1,8 @@
 import Act1Hook from "../app/Act1Hook.jsx";
 import Act1RoomChat from "../app/Act1RoomChat.jsx";
+import Act2ScenarioExperience from "../app/Act2ScenarioExperience.jsx";
 import Act2PhoneSimulation from "../app/Act2PhoneSimulation.jsx";
+import Act3PriyaExplains from "../app/Act3PriyaExplains.jsx";
 import Act3KidsInfographic from "../app/Act3KidsInfographic.jsx";
 import Act3CommonScams from "../app/Act3CommonScams.jsx";
 import Act3Infographic from "../app/Act3Infographic.jsx";
@@ -55,24 +57,28 @@ export const SCENE_SECTIONS = [
         props: { onComplete: noop },
       },
       {
-        id: "live-act2-phone-simulation",
-        label: "Act 2 — Phone simulation (5 scenarios)",
+        id: "live-act2-scenarios",
+        label: "Act 2 — The Scenarios (5 scored)",
         status: "live",
         act: 2,
         summary:
-          "Interactive phone with timed scenarios: PhonePe link, school email, OTP theft, fake friend, fake game admin.",
-        source: "src/app/Act2PhoneSimulation.jsx",
-        Component: Act2PhoneSimulation,
+          "Scored phone scenarios: deepfake giveaway, sextortion threat, OTP theft, fake friend, BGMI admin. Shields and close calls.",
+        source: "src/app/Act2ScenarioExperience.jsx · src/content/act2Scenarios.js",
+        supersedes: "legacy-act2-phone-simulation",
+        Component: Act2ScenarioExperience,
+        props: { onComplete: noop },
       },
       {
-        id: "live-act3-kids-infographic",
-        label: "Act 3 — Kids infographic",
+        id: "live-act3-priya-explains",
+        label: "Act 3 — Priya explains the patterns",
         status: "live",
         act: 3,
         summary:
-          "Scrollable kid-friendly infographic covering fake links, OTP scams, and gaming scams.",
-        source: "src/app/Act3KidsInfographic.jsx",
-        Component: Act3KidsInfographic,
+          "Room-style group debrief, three sequential scam cards (markdown sections), urgency outro, handoff to Act 4.",
+        source: "src/app/Act3PriyaExplains.jsx · src/content/act3/",
+        supersedes: "legacy-act3-kids-infographic",
+        Component: Act3PriyaExplains,
+        props: { onComplete: noop },
       },
     ],
   },
@@ -94,6 +100,17 @@ export const SCENE_SECTIONS = [
         props: { onComplete: noop },
       },
       {
+        id: "legacy-act2-phone-simulation",
+        label: "Act 2 — Phone simulation (5 scenarios)",
+        status: "legacy",
+        act: 2,
+        summary:
+          "Interactive phone explorer with timed scenarios: PhonePe link, school email, OTP theft, fake friend, fake MLBB admin.",
+        source: "src/app/Act2PhoneSimulation.jsx",
+        supersededBy: "live-act2-scenarios",
+        Component: Act2PhoneSimulation,
+      },
+      {
         id: "legacy-script-driven",
         label: "Script-driven flow (Act 1 + Scenario 1)",
         status: "legacy",
@@ -102,6 +119,17 @@ export const SCENE_SECTIONS = [
           "Markdown script runner through lock → home → WhatsApp Paytm hook → infographic → PhonePe scenario 1 (three branches). Ends after path debriefs.",
         source: "src/game/ScriptDrivenGame.jsx · src/content/game.script.md",
         Component: ScriptDrivenGame,
+      },
+      {
+        id: "legacy-act3-kids-infographic",
+        label: "Act 3 — Kids infographic (flip + PNG)",
+        status: "legacy",
+        act: 3,
+        summary:
+          "Wooden-table flip cards revealing PNG infographics for fake links, OTP, and gaming scams.",
+        source: "src/app/Act3KidsInfographic.jsx",
+        supersededBy: "live-act3-priya-explains",
+        Component: Act3KidsInfographic,
       },
       {
         id: "legacy-act3-common-scams",

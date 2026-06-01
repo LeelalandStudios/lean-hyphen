@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import PhoneExplorer from "../phone/PhoneExplorer.jsx";
 import ActPanel from "./ActPanel.jsx";
-import Act3Infographic from "./Act3Infographic.jsx";
-import Act3KidsInfographic from "./Act3KidsInfographic.jsx";
+import Act3PriyaExplains from "./Act3PriyaExplains.jsx";
 import Act1Hook from "./Act1Hook.jsx";
-import Act2PhoneSimulation from "./Act2PhoneSimulation.jsx";
+import Act2ScenarioExperience from "./Act2ScenarioExperience.jsx";
 import { ACTS, DEFAULT_ACT_ID } from "../content/acts.js";
 
 function actIdFromSearch() {
@@ -88,9 +87,9 @@ export default function LessonApp() {
           {activeActId === "act1" ? (
             <Act1Hook onComplete={() => setActiveActId("act2")} />
           ) : activeActId === "act2" ? (
-            <Act2PhoneSimulation />
+            <Act2ScenarioExperience onComplete={() => setActiveActId("act3")} />
           ) : activeActId === "act3" ? (
-            <Act3KidsInfographic />
+            <Act3PriyaExplains onComplete={() => setActiveActId("act4")} />
           ) : (
             <ActPanel actId={activeActId} />
           )}

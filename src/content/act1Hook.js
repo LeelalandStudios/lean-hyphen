@@ -47,9 +47,9 @@ export const ACT1_HOOK_BEATS = [
   { type: "message", sender: "Kabir", text: "guys wake up" },
   { type: "message", sender: "Kabir", text: "WAKE UP RIGHT NOW" },
   { type: "message", sender: "Kabir", text: "something happened" },
-  { type: "typing", ms: 1400 },
-  { type: "pause", ms: 900 },
-  { type: "typing", ms: 1200 },
+  { type: "typing", ms: 2000 },
+  { type: "pause", ms: 1400 },
+  { type: "typing", ms: 1800 },
   { type: "message", sender: "Aryan", text: "bro it's midnight what" },
   {
     type: "message",
@@ -57,9 +57,9 @@ export const ACT1_HOOK_BEATS = [
     text:
       "my cousin Rohan. he's 16. he saved up 8 months of birthday money — ₹12,000 — to buy a used laptop for his board exam prep",
   },
-  { type: "message", sender: "Kabir", text: "it's gone", pauseAfterMs: 400 },
+  { type: "message", sender: "Kabir", text: "it's gone", pauseAfterMs: 1800 },
   { type: "readReceipts" },
-  { type: "pause", ms: 1100 },
+  { type: "pause", ms: 1800 },
   { type: "message", sender: "Diya", text: "...what do you mean gone" },
   {
     type: "message",
