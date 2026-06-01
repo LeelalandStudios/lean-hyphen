@@ -6,6 +6,7 @@ import Act3PriyaExplains from "../app/Act3PriyaExplains.jsx";
 import Act3KidsInfographic from "../app/Act3KidsInfographic.jsx";
 import Act3CommonScams from "../app/Act3CommonScams.jsx";
 import Act3Infographic from "../app/Act3Infographic.jsx";
+import Act4Challenge from "../app/Act4Challenge.jsx";
 import Act4SpotTheIssue from "../app/Act4SpotTheIssue.jsx";
 import ScriptDrivenGame from "../game/ScriptDrivenGame.jsx";
 import PhoneRuntime from "../game/PhoneRuntime.jsx";
@@ -79,6 +80,17 @@ export const SCENE_SECTIONS = [
         supersedes: "legacy-act3-kids-infographic",
         Component: Act3PriyaExplains,
         props: { onComplete: noop },
+      },
+      {
+        id: "live-act4-challenge",
+        label: "Act 4 — Scam Detective challenge",
+        status: "live",
+        act: 4,
+        summary:
+          "Timed challenge: fake link, speed round, email red flags, response matching, boss level, scoreboard, group wrap, 5 rules, safety help.",
+        source: "src/app/Act4Challenge.jsx · src/content/act4Challenge.js",
+        supersedes: "legacy-act4-spot-the-issue",
+        Component: Act4Challenge,
       },
     ],
   },
@@ -159,6 +171,7 @@ export const SCENE_SECTIONS = [
         summary:
           "Tap-the-red-flags mini-game: intro → three puzzle rounds → completion screen.",
         source: "src/app/Act4SpotTheIssue.jsx",
+        supersededBy: "live-act4-challenge",
         Component: Act4SpotTheIssue,
       },
       {

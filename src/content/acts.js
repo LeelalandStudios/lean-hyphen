@@ -49,17 +49,16 @@ export const ACTS = [
     id: "act4",
     number: 4,
     title: "Act 4",
-    subtitle: "Spot the Issue",
+    subtitle: "Scam Detective",
     summary:
-      "Priya shares leelaland.app/spot-the-scam in the group. Tap the red flags in three rounds: fake email, OTP SMS, and fake game admin.",
+      "Timed challenge round: spot fake links, speed-classify messages, find email red flags, match safe responses, and pass the boss scenario. Score up to 200 and earn shields.",
     beats: [
-      "Open the challenge from WhatsApp",
-      "Round 1 — fake school email",
-      "Round 2 — OTP SMS",
-      "Round 3 — fake game admin",
-      "Return to the group — Priya concludes",
+      "SCAM DETECTIVE — level unlocked",
+      "Spot the Fake Link · Real or Scam speed round",
+      "What's Wrong Here · What Do You Do Now",
+      "Boss level — coordinated giveaway scam",
+      "Scoreboard, 5 rules, and final close",
     ],
-    comingSoon: true,
   },
 ];
 

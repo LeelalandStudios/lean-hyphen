@@ -18,7 +18,7 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 | URL | What you get |
 |-----|----------------|
 | `/` | **Lesson app** — sidebar Acts 1–4 (`src/app/LessonApp.jsx`). Completing an act advances to the next (`?act=act2`, etc.). |
-| `/?index=1` | **Scene index** — launch any live or legacy scene. Optional `?scene=<id>` (e.g. `live-act3-priya-explains`, `legacy-act2-phone-simulation`). |
+| `/?index=1` | **Scene index** — launch any live or legacy scene. Optional `?scene=<id>` (e.g. `live-act4-challenge`, `legacy-act2-phone-simulation`). |
 | `/?catalog=1` | **Screen catalog** — browse static story frames only. |
 
 Dev links to the scene index and screen catalog are at the bottom of the lesson sidebar.
@@ -30,9 +30,9 @@ Dev links to the scene index and screen catalog are at the bottom of the lesson 
 | **1 — The Hook** | `Act1Hook.jsx` | Live |
 | **2 — The Scenarios** | `Act2ScenarioExperience.jsx` | Live |
 | **3 — Priya explains** | `Act3PriyaExplains.jsx` | Live |
-| **4 — Spot the Issue** | `Act4SpotTheIssue.jsx` | Placeholder in lesson app; playable via scene index |
+| **4 — Scam Detective** | `Act4Challenge.jsx` | Live |
 
-Design target for Acts 1–4: `src/content/script_v2.md`. Older notes: `src/content/script.md`.
+Design source: `src/content/script.md` (full lesson script). Implementation plans: `_stash/plans/`.
 
 ---
 
@@ -53,7 +53,7 @@ Design target for Acts 1–4: `src/content/script_v2.md`. Older notes: `src/cont
 
 `src/app/Act2ScenarioExperience.jsx` · `src/content/act2Scenarios.js`
 
-Five scored phone scenarios aligned with `script_v2`: deepfake celebrity giveaway, sextortion threat, OTP theft, fake-friend impersonation, in-game admin scam. Header tracks **shields** and **close calls**. Wrong choices can retry; good choices earn a shield.
+Five scored phone scenarios: deepfake celebrity giveaway, sextortion threat, OTP theft, fake-friend impersonation, in-game admin scam. Header tracks **shields** and **close calls**. Wrong choices can retry; good choices earn a shield.
 
 Legacy alternative: `Act2PhoneSimulation.jsx` (older PhonePe / school-email flow) — scene index only.
 
@@ -63,22 +63,34 @@ Legacy alternative: `Act2PhoneSimulation.jsx` (older PhonePe / school-email flow
 
 `src/app/Act3PriyaExplains.jsx` · `src/content/act3/`
 
-1. **Room-style dialogue** — Squad Goals debrief (same bottom dialogue pattern as legacy `Act1RoomChat.jsx`, no room background image).
+1. **Room-style dialogue** — Squad Goals debrief (shared `RoomDialogue` pattern, no room background image).
 2. **Table** — three scam cards dealt one-by-one onto the wood table (face-down), then unlocked in order.
 3. **Tap a card** — expands to center; markdown sections fade in (`src/content/act3/cards/*.md`).
-4. **Understand** — compact horizontal “hose” fill using blue shades; label stays centered; stars are white. The button can be clicked at 0–3 stars. More stars add more progress.
-5. **Progress** — the main progress rail tracks earned stars (`0/9 ★` through `9/9 ★`), not just completed cards. Zero-star completion still unlocks the next card.
-6. **Outro** — after all cards are completed, Act 3 enters the group-chat ending sequence under **The pattern**. Priya names urgency as the underlying trick, Kabir sends it to Rohan, and **Test yourself →** goes to Act 4.
-
-Temporary dev control: while on the scam-card table, the top-right **Dev: ending** button skips directly to the Act 3 ending sequence for review.
+4. **Understand** — compact horizontal “hose” fill; label stays centered; stars are white. The button can be clicked at 0–3 stars.
+5. **Progress** — the main progress rail tracks earned stars (`0/9 ★` through `9/9 ★`). Zero-star completion still unlocks the next card.
+6. **Outro** — Priya names urgency as the underlying trick, Kabir sends it to Rohan, and **Test yourself →** starts Act 4.
 
 Supporting UI: `src/components/act3/` (`Act3CardTable`, `ScamCardDeck`, `UnderstandButton`, …).
 
 ---
 
-### Act 4 — Spot the Issue
+### Act 4 — Scam Detective (challenge round)
 
-`src/app/Act4SpotTheIssue.jsx` — tap red flags in three rounds (email, OTP SMS, fake game admin). Wired in the lesson sidebar as coming soon; fully playable from `/?index=1` → **legacy-act4-spot-the-issue**.
+`src/app/Act4Challenge.jsx` · `src/content/act4Challenge.js` · `src/components/act4/`
+
+Full-screen challenge (not inside the phone shell). Score is normalized to **200 points**; up to **5 shields** and **close calls** tracked in the HUD. No in-round retries; **Play again** on the final screen resets the run.
+
+| Mini-game | What you do |
+|-----------|-------------|
+| **Spot the Fake Link** | Pick the real domain (15s timer) |
+| **Real or Scam?** | Seven messages, REAL or SCAM (8s each) |
+| **What's Wrong Here?** | Tap four red flags in a fake bank email (30s) |
+| **What Do You Do Now?** | Match situations to responses (tap pair, tap line to unmatch) |
+| **Boss level** | Typed answer; local keyword grading + model answer |
+
+Then: **scoreboard** → **group chat wrap-up** → **5 rules** → **if it happens to you** (1930, cybercrime.gov.in) → **final screen** (share / play again).
+
+Legacy red-flag prototype: `Act4SpotTheIssue.jsx` — scene index as `legacy-act4-spot-the-issue`.
 
 ---
 
@@ -93,11 +105,11 @@ Preserved for comparison and reuse:
 | `legacy-act3-kids-infographic` | Flip cards + PNG infographics |
 | `legacy-act3-common-scams` | PDF step-through |
 | `legacy-act3-infographic` | Tabbed card layout |
-| `legacy-act4-spot-the-issue` | Red-flag mini-game |
+| `legacy-act4-spot-the-issue` | Older three-round “tap the red flags” mini-game |
 | `legacy-script-driven` | Early markdown script runner |
 | `legacy-phone-runtime` | PhonePe SMS prototype |
 
-Registry: `src/catalog/sceneIndex.js`.
+Live registry (including `live-act4-challenge`): `src/catalog/sceneIndex.js`.
 
 ## Terminology
 
@@ -121,8 +133,8 @@ npm run preview
 | Phase | Status | What |
 |-------|--------|------|
 | **1** | Done | Static screen catalog + lesson acts |
-| **2** | **Now** | Live Acts 1–3, Act 2 v2 scenarios, Act 3 pattern cards |
-| **3** | Later | Markdown script engine for full `script_v2` flow (`src/engine/`) |
+| **2** | Done | Live Acts 1–4: hook, v2 scenarios, pattern cards, Scam Detective challenge |
+| **3** | Later | Markdown script engine for full scripted flow (`src/engine/`) |
 
 See `docs/ARCHITECTURE.md` and `src/engine/script-format.md`.
 
@@ -130,24 +142,27 @@ See `docs/ARCHITECTURE.md` and `src/engine/script-format.md`.
 
 ```
 src/
-  app/              Lesson acts (Act1Hook, Act2ScenarioExperience, Act3PriyaExplains, …)
+  app/              Lesson acts (Act1Hook … Act4Challenge, LessonApp)
   catalog/          Scene index + static screen catalog
   components/
     act3/           Scam cards, Understand button, table overlay
-    room/           RoomDialogue (shared with legacy Act 1 room)
+    act4/           Challenge mini-games, scoreboard, finale screens
+    room/           RoomDialogue (Act 3 + Act 4 group wrap)
     phone/          Phone chrome
+    whatsapp/       WhatsApp shells and typing bubble
   content/
     act1Hook.js
     act2Scenarios.js
     act3/           Intro/outro scripts + card markdown
+    act4Challenge.js
     acts.js         Sidebar metadata
-    script_v2.md    Primary lesson design
-    script.md       Older outline
+    script.md       Full lesson design (Acts 1–4 in app)
     staticScreens.js
   screens/          Static / per-scenario screen components
   phone/            Phone Explorer + store
   engine/           Phase 3 specs + legacy flow
   game/             Routes (?index=1, ?catalog=1, default lesson)
+_stash/plans/       Implementation plans (e.g. act4/req.md)
 docs/
   ARCHITECTURE.md
 ```
@@ -156,6 +171,6 @@ docs/
 
 | File | Role |
 |------|------|
-| `src/content/script_v2.md` | **Primary** — full lesson design (Acts 1–5 in doc; app implements 1–4) |
-| `src/content/script.md` | Short outline + catalog alignment |
+| `src/content/script.md` | **Primary** — full lesson design (Acts 1–4 implemented in the lesson app) |
 | `src/content/act3/cards/*.md` | Act 3 scam card copy (parsed at build time) |
+| `src/content/act4Challenge.js` | Act 4 challenge copy, rounds, scoring bands |

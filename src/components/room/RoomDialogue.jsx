@@ -83,11 +83,9 @@ export default function RoomDialogue({ script, onComplete, finalButtonLabel }) {
             onComplete();
             return;
           }
-          setIdx((v) => Math.min(script.length - 1, v + 1));
+          setIdx((v) => v + 1);
         }}
       />
     </div>
   );
 }
-
-// useState import - I forgot to add import!

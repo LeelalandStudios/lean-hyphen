@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import PhoneExplorer from "../phone/PhoneExplorer.jsx";
 import ActPanel from "./ActPanel.jsx";
 import Act3PriyaExplains from "./Act3PriyaExplains.jsx";
+import Act4Challenge from "./Act4Challenge.jsx";
 import Act1Hook from "./Act1Hook.jsx";
 import Act2ScenarioExperience from "./Act2ScenarioExperience.jsx";
 import { ACTS, DEFAULT_ACT_ID } from "../content/acts.js";
@@ -90,6 +91,8 @@ export default function LessonApp() {
             <Act2ScenarioExperience onComplete={() => setActiveActId("act3")} />
           ) : activeActId === "act3" ? (
             <Act3PriyaExplains onComplete={() => setActiveActId("act4")} />
+          ) : activeActId === "act4" ? (
+            <Act4Challenge />
           ) : (
             <ActPanel actId={activeActId} />
           )}
