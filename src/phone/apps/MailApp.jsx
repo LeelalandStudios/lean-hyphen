@@ -83,7 +83,12 @@ export default function MailApp({ onBack, phone }) {
         <button
           key={email.id ?? email.subject}
           type="button"
-          onClick={() => setActiveEmailId(email.id ?? null)}
+          onClick={() => {
+            setActiveEmailId(email.id ?? null);
+            if (email.id) {
+              phone.api.signal("open_email", email.id);
+            }
+          }}
           className={`w-full border-b border-slate-100 p-4 text-left ${
             email.unread ? "bg-slate-50" : "opacity-80"
           }`}

@@ -39,6 +39,14 @@ function Block({ block }) {
     );
   }
 
+  if (trimmed.startsWith("## ")) {
+    return (
+      <h3 className="text-base font-black uppercase text-slate-900">
+        {renderInline(trimmed.slice(3))}
+      </h3>
+    );
+  }
+
   const lines = trimmed.split("\n");
   if (lines.every((l) => l.startsWith("- "))) {
     return (

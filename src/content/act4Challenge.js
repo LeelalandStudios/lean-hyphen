@@ -44,7 +44,8 @@ export const ACT4_ROUNDS = [
     id: "fake-link",
     number: 1,
     title: "Spot the Fake Link",
-    prompt: "3 links are on screen. 1 is real. 2 are fake. Tap the real one.",
+    prompt:
+      "3 phones are on screen. Each has one notification. Tap the phone/notification you trust.",
     timerSeconds: 15,
     maxPoints: 20,
     type: "fake-link",
@@ -93,6 +94,12 @@ export const FAKE_LINK_OPTIONS = [
     domain: "phonepe.com",
     path: "/cashback/offer22",
     correct: true,
+    notification: {
+      appName: "PhonePe",
+      title: "Cashback credited — ₹50",
+      body: "Your PhonePe cashback is ready. Open the link below to claim before midnight.",
+      time: "2m ago",
+    },
   },
   {
     id: "b",
@@ -102,6 +109,12 @@ export const FAKE_LINK_OPTIONS = [
     path: "/claim",
     correct: false,
     why: "Zero instead of 'o' — classic phishing.",
+    notification: {
+      appName: "PhonePe Rewards",
+      title: "URGENT: Unclaimed reward",
+      body: "You have ₹50 waiting. Verify your account now using the secure link below.",
+      time: "now",
+    },
   },
   {
     id: "c",
@@ -111,6 +124,12 @@ export const FAKE_LINK_OPTIONS = [
     path: "/verify",
     correct: false,
     why: "Extra words on a fake domain — another phishing trick.",
+    notification: {
+      appName: "PhonePe Support",
+      title: "Security alert — action required",
+      body: "Unusual activity detected. Confirm your identity on our helpline portal immediately.",
+      time: "1m ago",
+    },
   },
 ];
 

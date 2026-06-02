@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useReducer } from "react";
+import { playScamNotification } from "../utils/sound.js";
 
 /**
  * @typedef {{ id: string, appId: string, appLabel: string, from: string, body: string, createdAt: number }} PhoneNotification
@@ -167,6 +168,10 @@ function reducer(state, action) {
       };
     }
 
+    case "signals.clear": {
+      return { ...state, signals: {} };
+    }
+
     default:
       return state;
   }
@@ -185,6 +190,9 @@ export function usePhoneStore() {
       },
       notify(payload) {
         dispatch({ type: "notify", ...payload });
+        if (!payload || !payload.silent) {
+          playScamNotification();
+        }
       },
       receiveSms(payload) {
         dispatch({ type: "sms.receive", ...payload });
@@ -206,6 +214,9 @@ export function usePhoneStore() {
       },
       signal(name, value) {
         dispatch({ type: "signal", name, value });
+      },
+      clearSignals() {
+        dispatch({ type: "signals.clear" });
       },
     };
   }, []);

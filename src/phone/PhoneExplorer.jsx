@@ -3,22 +3,27 @@ import PhoneShell from "../components/phone/PhoneShell.jsx";
 import LockScreen from "../screens/LockScreen.jsx";
 import HomeScreen from "../screens/HomeScreen.jsx";
 import NotificationBanner from "../components/phone/NotificationBanner.jsx";
-import { EXPLORER_APPS } from "../content/constants.js";
+import { EXPLORER_APPS, NOTIFICATION_BANNER_STAY_MS } from "../content/constants.js";
 import { usePhoneStore } from "./phoneStore.js";
 import { appIdFromNotification, renderPhoneApp } from "./appRegistry.jsx";
 
 /**
  * Phone Explorer — the navigable phone OS (lock → home → apps).
- * @param {{ embedded?: boolean, phone?: ReturnType<typeof usePhoneStore>, onUnlocked?: () => void, onNotificationOpened?: (notification: { app?: string, from?: string, body?: string } | null) => void, scenarioThreadId?: string, onPhonepeClaim?: () => void, openAppId?: string | null }} props
+ * @param {{ embedded?: boolean, phone?: ReturnType<typeof usePhoneStore>, onUnlocked?: () => void, onNotificationOpened?: (notification: { app?: string, from?: string, body?: string } | null) => void, onScamReached?: () => void, scenarioThreadId?: string, onPhonepeClaim?: () => void, openAppId?: string | null, lockNotification?: { appId?: string, appLabel?: string, from?: string, body?: string } | null, badgeApp?: string, homeApps?: { id: string, emoji: string, label: string }[], phoneSessionKey?: number }} props
  */
 export default function PhoneExplorer({
   embedded = false,
   phone: phoneOverride,
   onUnlocked,
   onNotificationOpened,
+  onScamReached,
   scenarioThreadId,
   onPhonepeClaim,
   openAppId = null,
+  lockNotification = null,
+  badgeApp,
+  homeApps = EXPLORER_APPS,
+  phoneSessionKey = 0,
 }) {
   const internalPhone = usePhoneStore();
   const phone = phoneOverride ?? internalPhone;
@@ -33,10 +38,11 @@ export default function PhoneExplorer({
 
   const openApp = useCallback(
     (appId) => {
+      phone.api.clearNotifications();
       setHistory((h) => [...h, route]);
       setRoute({ screen: "app", appId });
     },
-    [route]
+    [route, phone.api]
   );
 
   const goBack = useCallback(() => {
@@ -76,20 +82,30 @@ export default function PhoneExplorer({
     phone.api.dismissNotification(banner.id);
   }, [phone.api, banner?.id]);
 
-  const homeBadge = totalUnreadSms > 0;
+  const homeBadge =
+    badgeApp != null ? true : totalUnreadSms > 0;
+  const resolvedBadgeApp = badgeApp ?? (totalUnreadSms > 0 ? "messages" : undefined);
 
   let content = null;
 
+  useEffect(() => {
+    setRoute({ screen: "lock", appId: null });
+    setHistory([]);
+    lastOpenAppIdRef.current = null;
+  }, [phoneSessionKey]);
+
   if (route.screen === "lock") {
-    content = <LockScreen onUnlock={unlock} />;
+    content = (
+      <LockScreen onUnlock={unlock} notification={lockNotification} />
+    );
   } else if (route.screen === "home") {
     content = (
       <HomeScreen
-        apps={EXPLORER_APPS}
+        apps={homeApps}
         variant="default"
         notification={banner}
         badge={homeBadge}
-        badgeApp={homeBadge ? "messages" : undefined}
+        badgeApp={resolvedBadgeApp}
         onOpenApp={openApp}
         onOpenNotification={() => {
           const appId = appIdFromNotification(banner);
@@ -111,6 +127,7 @@ export default function PhoneExplorer({
       scenarioThreadId,
       onOpenScenarioThread: onNotificationOpened,
       onPhonepeClaim,
+      onScamReached,
     });
   }
 
@@ -138,7 +155,7 @@ export default function PhoneExplorer({
               }
               openApp(appId);
             }}
-            autoDismissMs={banner ? 2000 : 0}
+            autoDismissMs={banner ? NOTIFICATION_BANNER_STAY_MS : 0}
             onDismiss={dismissBanner}
           />
         )}

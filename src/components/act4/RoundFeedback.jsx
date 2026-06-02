@@ -12,10 +12,11 @@ import ChallengeButton from "./ChallengeButton.jsx";
  *     details?: { label: string, ok?: boolean, text?: string }[],
  *   },
  *   onNext: () => void,
+ *   onRetry?: () => void,
  *   nextLabel?: string,
  * }} props
  */
-export default function RoundFeedback({ result, onNext, nextLabel = "Next →" }) {
+export default function RoundFeedback({ result, onNext, onRetry, nextLabel = "Next →" }) {
   return (
     <div className="flex flex-1 flex-col px-6 py-8">
       <div className="mx-auto w-full max-w-lg">
@@ -71,7 +72,12 @@ export default function RoundFeedback({ result, onNext, nextLabel = "Next →" }
           </ul>
         )}
 
-        <div className="mt-8 flex justify-end">
+        <div className="mt-8 flex flex-wrap justify-end gap-3">
+          {onRetry && (
+            <ChallengeButton variant="secondary" onClick={onRetry}>
+              Try again
+            </ChallengeButton>
+          )}
           <ChallengeButton onClick={onNext}>{nextLabel}</ChallengeButton>
         </div>
       </div>

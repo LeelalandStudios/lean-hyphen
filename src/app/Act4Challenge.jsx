@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { startFinalAmbient, stopFinalAmbient } from "../utils/sound.js";
 import {
   ACT4_CHALLENGE_INTRO,
   ACT4_ROUNDS,
@@ -17,6 +18,8 @@ import RealOrScamSpeedRound from "../components/act4/RealOrScamSpeedRound.jsx";
 import ResultsBoard from "../components/act4/ResultsBoard.jsx";
 import RoundFeedback from "../components/act4/RoundFeedback.jsx";
 import RoundIntro from "../components/act4/RoundIntro.jsx";
+import { statsFromRoundResults } from "../components/act4/roundStats.js";
+
 const ROUND_GAMES = {
   "fake-link": FakeLinkGame,
   "speed-round": RealOrScamSpeedRound,
@@ -26,17 +29,44 @@ const ROUND_GAMES = {
 };
 
 /**
- * Act 4 — Scam Detective challenge round.
+ * @param {{
+ *   focusRoundId?: string | null,
+ *   onFocusRoundChange?: (roundId: string | null) => void,
+ *   roundResults?: any[],
+ *   onRoundResultsChange?: (results: any[]) => void,
+ * }} props
  */
-export default function Act4Challenge() {
+export default function Act4Challenge({
+  focusRoundId,
+  onFocusRoundChange,
+  roundResults: roundResultsProp = [],
+  onRoundResultsChange,
+}) {
   const [stage, setStage] = useState("intro");
   const [roundIndex, setRoundIndex] = useState(0);
   const [roundPhase, setRoundPhase] = useState("rules");
   const [score, setScore] = useState(0);
   const [shields, setShields] = useState(0);
   const [closeCalls, setCloseCalls] = useState(0);
-  const [roundResults, setRoundResults] = useState([]);
+  const [localRoundResults, setLocalRoundResults] = useState([]);
+  const roundResults = onRoundResultsChange ? roundResultsProp : localRoundResults;
+  const setRoundResults = onRoundResultsChange || setLocalRoundResults;
   const [feedbackResult, setFeedbackResult] = useState(null);
+
+  const applyResults = useCallback((results) => {
+    const stats = statsFromRoundResults(results);
+    setScore(stats.score);
+    setShields(stats.shields);
+    setCloseCalls(stats.closeCalls);
+    setRoundResults(results);
+  }, [setRoundResults]);
+
+  useEffect(() => {
+    const stats = statsFromRoundResults(roundResults);
+    setScore(stats.score);
+    setShields(stats.shields);
+    setCloseCalls(stats.closeCalls);
+  }, [roundResults]);
 
   const resetRun = useCallback(() => {
     setStage("intro");
@@ -47,7 +77,8 @@ export default function Act4Challenge() {
     setCloseCalls(0);
     setRoundResults([]);
     setFeedbackResult(null);
-  }, []);
+    onFocusRoundChange?.(null);
+  }, [onFocusRoundChange, setRoundResults]);
 
   const startChallenge = useCallback(() => {
     setRoundIndex(0);
@@ -58,29 +89,91 @@ export default function Act4Challenge() {
     setRoundResults([]);
     setFeedbackResult(null);
     setStage("round");
-  }, []);
+    onFocusRoundChange?.(ACT4_ROUNDS[0]?.id ?? null);
+  }, [onFocusRoundChange, setRoundResults]);
+
+  const goToPhase = useCallback(
+    (phaseId) => {
+      const roundIdx = ACT4_ROUNDS.findIndex((r) => r.id === phaseId);
+      if (roundIdx >= 0) {
+        setRoundIndex(roundIdx);
+        setRoundPhase("rules");
+        setFeedbackResult(null);
+        setStage("round");
+        onFocusRoundChange?.(phaseId);
+      } else {
+        setStage(phaseId);
+        onFocusRoundChange?.(phaseId);
+      }
+    },
+    [onFocusRoundChange]
+  );
+
+  useEffect(() => {
+    if (!focusRoundId) return;
+    goToPhase(focusRoundId);
+  }, [focusRoundId, goToPhase]);
+
+  useEffect(() => {
+    const isFinalSummary = ["group", "rules", "help", "final"].includes(stage);
+    if (isFinalSummary) {
+      startFinalAmbient();
+      return () => {
+        stopFinalAmbient();
+      };
+    }
+  }, [stage]);
 
   const handleRoundComplete = useCallback((result) => {
-    setScore((s) => s + (result.pointsEarned ?? 0));
-    if (result.shieldEarned) setShields((n) => n + 1);
-    setCloseCalls((n) => n + (result.closeCalls ?? 0));
-    setRoundResults((prev) => [...prev, result]);
+    setRoundResults((prev) => {
+      const existsIdx = prev.findIndex((r) => r.roundId === result.roundId);
+      let next;
+      if (existsIdx !== -1) {
+        next = [...prev];
+        next[existsIdx] = result;
+      } else {
+        next = [...prev, result];
+      }
+      const stats = statsFromRoundResults(next);
+      setScore(stats.score);
+      setShields(stats.shields);
+      setCloseCalls(stats.closeCalls);
+      return next;
+    });
     setFeedbackResult(result);
     setRoundPhase("rules");
     setStage("feedback");
-  }, []);
+  }, [setRoundResults]);
+
+  const handleRetryRound = useCallback(() => {
+    if (!feedbackResult) return;
+    setRoundResults((prev) => {
+      const next = prev.slice(0, -1);
+      const stats = statsFromRoundResults(next);
+      setScore(stats.score);
+      setShields(stats.shields);
+      setCloseCalls(stats.closeCalls);
+      return next;
+    });
+    setFeedbackResult(null);
+    setRoundPhase("rules");
+    setStage("round");
+  }, [feedbackResult, setRoundResults]);
 
   const handleFeedbackNext = useCallback(() => {
     if (roundIndex >= ACT4_ROUNDS.length - 1) {
       setFeedbackResult(null);
       setStage("results");
+      onFocusRoundChange?.(null);
       return;
     }
-    setRoundIndex((i) => i + 1);
+    const nextIndex = roundIndex + 1;
+    setRoundIndex(nextIndex);
     setFeedbackResult(null);
     setRoundPhase("rules");
     setStage("round");
-  }, [roundIndex]);
+    onFocusRoundChange?.(ACT4_ROUNDS[nextIndex]?.id ?? null);
+  }, [roundIndex, onFocusRoundChange]);
 
   if (stage === "intro") {
     return (
@@ -128,6 +221,7 @@ export default function Act4Challenge() {
     body = (
       <RoundFeedback
         result={feedbackResult}
+        onRetry={handleRetryRound}
         onNext={handleFeedbackNext}
         nextLabel={
           roundIndex >= ACT4_ROUNDS.length - 1 ? "See results →" : "Next →"
@@ -166,7 +260,7 @@ export default function Act4Challenge() {
     } else if (GameComponent) {
       body = (
         <GameComponent
-          key={currentRound.id}
+          key={`${currentRound.id}-${roundResults.length}`}
           active={roundPhase === "play"}
           onComplete={handleRoundComplete}
         />

@@ -1,27 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import ScamCardDeck, { CardProgressBar, THROW_DELAY_MS } from "./ScamCardDeck.jsx";
+import ScamCardDeck, { CardProgressBar } from "./ScamCardDeck.jsx";
 import ScamCardDetail from "./ScamCardDetail.jsx";
+import { playThwack, playCompleteCard, playProgressBar } from "../../utils/sound.js";
 
 const TABLE_SETTLE_MS = 400;
+const STACK_THROW_DELAY_MS = 120;
+const BETWEEN_STACKS_DELAY_MS = 260;
 
 /**
- * Wooden table + cards thrown into grid slots + expand overlay.
- * @param {{
- *   cards: { id: string, emoji: string, label: string, sections: unknown[] }[],
- *   completedIds: string[],
- *   cardStars: Record<string, number>,
- *   activeCardId: string | null,
- *   onCardUnderstood: (id: string, stars: number) => void,
- * }} props
+ * Wooden table + card stacks thrown into grid slots + expand overlay.
  */
 export default function Act3CardTable({
   cards,
   completedIds,
-  cardStars,
   activeCardId,
-  onCardUnderstood,
+  onCardComplete,
 }) {
-  const [dealtCount, setDealtCount] = useState(0);
+  const [dealtLayersByCardId, setDealtLayersByCardId] = useState({});
   const [ready, setReady] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
   const [overlayAnim, setOverlayAnim] = useState("closed");
@@ -32,22 +27,29 @@ export default function Act3CardTable({
   );
 
   useEffect(() => {
-    setDealtCount(0);
+    setDealtLayersByCardId({});
     setReady(false);
     const timers = [];
-    for (let i = 0; i < cards.length; i += 1) {
+    let delay = TABLE_SETTLE_MS;
+
+    for (const card of cards) {
+      const cardId = card.id;
+      const finalLayers = card.sections.length;
       timers.push(
-        window.setTimeout(() => setDealtCount(i + 1), TABLE_SETTLE_MS + i * THROW_DELAY_MS)
+        window.setTimeout(() => {
+          setDealtLayersByCardId((prev) => ({
+            ...prev,
+            [cardId]: finalLayers,
+          }));
+          playThwack();
+        }, delay)
       );
+      delay += BETWEEN_STACKS_DELAY_MS + 200;
     }
-    timers.push(
-      window.setTimeout(
-        () => setReady(true),
-        TABLE_SETTLE_MS + cards.length * THROW_DELAY_MS + 200
-      )
-    );
+
+    timers.push(window.setTimeout(() => setReady(true), delay));
     return () => timers.forEach((t) => window.clearTimeout(t));
-  }, [cards.length]);
+  }, [cards]);
 
   const openCard = useCallback((id) => {
     setExpandedId(id);
@@ -65,82 +67,102 @@ export default function Act3CardTable({
     }, 420);
   }, []);
 
-  const handleUnderstand = useCallback((stars) => {
+  const handleComplete = useCallback(() => {
     if (!expandedId) return;
-    onCardUnderstood(expandedId, stars);
+    playCompleteCard();
+    onCardComplete(expandedId);
     closeCard();
-  }, [closeCard, expandedId, onCardUnderstood]);
+  }, [closeCard, expandedId, onCardComplete]);
 
-  const allDealt = dealtCount >= cards.length;
-  const earnedStars = cards.reduce((sum, card) => sum + (cardStars[card.id] ?? 0), 0);
-  const totalStars = cards.length * 3;
+  const allStacksDealt = cards.every(
+    (card) => (dealtLayersByCardId[card.id] ?? 0) >= card.sections.length
+  );
+
+  const totalSections = cards.reduce((sum, card) => sum + card.sections.length, 0);
+  const completedSections = cards.reduce(
+    (sum, card) =>
+      sum + (completedIds.includes(card.id) ? card.sections.length : 0),
+    0
+  );
+
+  useEffect(() => {
+    if (completedSections > 0) {
+      playProgressBar();
+    }
+  }, [completedSections]);
+
+  const tableDimmed = Boolean(expandedId);
 
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col">
+    <div className="relative flex h-full min-h-0 flex-row overflow-hidden">
       <div
-        className={`flex min-h-0 flex-1 gap-4 transition-all duration-500 ease-out ${
-          expandedId
-            ? "pointer-events-none scale-[0.86] opacity-35 blur-[3px]"
-            : "scale-100 opacity-100 blur-0"
+        className={`act3-scroll min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain transition-opacity duration-500 ${
+          tableDimmed ? "pointer-events-none opacity-35 blur-[3px]" : ""
         }`}
       >
-        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="relative w-full px-1 pb-6 pt-2 sm:px-2 lg:pb-8 lg:pt-4">
           <div
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(ellipse 90% 70% at 50% 55%, rgba(255,220,180,0.12), transparent 65%)",
+                "radial-gradient(ellipse 70% 50% at 20% 15%, rgba(255,220,180,0.12), transparent 70%)",
             }}
           />
 
-          <div className="relative flex min-h-0 flex-1 flex-col items-center justify-start pt-8 sm:pt-12">
+          <div className="relative w-full py-4 sm:py-6 lg:py-2">
             <ScamCardDeck
               cards={cards}
               completedIds={completedIds}
               activeCardId={activeCardId}
               onSelectCard={openCard}
-              dealtCount={dealtCount}
+              dealtLayersByCardId={dealtLayersByCardId}
               ready={ready}
             />
           </div>
         </div>
-
-        <div className="flex shrink-0 flex-col items-center gap-2 py-4">
-          <CardProgressBar
-            total={totalStars}
-            completed={earnedStars}
-            visible={allDealt}
-          />
-          <span
-            className={`text-[10px] font-bold tabular-nums text-white/50 transition-opacity ${
-              allDealt ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            {earnedStars}/{totalStars} ★
-          </span>
-        </div>
       </div>
+
+      {allStacksDealt && (
+        <aside
+          className={`flex h-full min-h-0 w-7 shrink-0 flex-col items-center gap-2 border-l border-amber-950/30 bg-black/15 py-3 pl-0.5 pr-1 ${
+            tableDimmed ? "opacity-35" : ""
+          }`}
+          aria-label="Section progress"
+        >
+          <CardProgressBar total={totalSections} completed={completedSections} />
+          <span className="shrink-0 text-center text-[9px] font-bold leading-none tabular-nums text-white/50">
+            {completedSections}/{totalSections}
+          </span>
+        </aside>
+      )}
 
       {expandedId && viewingCard && (
         <div
-          className={`absolute inset-0 z-30 flex items-center justify-center p-6 transition-opacity duration-400 ${
+          className={`act3-scroll-panel absolute inset-0 z-30 overflow-x-hidden overflow-y-auto overscroll-y-contain transition-opacity duration-400 ${
             overlayAnim === "closing" ? "opacity-0" : "opacity-100"
           }`}
         >
-          <div className="pointer-events-none absolute inset-0 bg-black/25" />
-          <div
-            className={`relative flex h-[min(92%,720px)] w-full max-w-xl flex-col overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-[0_32px_120px_rgba(0,0,0,0.45)] transition-transform ease-out ${
-              overlayAnim === "open"
-                ? "scale-100"
-                : overlayAnim === "closing"
-                  ? "scale-90 opacity-0"
-                  : "scale-[0.42]"
-            }`}
-            style={{
-              transitionDuration: overlayAnim === "open" ? "450ms" : "420ms",
-            }}
-          >
-            <ScamCardDetail card={viewingCard} onUnderstand={handleUnderstand} />
+          <button
+            type="button"
+            aria-label="Close card"
+            className="fixed inset-0 bg-black/25"
+            onClick={closeCard}
+          />
+          <div className="relative flex min-h-full items-center justify-center p-4 sm:p-6">
+            <div
+              className={`relative flex w-full max-w-xl max-h-[min(92dvh,720px)] min-h-[min(320px,70dvh)] flex-col overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-[0_32px_120px_rgba(0,0,0,0.45)] transition-transform ease-out ${
+                overlayAnim === "open"
+                  ? "scale-100"
+                  : overlayAnim === "closing"
+                    ? "scale-90 opacity-0"
+                    : "scale-[0.42]"
+              }`}
+              style={{
+                transitionDuration: overlayAnim === "open" ? "450ms" : "420ms",
+              }}
+            >
+              <ScamCardDetail card={viewingCard} onComplete={handleComplete} />
+            </div>
           </div>
         </div>
       )}

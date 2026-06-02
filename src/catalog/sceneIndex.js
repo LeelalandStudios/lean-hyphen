@@ -52,7 +52,7 @@ export const SCENE_SECTIONS = [
         act: 1,
         summary:
           "Black screen → WhatsApp Squad Goals at 11:47 PM. Kabir tells Rohan's ₹12,000 PhonePe scam story; transition to 5 waiting messages.",
-        source: "src/app/Act1Hook.jsx · src/content/act1Hook.js",
+        source: "src/app/Act1Hook.jsx · src/content/chats/act1-hook.yaml",
         supersedes: "legacy-act1-room-chat",
         Component: Act1Hook,
         props: { onComplete: noop },

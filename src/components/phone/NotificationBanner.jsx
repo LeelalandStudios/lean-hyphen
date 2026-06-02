@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { NOTIFICATION_BANNER_STAY_MS } from "../../content/constants.js";
 
 /**
  * @param {{ data: { app?: string, from?: string, body?: string } | null, onClick?: () => void, autoDismissMs?: number, onDismiss?: () => void }} props
@@ -6,7 +7,7 @@ import { useEffect, useState } from "react";
 export default function NotificationBanner({
   data,
   onClick,
-  autoDismissMs = 2000,
+  autoDismissMs = NOTIFICATION_BANNER_STAY_MS,
   onDismiss,
 }) {
   const [phase, setPhase] = useState("hidden");

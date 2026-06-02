@@ -1,0 +1,73 @@
+id: demo-hook
+type: whatsapp-chat
+
+header:
+  title: "🔥 Squad Goals"
+  subtitle: "5 members"
+  currentTime: "11:47 PM"
+  showBack: false
+  showMenu: true
+
+settings:
+  autoStart: true
+  autoScroll: true
+  fastForward: true
+  defaultMessageDelayMs: auto
+  defaultTypingMs: 1200
+  defaultTime: "11:47 PM"
+  encryptedNotice: true
+  inputBar: true
+
+senders:
+  Kabir:
+    color: "#e542a3"
+  Aryan:
+    color: "#53bdeb"
+  Priya:
+    color: "#25d366"
+
+beats:
+  - type: message
+    sender: Kabir
+    text: "guys wake up"
+    delayAfterMs: 1600
+
+  - type: typing
+    sender: Kabir
+    durationMs: 2000
+
+  - type: message
+    sender: Kabir
+    text: |
+      my cousin Rohan. he's 16. he saved up 8 months of birthday money.
+      it's gone.
+    time: "11:48 PM"
+    receipts: true
+
+  - type: pause
+    durationMs: 1400
+
+  - type: readReceipts
+    target: "it's gone"
+
+  - type: forwarded
+    sender: Aryan
+    from: "+91 98765 43210 (Unknown)"
+    body: |
+      You've been selected for a Free Fire Diamond Giveaway!
+      Claim now: bit.ly/ff-d1amonds-free
+    time: "11:49 PM"
+
+  - type: divider
+    label: Today
+
+  - type: link
+    sender: Priya
+    title: "Spot the Scam"
+    url: "leelaland.app/spot-the-scam"
+    caption: "Tap each red flag."
+    time: "11:50 PM"
+
+  - type: message
+    sender: Priya
+    text: "I can show you exactly how it works. right now."

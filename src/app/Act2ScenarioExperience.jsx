@@ -1,31 +1,53 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { playCorrect, playIncorrect } from "../utils/sound.js";
 import {
   ACT2_SCENARIOS,
   ACT2_SCENARIO_COUNT,
 } from "../content/act2Scenarios.js";
 import Act2ProgressHeader from "../components/act2/Act2ProgressHeader.jsx";
 import Act2ScenarioLayout from "../components/act2/Act2ScenarioLayout.jsx";
-import { getAct2ScreenComponent } from "../components/act2/screens/ScenarioScreenRegistry.jsx";
-
 /**
- * Act 2 — scored five-scenario phone experience.
- * @param {{ onComplete?: () => void }} props
+ * Act 2 — scored five-scenario phone experience (notification-first flow).
+ * @param {{ onComplete?: () => void, focusScenarioId?: string | null, onFocusScenarioChange?: (id: string) => void }} props
  */
-export default function Act2ScenarioExperience({ onComplete }) {
-  const [scenarioIndex, setScenarioIndex] = useState(0);
+export default function Act2ScenarioExperience({
+  onComplete,
+  focusScenarioId,
+  onFocusScenarioChange,
+  completedScenarioIds: completedScenarioIdsProp = [],
+  onCompletedScenarioIdsChange,
+}) {
+  const [scenarioIndex, setScenarioIndex] = useState(() => {
+    if (focusScenarioId) {
+      const idx = ACT2_SCENARIOS.findIndex((s) => s.id === focusScenarioId);
+      if (idx !== -1) return idx;
+    }
+    return 0;
+  });
   const [selectedChoiceId, setSelectedChoiceId] = useState(null);
   const [outcomeVisible, setOutcomeVisible] = useState(false);
-  const [shieldCount, setShieldCount] = useState(0);
   const [closeCalls, setCloseCalls] = useState(0);
-  const [completedScenarioIds, setCompletedScenarioIds] = useState([]);
+  const [localCompletedScenarioIds, setLocalCompletedScenarioIds] = useState([]);
+  const completedScenarioIds = onCompletedScenarioIdsChange ? completedScenarioIdsProp : localCompletedScenarioIds;
+  const setCompletedScenarioIds = onCompletedScenarioIdsChange || setLocalCompletedScenarioIds;
+  const shieldCount = completedScenarioIds.length;
+  const [attempt, setAttempt] = useState(0);
+
+  useEffect(() => {
+    if (!focusScenarioId) return;
+    const idx = ACT2_SCENARIOS.findIndex((s) => s.id === focusScenarioId);
+    if (idx !== -1 && idx !== scenarioIndex) {
+      setScenarioIndex(idx);
+      setSelectedChoiceId(null);
+      setOutcomeVisible(false);
+      setAttempt(0);
+    }
+  }, [focusScenarioId, scenarioIndex]);
 
   const scenario = ACT2_SCENARIOS[scenarioIndex];
   const selectedChoice = scenario?.choices.find((c) => c.id === selectedChoiceId);
   const outcome = selectedChoice ? scenario.outcomes[selectedChoice.id] : null;
   const isLastScenario = scenarioIndex >= ACT2_SCENARIO_COUNT - 1;
-  const ScreenComponent = scenario
-    ? getAct2ScreenComponent(scenario.screenType)
-    : null;
 
   const handleChoose = useCallback(
     (choiceId) => {
@@ -39,9 +61,13 @@ export default function Act2ScenarioExperience({ onComplete }) {
 
       if (choice.result === "fail") {
         setCloseCalls((n) => n + 1);
-      } else if (!completedScenarioIds.includes(scenario.id)) {
-        setShieldCount((n) => n + 1);
-        setCompletedScenarioIds((prev) => [...prev, scenario.id]);
+        playIncorrect();
+      } else {
+        if (!completedScenarioIds.includes(scenario.id)) {
+          setShieldCount((n) => n + 1);
+          setCompletedScenarioIds((prev) => [...prev, scenario.id]);
+        }
+        playCorrect();
       }
     },
     [outcomeVisible, scenario, completedScenarioIds]
@@ -50,6 +76,7 @@ export default function Act2ScenarioExperience({ onComplete }) {
   const handleRetry = useCallback(() => {
     setSelectedChoiceId(null);
     setOutcomeVisible(false);
+    setAttempt((a) => a + 1);
   }, []);
 
   const handleNext = useCallback(() => {
@@ -57,12 +84,18 @@ export default function Act2ScenarioExperience({ onComplete }) {
       onComplete?.();
       return;
     }
-    setScenarioIndex((i) => i + 1);
+    const nextIdx = scenarioIndex + 1;
+    setScenarioIndex(nextIdx);
     setSelectedChoiceId(null);
     setOutcomeVisible(false);
-  }, [isLastScenario, onComplete]);
+    setAttempt(0);
+    const nextScenario = ACT2_SCENARIOS[nextIdx];
+    if (nextScenario) {
+      onFocusScenarioChange?.(nextScenario.id);
+    }
+  }, [isLastScenario, onComplete, scenarioIndex, onFocusScenarioChange]);
 
-  if (!scenario || !ScreenComponent) {
+  if (!scenario) {
     return null;
   }
 
@@ -76,9 +109,8 @@ export default function Act2ScenarioExperience({ onComplete }) {
       />
       <div className="min-h-0 flex-1 overflow-hidden">
         <Act2ScenarioLayout
-          key={scenario.id}
+          key={`${scenario.id}_${attempt}`}
           scenario={scenario}
-          ScreenComponent={ScreenComponent}
           selectedChoiceId={selectedChoiceId}
           outcomeVisible={outcomeVisible}
           outcome={outcome}

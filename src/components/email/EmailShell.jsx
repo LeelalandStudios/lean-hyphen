@@ -17,7 +17,7 @@ export default function EmailShell({ title = "Gmail", children, footer, onBack }
         <span className="flex-1 truncate text-sm font-medium text-slate-700">{title}</span>
         <span className="text-lg">🔍</span>
       </header>
-      <div className={`min-h-0 flex-1 overflow-y-auto ${footer ? "" : "pb-4"}`}>
+      <div className={`min-h-0 flex-1 overflow-y-auto ${footer ? "" : "pb-16"}`}>
         {children}
       </div>
       {footer}

@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { ACT4_SCORE_BANDS } from "../../content/act4Challenge.js";
 import { getScoreBand } from "./answerScoring.js";
 import ChallengeButton from "./ChallengeButton.jsx";
+import { playScore80, playScorePerfect } from "../../utils/sound.js";
 
 /**
  * @param {{
@@ -13,6 +15,14 @@ import ChallengeButton from "./ChallengeButton.jsx";
  */
 export default function ResultsBoard({ score, shields, closeCalls, roundResults, onContinue }) {
   const band = getScoreBand(score, ACT4_SCORE_BANDS);
+
+  useEffect(() => {
+    if (score === 200) {
+      playScorePerfect();
+    } else if (score >= 160) {
+      playScore80();
+    }
+  }, [score]);
 
   return (
     <div className="flex flex-1 flex-col overflow-y-auto px-6 py-8">

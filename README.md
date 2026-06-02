@@ -64,13 +64,13 @@ Legacy alternative: `Act2PhoneSimulation.jsx` (older PhonePe / school-email flow
 `src/app/Act3PriyaExplains.jsx` · `src/content/act3/`
 
 1. **Room-style dialogue** — Squad Goals debrief (shared `RoomDialogue` pattern, no room background image).
-2. **Table** — three scam cards dealt one-by-one onto the wood table (face-down), then unlocked in order.
-3. **Tap a card** — expands to center; markdown sections fade in (`src/content/act3/cards/*.md`).
-4. **Understand** — compact horizontal “hose” fill; label stays centered; stars are white. The button can be clicked at 0–3 stars.
-5. **Progress** — the main progress rail tracks earned stars (`0/9 ★` through `9/9 ★`). Zero-star completion still unlocks the next card.
+2. **Table** — three topic stacks dealt onto the wood table (one physical card per section), then unlocked in order.
+3. **Tap a stack** — expands to center; the first section card flips in (`src/content/act3/cards/*.md`).
+4. **Next →** — disabled briefly after each section appears; each click stacks the next section card on top. The final section shows **Done**.
+5. **Progress** — golden progress rail tracks completed sections (`0/N` through `N/N`); progress increases when a topic stack is finished.
 6. **Outro** — Priya names urgency as the underlying trick, Kabir sends it to Rohan, and **Test yourself →** starts Act 4.
 
-Supporting UI: `src/components/act3/` (`Act3CardTable`, `ScamCardDeck`, `UnderstandButton`, …).
+Supporting UI: `src/components/act3/` (`Act3CardTable`, `ScamCardDeck`, `CardSectionNav`, …).
 
 ---
 
@@ -145,7 +145,7 @@ src/
   app/              Lesson acts (Act1Hook … Act4Challenge, LessonApp)
   catalog/          Scene index + static screen catalog
   components/
-    act3/           Scam cards, Understand button, table overlay
+    act3/           Scam card stacks, CardSectionNav, table overlay
     act4/           Challenge mini-games, scoreboard, finale screens
     room/           RoomDialogue (Act 3 + Act 4 group wrap)
     phone/          Phone chrome

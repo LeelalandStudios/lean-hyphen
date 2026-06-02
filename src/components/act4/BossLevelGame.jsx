@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { BOSS_SCENARIO } from "../../content/act4Challenge.js";
 import { gradeBossAnswer, scoreBossLevel } from "./answerScoring.js";
 import ChallengeButton from "./ChallengeButton.jsx";
+import { startBossAmbient, stopBossAmbient } from "../../utils/sound.js";
 
 /**
  * @param {{ active: boolean, onComplete: (result: object) => void }} props
@@ -14,6 +15,10 @@ export default function BossLevelGame({ active, onComplete }) {
     if (active) {
       setAnswer("");
       setSubmitted(false);
+      startBossAmbient();
+      return () => {
+        stopBossAmbient();
+      };
     }
   }, [active]);
 

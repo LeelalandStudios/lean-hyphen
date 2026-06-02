@@ -11,6 +11,9 @@ import { HOME_RAFI_NOTIFICATION, RAFI_SCAM_NUMBER } from "./scenario3.js";
 import { HOME_MAIL_NOTIFICATION } from "./scenario4.js";
 import { HOME_MLBB_NOTIFICATION } from "./scenario5.js";
 
+/** How long notification banners stay visible before auto-hiding (ms). */
+export const NOTIFICATION_BANNER_STAY_MS = 8000;
+
 export const PAYTM_SENDER = "+91 91234 56789";
 export const OTP_SCAM_SENDER = "+91 91234 56789";
 export const WHATSAPP_OTP_SENDER = "+91 93333 22211";
@@ -178,6 +181,8 @@ export const DRAWER_APP_ROWS = [
 export const EXPLORER_APPS = [
   { id: "whatsapp", emoji: "💬", label: "WhatsApp" },
   { id: "messages", emoji: "🗨️", label: "Messages" },
+  { id: "youtube", emoji: "▶️", label: "YouTube" },
+  { id: "instagram", emoji: "📸", label: "Instagram" },
   { id: "phonepe", emoji: "📱", label: "PhonePe" },
   { id: "chrome", emoji: "🌐", label: "Chrome" },
   { id: "phone", emoji: "📞", label: "Call log" },

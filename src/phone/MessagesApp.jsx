@@ -3,7 +3,13 @@ import AppScreen from "../components/phone/AppScreen.jsx";
 import MessageBody from "../components/ui/MessageBody.jsx";
 import ScenarioChoiceFooter from "../components/messages/ScenarioChoiceFooter.jsx";
 
-export default function MessagesApp({ phone, onBack, scenarioThreadId, onOpenScenarioThread }) {
+export default function MessagesApp({
+  phone,
+  onBack,
+  scenarioThreadId,
+  onOpenScenarioThread,
+  onScamReached,
+}) {
   const { state, api } = phone;
   const [activeThreadId, setActiveThreadId] = useState(null);
 
@@ -11,11 +17,12 @@ export default function MessagesApp({ phone, onBack, scenarioThreadId, onOpenSce
     (threadId) => {
       api.markSmsRead(threadId);
       setActiveThreadId(threadId);
+      api.signal("messages.thread.opened", threadId);
       if (scenarioThreadId && threadId === scenarioThreadId) {
-        onOpenScenarioThread?.();
+        onScamReached?.();
       }
     },
-    [api, scenarioThreadId, onOpenScenarioThread]
+    [api, scenarioThreadId, onScamReached]
   );
 
   useEffect(() => {

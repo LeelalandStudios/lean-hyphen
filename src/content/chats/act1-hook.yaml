@@ -1,0 +1,123 @@
+id: act1-hook
+type: whatsapp-chat
+
+header:
+  title: "🔥 Squad Goals"
+  subtitle: "5 members"
+  currentTime: "11:47 PM"
+  showBack: false
+  showMenu: true
+
+settings:
+  autoStart: true
+  autoScroll: true
+  fastForward: false
+  defaultMessageDelayMs: auto
+  defaultTypingMs: 1200
+  defaultTime: "11:47 PM"
+  encryptedNotice: false
+  inputBar: true
+
+senders:
+  Kabir:
+    color: "#e542a3"
+  Aryan:
+    color: "#53bdeb"
+  Diya:
+    color: "#e542a3"
+  Priya:
+    color: "#25d366"
+  Meera:
+    color: "#8696a0"
+
+beats:
+  - type: message
+    sender: Kabir
+    text: "guys wake up"
+
+  - type: message
+    sender: Kabir
+    text: "WAKE UP RIGHT NOW"
+
+  - type: message
+    sender: Kabir
+    text: "something happened"
+
+  - type: typing
+    durationMs: 2000
+
+  - type: pause
+    durationMs: 1400
+
+  - type: typing
+    durationMs: 1800
+
+  - type: message
+    sender: Aryan
+    text: "bro it's midnight what"
+
+  - type: message
+    sender: Kabir
+    text: |
+      my cousin Rohan. he's 16. he saved up 8 months of birthday money — ₹12,000 — to buy a used laptop for his board exam prep
+
+  - type: message
+    sender: Kabir
+    text: "it's gone"
+    delayAfterMs: 1800
+
+  - type: readReceipts
+    target: "it's gone"
+
+  - type: pause
+    durationMs: 1800
+
+  - type: message
+    sender: Diya
+    text: "...what do you mean gone"
+
+  - type: message
+    sender: Kabir
+    text: |
+      he got a message yesterday. said he won a cashback on PhonePe. ₹3,000. looked completely real — the logo, everything.
+
+  - type: message
+    sender: Kabir
+    text: |
+      he clicked the link. typed his details. that's it. they emptied the whole account in 4 minutes.
+
+  - type: message
+    sender: Kabir
+    text: |
+      he didn't even tell his parents until today. he thought it was his fault.
+
+  - type: message
+    sender: Priya
+    text: |
+      it wasn't his fault. they're designed to fool people. even adults fall for this.
+
+  - type: message
+    sender: Aryan
+    text: "ok but how? he's not dumb"
+
+  - type: message
+    sender: Priya
+    text: |
+      that's exactly the point. being smart has nothing to do with it. these tricks are built to bypass your brain. they use time pressure. they use fear. they use trust.
+
+  - type: message
+    sender: Priya
+    text: |
+      I can show you exactly how it works. right now. so when it comes for you — and it will — you're ready.
+
+  - type: message
+    sender: Kabir
+    text: "do it. i want to understand what happened to him."
+
+  - type: message
+    sender: Diya
+    text: "same"
+
+  - type: message
+    sender: Aryan
+    text: "let's go"

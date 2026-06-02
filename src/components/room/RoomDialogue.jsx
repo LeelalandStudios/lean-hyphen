@@ -66,13 +66,14 @@ function DialogueBox({ speakerId, line, onNext, isLast, nextLabel }) {
  *   finalButtonLabel?: string,
  * }} props
  */
-export default function RoomDialogue({ script, onComplete, finalButtonLabel }) {
+export default function RoomDialogue({ script, onComplete, finalButtonLabel, header }) {
   const [idx, setIdx] = useState(0);
   const line = script[idx] ?? script[0];
   const isLast = idx >= script.length - 1;
 
   return (
-    <div className="absolute inset-x-0 bottom-0 z-20 flex justify-center p-5">
+    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-5 gap-4">
+      {header}
       <DialogueBox
         speakerId={line.speaker}
         line={line}

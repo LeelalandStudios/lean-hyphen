@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { playTimerTick, playTimerEnd } from "../../utils/sound.js";
 
 /**
  * @param {{
@@ -28,9 +29,11 @@ export default function TimerBar({ seconds, active, onExpire, label = "Time left
         const next = r - 1;
         if (next <= 0 && !expiredRef.current) {
           expiredRef.current = true;
+          playTimerEnd();
           window.setTimeout(() => onExpireRef.current?.(), 0);
           return 0;
         }
+        playTimerTick();
         return Math.max(0, next);
       });
     }, 1000);

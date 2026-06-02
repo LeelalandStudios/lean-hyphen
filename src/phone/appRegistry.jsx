@@ -8,11 +8,17 @@ import GenericShellApp from "./apps/GenericShellApp.jsx";
 import PhonePeWalletScreen from "../screens/act3/PhonePeWalletScreen.jsx";
 import NewsFeedScreen from "../screens/apps/NewsFeedScreen.jsx";
 import MLBBLobbyScenario5Screen from "../screens/act3/scenario5/MLBBLobbyScenario5Screen.jsx";
+import Act2ScamApp from "./Act2ScamApp.jsx";
+import Act2WhatsAppKabirApp from "./Act2WhatsAppKabirApp.jsx";
+import { ACT2_SCENARIOS } from "../content/act2Scenarios.js";
 
-/**
- * @param {string} appId
- * @param {{ phone: import('./phoneStore.js').ReturnType<typeof import('./phoneStore.js').usePhoneStore>, onBack: () => void, onBackToHome: () => void, scenarioThreadId?: string, onOpenScenarioThread?: () => void }} ctx
- */
+/** Active Act 2 scenario when vars.act2_active_scenario is set. */
+function activeAct2Scenario(phone) {
+  const id = phone?.state?.vars?.act2_active_scenario;
+  if (!id) return null;
+  return ACT2_SCENARIOS.find((s) => s.id === id) ?? null;
+}
+
 export function renderPhoneApp(appId, ctx) {
   const {
     phone,
@@ -21,7 +27,34 @@ export function renderPhoneApp(appId, ctx) {
     scenarioThreadId,
     onOpenScenarioThread,
     onPhonepeClaim,
+    onScamReached,
   } = ctx;
+
+  const act2 = activeAct2Scenario(phone);
+
+  if (act2?.targetAppId === appId && act2.screenType) {
+    if (appId === "whatsapp" && act2.id === "friend-help") {
+      return (
+        <Act2WhatsAppKabirApp
+          phone={phone}
+          onBack={onBack}
+          scenarioId={act2.id}
+          onScamReached={onScamReached}
+        />
+      );
+    }
+    if (appId === "youtube" || appId === "instagram") {
+      return (
+        <Act2ScamApp
+          phone={phone}
+          onBack={onBack}
+          screenType={act2.screenType}
+          scenarioId={act2.id}
+          onScamReached={onScamReached}
+        />
+      );
+    }
+  }
 
   switch (appId) {
     case "messages":
@@ -31,6 +64,7 @@ export function renderPhoneApp(appId, ctx) {
           onBack={onBack}
           scenarioThreadId={scenarioThreadId}
           onOpenScenarioThread={onOpenScenarioThread}
+          onScamReached={onScamReached}
         />
       );
     case "whatsapp":
@@ -114,7 +148,15 @@ export function renderPhoneApp(appId, ctx) {
         />
       );
     case "instagram":
-      return (
+      return act2?.screenType === "instagram-threat" ? (
+        <Act2ScamApp
+          phone={phone}
+          onBack={onBack}
+          screenType="instagram-threat"
+          scenarioId={act2.id}
+          onScamReached={onScamReached}
+        />
+      ) : (
         <GenericShellApp
           title="Instagram"
           emoji="📸"
@@ -129,7 +171,15 @@ export function renderPhoneApp(appId, ctx) {
         />
       );
     case "youtube":
-      return (
+      return act2?.screenType === "youtube-deepfake" ? (
+        <Act2ScamApp
+          phone={phone}
+          onBack={onBack}
+          screenType="youtube-deepfake"
+          scenarioId={act2.id}
+          onScamReached={onScamReached}
+        />
+      ) : (
         <GenericShellApp
           title="YouTube"
           emoji="▶️"
@@ -161,7 +211,13 @@ export function renderPhoneApp(appId, ctx) {
     case "mail":
       return <MailApp onBack={onBack} phone={phone} />;
     case "mlbb":
-      return <MLBBLobbyScenario5Screen onBack={onBack} phone={phone} />;
+      return (
+        <MLBBLobbyScenario5Screen
+          onBack={onBack}
+          phone={phone}
+          onScamReached={onScamReached}
+        />
+      );
     case "news":
       return <NewsFeedScreen onBack={onBack} />;
     default:
@@ -177,8 +233,11 @@ export function renderPhoneApp(appId, ctx) {
 
 /** Map a home notification banner to an app id. */
 export function appIdFromNotification(notification) {
+  if (notification?.appId) return notification.appId;
   const label = `${notification?.app ?? ""} ${notification?.from ?? ""}`.toLowerCase();
   if (label.includes("whatsapp")) return "whatsapp";
+  if (label.includes("youtube")) return "youtube";
+  if (label.includes("instagram")) return "instagram";
   if (label.includes("message")) return "messages";
   if (label.includes("gmail") || label.includes("mail")) return "mail";
   if (label.includes("teen wire") || label.includes("news")) return "news";

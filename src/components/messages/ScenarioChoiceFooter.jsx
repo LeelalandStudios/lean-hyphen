@@ -9,7 +9,7 @@ export default function ScenarioChoiceFooter({
   onChoose,
 }) {
   return (
-    <footer className="shrink-0 border-t border-slate-200 bg-slate-50 p-3 shadow-[0_-4px_12px_rgba(0,0,0,0.06)]">
+    <footer className="shrink-0 border-t border-slate-200 bg-slate-50 p-3 pb-16 shadow-[0_-4px_12px_rgba(0,0,0,0.06)]">
       <p className="mb-2 text-center text-[10px] font-semibold uppercase tracking-wide text-slate-500">
         {title}
       </p>

@@ -1,4 +1,8 @@
-import { HOME_APPS, HOME_VARIANTS } from "../content/constants.js";
+import {
+  HOME_APPS,
+  HOME_VARIANTS,
+  NOTIFICATION_BANNER_STAY_MS,
+} from "../content/constants.js";
 import AppIcon from "../components/phone/AppIcon.jsx";
 import NotificationBanner from "../components/phone/NotificationBanner.jsx";
 import StatusBar from "../components/phone/StatusBar.jsx";
@@ -18,7 +22,7 @@ export default function HomeScreen({
   onOpenApp,
   onOpenNotification,
   onNotificationDismiss,
-  notificationAutoDismissMs = 2000,
+  notificationAutoDismissMs = NOTIFICATION_BANNER_STAY_MS,
 }) {
   const variantConfig = HOME_VARIANTS[variant] ?? HOME_VARIANTS.default;
   const notification =

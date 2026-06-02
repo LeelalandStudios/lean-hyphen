@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   HOME_MLBB_NOTIFICATION,
   MLBB_LOBBY_DIAMONDS,
@@ -5,8 +6,16 @@ import {
 import StatusBar from "../../../components/phone/StatusBar.jsx";
 import ScenarioChoiceFooter from "../../../components/messages/ScenarioChoiceFooter.jsx";
 
-export default function MLBBLobbyScenario5Screen({ onBack, phone }) {
+export default function MLBBLobbyScenario5Screen({ onBack, phone, onScamReached }) {
   const gate = phone?.state?.choiceGate ?? null;
+  const activeScenario = phone?.state?.vars?.act2_active_scenario;
+
+  useEffect(() => {
+    if (activeScenario === "game-threat") {
+      phone?.api?.signal("mlbb.admin_dm.opened", "game-threat");
+      onScamReached?.();
+    }
+  }, [phone?.api, activeScenario, onScamReached]);
   return (
     <div className="relative h-full overflow-y-auto bg-gradient-to-b from-indigo-800 via-violet-900 to-slate-950 p-5 pt-16 text-white">
       <StatusBar />

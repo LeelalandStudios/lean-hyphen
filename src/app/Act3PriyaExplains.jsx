@@ -8,13 +8,15 @@ import {
 } from "../content/act3/act3Patterns.js";
 
 /**
- * Act 3 — Priya explains patterns (room dialogue + sequential scam cards).
+ * Act 3 — Priya explains patterns (room dialogue + sequential scam card stacks).
  * @param {{ onComplete?: () => void }} props
  */
-export default function Act3PriyaExplains({ onComplete }) {
-  const [phase, setPhase] = useState("intro");
+export default function Act3PriyaExplains({ onComplete, focusPhaseId, onFocusPhaseChange }) {
+  const [internalPhase, setInternalPhase] = useState("intro");
   const [completedIds, setCompletedIds] = useState([]);
-  const [cardStars, setCardStars] = useState({});
+
+  const phase = focusPhaseId || internalPhase;
+  const setPhase = onFocusPhaseChange || setInternalPhase;
 
   const activeCardId = useMemo(() => {
     for (const card of ACT3_CARDS) {
@@ -31,12 +33,8 @@ export default function Act3PriyaExplains({ onComplete }) {
     }
   }, [phase, allCardsDone]);
 
-  const handleCardUnderstood = useCallback((cardId, stars) => {
+  const handleCardComplete = useCallback((cardId) => {
     setCompletedIds((prev) => (prev.includes(cardId) ? prev : [...prev, cardId]));
-    setCardStars((prev) => ({
-      ...prev,
-      [cardId]: Math.max(0, Math.min(3, Number(stars) || 0)),
-    }));
   }, []);
 
   const frameClass =
@@ -46,17 +44,19 @@ export default function Act3PriyaExplains({ onComplete }) {
     return (
       <div className={frameClass}>
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-indigo-950/30 via-transparent to-black/60" />
-        <div className="flex flex-1 flex-col items-center justify-center px-6 pb-32 pt-10">
-          <p className="text-center text-[11px] font-extrabold uppercase tracking-[0.2em] text-white/50">
-            🔥 Squad Goals · 12:14 AM
-          </p>
-          <h2 className="mt-2 text-center text-2xl font-extrabold text-white">
-            Priya explains the patterns
-          </h2>
-        </div>
         <RoomDialogue
           script={ACT3_INTRO_SCRIPT}
           onComplete={() => setPhase("cards")}
+          header={
+            <div className="text-center select-none pb-2">
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white/50">
+                🔥 Squad Goals · 12:14 AM
+              </p>
+              <h2 className="mt-2 text-2xl font-extrabold text-white">
+                Priya explains the patterns
+              </h2>
+            </div>
+          }
         />
       </div>
     );
@@ -66,18 +66,20 @@ export default function Act3PriyaExplains({ onComplete }) {
     return (
       <div className={frameClass}>
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-indigo-950/30 via-transparent to-black/60" />
-        <div className="flex flex-1 flex-col items-center justify-center px-6 pb-32 pt-10">
-          <p className="text-center text-[11px] font-extrabold uppercase tracking-[0.2em] text-white/50">
-            🔥 Squad Goals
-          </p>
-          <h2 className="mt-2 text-center text-2xl font-extrabold text-white">
-            The pattern
-          </h2>
-        </div>
         <RoomDialogue
           script={ACT3_OUTRO_SCRIPT}
           finalButtonLabel="Test yourself →"
           onComplete={() => onComplete?.()}
+          header={
+            <div className="text-center select-none pb-2">
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white/50">
+                🔥 Squad Goals
+              </p>
+              <h2 className="mt-2 text-2xl font-extrabold text-white">
+                The pattern
+              </h2>
+            </div>
+          }
         />
       </div>
     );
@@ -102,23 +104,24 @@ export default function Act3PriyaExplains({ onComplete }) {
         />
       </div>
 
-      <div className="relative z-10 flex min-h-0 flex-1 flex-col p-5 pr-3">
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden py-5 pl-5 pr-0">
         <header className="shrink-0 pb-2 text-center">
           <p className="text-[11px] font-extrabold uppercase tracking-wider text-amber-200/80">
             Scam cards
           </p>
           <p className="mt-1 text-sm text-white/70">
-            Priya deals the cards — tap each one in order.
+            Priya deals the cards — tap each stack in order.
           </p>
         </header>
 
+        <div className="min-h-0 flex-1 overflow-hidden">
         <Act3CardTable
           cards={ACT3_CARDS}
           completedIds={completedIds}
-          cardStars={cardStars}
           activeCardId={activeCardId}
-          onCardUnderstood={handleCardUnderstood}
+          onCardComplete={handleCardComplete}
         />
+        </div>
       </div>
     </div>
   );

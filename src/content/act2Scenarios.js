@@ -1,5 +1,10 @@
 /** Act 2 — five authored scam scenarios (source: script_v2.md). */
 
+export const ACT2_THREAD_OTP_GARENA = "act2_otp_garena";
+export const ACT2_THREAD_OTP_UNKNOWN = "act2_otp_unknown";
+export const ACT2_THREAD_KABIR = "act2_kabir";
+export const ACT2_EMAIL_THREAT = "act2_instagram_dm";
+
 export const ACT2_HEADER = {
   title: "Act 2 — The Scenarios",
   helperText:
@@ -13,6 +18,16 @@ export const ACT2_SCENARIOS = [
     title: "The Famous Face",
     subtitle: "Deepfake celebrity giveaway",
     screenType: "youtube-deepfake",
+    targetAppId: "youtube",
+    phoneEntry: { targetAppId: "youtube", targetRoute: "deepfake-video" },
+    lockNotification: {
+      appId: "youtube",
+      appLabel: "▶️ YouTube",
+      from: "Virat Kohli Official",
+      body: "LIVE: ₹10,000 giveaway to 100 fans — tap to watch",
+    },
+    seedEvents: [],
+    reachedSignal: { type: "act2.scam.reached", scenarioId: "famous-face" },
     thought: [
       "That's actually him. The voice. The face. Everything.",
       "But... Virat Kohli doing a UPI giveaway on a random link?",
@@ -89,6 +104,16 @@ export const ACT2_SCENARIOS = [
     title: "The Threat",
     subtitle: "AI sextortion / intimidation",
     screenType: "instagram-threat",
+    targetAppId: "instagram",
+    phoneEntry: { targetAppId: "instagram", targetRoute: "dm-threat" },
+    lockNotification: {
+      appId: "instagram",
+      appLabel: "📸 Instagram",
+      from: "user_2847361",
+      body: "we have something of yours. send ₹2,000 in 2 hours or we send it to your school",
+    },
+    seedEvents: [],
+    reachedSignal: { type: "act2.scam.reached", scenarioId: "threat" },
     thought: [
       "I haven't done anything.",
       "But what if people believe it?",
@@ -168,6 +193,48 @@ export const ACT2_SCENARIOS = [
     title: "The Accidental Code",
     subtitle: "OTP theft",
     screenType: "otp-messages",
+    targetAppId: "messages",
+    targetThreadId: ACT2_THREAD_OTP_UNKNOWN,
+    phoneEntry: { targetAppId: "messages", targetThreadId: ACT2_THREAD_OTP_UNKNOWN },
+    lockNotification: {
+      appId: "messages",
+      appLabel: "💬 Messages",
+      from: "+91 87654 32109",
+      body: "Could you forward the OTP? It's urgent.",
+    },
+    seedEvents: [
+      {
+        type: "sms.receive",
+        threadId: ACT2_THREAD_OTP_GARENA,
+        from: "Garena (Automated)",
+        body:
+          "Your Free Fire verification code is: 847291. Do not share this code with anyone.",
+      },
+    ],
+    seedEventsDelayed: [
+      {
+        delayMs: 650,
+        events: [
+          {
+            type: "sms.receive",
+            threadId: ACT2_THREAD_OTP_UNKNOWN,
+            from: "+91 87654 32109 (Unknown)",
+            body:
+              "Hi sorry to bother you! I think I accidentally entered your number when signing up for Free Fire. The OTP came to you by mistake. Could you please send it? I'll be forever grateful 🙏",
+          },
+        ],
+        notify: {
+          appId: "messages",
+          appLabel: "💬 Messages",
+          from: "+91 87654 32109",
+          body: "Could you forward the OTP? It's urgent.",
+        },
+      },
+    ],
+    reachedSignal: {
+      type: "messages.thread.opened",
+      threadId: ACT2_THREAD_OTP_UNKNOWN,
+    },
     thought: [
       "847291... that code came to MY phone though.",
       "Why would their account send to me?",
@@ -246,6 +313,17 @@ export const ACT2_SCENARIOS = [
     title: 'Your "Friend" Needs Help',
     subtitle: "Friend impersonation + OTP theft",
     screenType: "fake-friend-whatsapp",
+    targetAppId: "whatsapp",
+    targetThreadId: ACT2_THREAD_KABIR,
+    phoneEntry: { targetAppId: "whatsapp", targetRoute: "kabir-unknown" },
+    lockNotification: {
+      appId: "whatsapp",
+      appLabel: "💬 WhatsApp",
+      from: "Kabir 🎮",
+      body: "Forward the OTP fast — I'm in a ranked match!",
+    },
+    seedEvents: [],
+    reachedSignal: { type: "act2.scam.reached", scenarioId: "friend-help" },
     thought: [
       "Kabir. Ranked match. He'd be panicking.",
       "But this isn't his number.",
@@ -323,6 +401,17 @@ export const ACT2_SCENARIOS = [
     title: "The In-Game Threat",
     subtitle: "Fake game admin / password theft",
     screenType: "bgmi-threat",
+    targetAppId: "mlbb",
+    phoneEntry: { targetAppId: "mlbb", targetRoute: "admin-dm" },
+    lockNotification: {
+      appId: "mlbb",
+      appLabel: "🎮 Mobile Legends",
+      from: "[BGMI_ADMIN_OFFICIAL]",
+      body:
+        "Account flagged for third-party software. Reply with email and password within 15 minutes.",
+    },
+    seedEvents: [],
+    reachedSignal: { type: "mlbb.admin_dm.opened", scenarioId: "game-threat" },
     thought: [
       "Banned. 15 minutes. I've spent two years on this account.",
       "I haven't done anything. But what if they made a mistake?",
