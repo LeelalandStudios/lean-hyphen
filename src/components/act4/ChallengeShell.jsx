@@ -17,7 +17,7 @@ export default function ChallengeShell({
   showHud = true,
 }) {
   return (
-    <div className="flex h-full min-h-0 flex-col overflow-hidden bg-gradient-to-b from-slate-900 via-slate-950 to-black">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden bg-transparent">
       {showHud && <ScoreHud score={score} shields={shields} closeCalls={closeCalls} />}
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">{children}</div>
     </div>

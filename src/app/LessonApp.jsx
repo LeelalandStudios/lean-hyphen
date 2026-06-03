@@ -176,6 +176,32 @@ export default function LessonApp() {
     setAct3PhaseId(subId);
   }, []);
 
+  useEffect(() => {
+    const bgAudio = new Audio("/backgrounds/Scam Simulation Game (2).mp3");
+    bgAudio.loop = true;
+    bgAudio.volume = 0.20; // Soft volume for ambient background
+
+    const playAudio = () => {
+      bgAudio.play().then(() => {
+        // Success: remove listeners
+        window.removeEventListener("click", playAudio);
+        window.removeEventListener("touchstart", playAudio);
+      }).catch((err) => {
+        console.log("Autoplay blocked, waiting for user interaction.", err);
+      });
+    };
+
+    playAudio();
+    window.addEventListener("click", playAudio);
+    window.addEventListener("touchstart", playAudio);
+
+    return () => {
+      bgAudio.pause();
+      window.removeEventListener("click", playAudio);
+      window.removeEventListener("touchstart", playAudio);
+    };
+  }, []);
+
   return (
     <div className="flex h-screen overflow-hidden bg-slate-950 text-slate-100">
       <aside className="flex h-full w-60 shrink-0 flex-col border-r border-slate-800 bg-slate-900">
@@ -427,8 +453,12 @@ export default function LessonApp() {
         </div>
       </aside>
 
-      <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-slate-950">
-        <div className="min-h-0 flex-1 overflow-hidden">
+      <main
+        className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-cover bg-center bg-no-repeat relative"
+        style={{ backgroundImage: `url('/backgrounds/gemini-2.5-flash-image_remove_the_rectangle_shape-0.jpg')` }}
+      >
+        <div className="absolute inset-0 bg-slate-950/75 pointer-events-none" />
+        <div className="relative z-10 min-h-0 flex-1 overflow-hidden flex flex-col">
           {activeActId === "act1" ? (
             <Act1Hook
               onComplete={() => setActiveActId("act2")}

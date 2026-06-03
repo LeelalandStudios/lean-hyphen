@@ -38,7 +38,7 @@ export default function Act3PriyaExplains({ onComplete, focusPhaseId, onFocusPha
   }, []);
 
   const frameClass =
-    "relative flex h-full min-h-0 flex-col overflow-hidden bg-gradient-to-b from-slate-900 via-slate-950 to-black";
+    "relative flex h-full min-h-0 flex-col overflow-hidden bg-transparent";
 
   if (phase === "intro") {
     return (

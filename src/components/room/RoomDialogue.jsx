@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ROOM_CHARACTERS } from "./roomCharacters.js";
+import { playVoiceoverForText, pauseVoiceover, stopVoiceover } from "../../utils/voiceover.js";
 
 function ForwardedCard({ from, body }) {
   return (
@@ -20,7 +21,7 @@ function ForwardedCard({ from, body }) {
   );
 }
 
-function DialogueBox({ speakerId, line, onNext, isLast, nextLabel }) {
+function DialogueBox({ speakerId, line, displayedText }) {
   const c = ROOM_CHARACTERS[speakerId] ?? ROOM_CHARACTERS.priya;
 
   return (
@@ -37,22 +38,12 @@ function DialogueBox({ speakerId, line, onNext, isLast, nextLabel }) {
           </p>
           {line.type === "forwarded" ? (
             <div className="mt-2">
-              <ForwardedCard from={line.from} body={line.body} />
+              <ForwardedCard from={line.from} body={displayedText} />
             </div>
           ) : (
-            <p className="mt-1 text-base leading-snug text-white">{line.text}</p>
+            <p className="mt-1 text-base leading-snug text-white">{displayedText}</p>
           )}
         </div>
-      </div>
-
-      <div className="mt-4 flex items-center justify-end gap-3">
-        <button
-          type="button"
-          onClick={onNext}
-          className="rounded-full bg-white px-5 py-2 text-xs font-extrabold text-slate-950 hover:bg-slate-100"
-        >
-          {nextLabel ?? (line.type === "cta" ? line.label : "Next →")}
-        </button>
       </div>
     </div>
   );
@@ -60,33 +51,114 @@ function DialogueBox({ speakerId, line, onNext, isLast, nextLabel }) {
 
 /**
  * Visual-novel dialogue strip (same pattern as legacy Act 1 room chat).
- * @param {{
- *   script: { speaker: string, type?: string, text?: string, from?: string, body?: string, label?: string }[],
- *   onComplete: () => void,
- *   finalButtonLabel?: string,
- * }} props
+ * Handles typewriter text generation, screen-tap pausing, and auto-advance timers.
  */
 export default function RoomDialogue({ script, onComplete, finalButtonLabel, header }) {
   const [idx, setIdx] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
+
   const line = script[idx] ?? script[0];
   const isLast = idx >= script.length - 1;
+  const targetText = line.type === "forwarded" ? (line.body || "") : (line.text || "");
+
+  // 1. Reset text state when transitioning to a new line
+  useEffect(() => {
+    setDisplayedText("");
+    setIsComplete(false);
+  }, [idx, targetText]);
+
+  // 2. Typewriter Effect (Pauseable)
+  useEffect(() => {
+    if (isComplete || isPaused || !targetText) {
+      if (!targetText) setIsComplete(true);
+      return;
+    }
+
+    let currentIndex = displayedText.length;
+    const interval = setInterval(() => {
+      currentIndex++;
+      setDisplayedText(targetText.slice(0, currentIndex));
+      if (currentIndex >= targetText.length) {
+        clearInterval(interval);
+        setIsComplete(true);
+      }
+    }, 35);
+
+    return () => clearInterval(interval);
+  }, [targetText, isPaused, isComplete, displayedText.length]);
+
+  // 3. Auto-Advance Timer (Pauseable, skipped on last line)
+  useEffect(() => {
+    if (!isComplete || isPaused || isLast) return;
+
+    // Calculate reading delay dynamically based on text length
+    const baseDelay = 1200;
+    const msPerChar = 25;
+    const readingDelay = Math.max(1500, baseDelay + targetText.length * msPerChar);
+
+    const timeout = setTimeout(() => {
+      setIdx((prev) => prev + 1);
+    }, readingDelay);
+
+    return () => clearTimeout(timeout);
+  }, [isComplete, isPaused, isLast, idx, targetText]);
+
+  // 4. Voiceover Playback Integration
+  useEffect(() => {
+    if (!targetText) return;
+
+    if (!isPaused) {
+      playVoiceoverForText(targetText);
+    } else {
+      pauseVoiceover();
+    }
+
+    return () => {
+      stopVoiceover();
+    };
+  }, [idx, targetText, isPaused]);
+
+  const handleContainerClick = () => {
+    setIsPaused((p) => !p);
+  };
 
   return (
-    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-5 gap-4">
+    <div 
+      onClick={handleContainerClick}
+      className="absolute inset-0 z-20 flex flex-col items-center justify-center p-5 gap-4 cursor-pointer select-none"
+    >
       {header}
+      
       <DialogueBox
         speakerId={line.speaker}
         line={line}
-        isLast={isLast}
-        nextLabel={isLast ? finalButtonLabel : undefined}
-        onNext={() => {
-          if (isLast) {
-            onComplete();
-            return;
-          }
-          setIdx((v) => v + 1);
-        }}
+        displayedText={displayedText}
       />
+
+      {/* Control panel beneath dialogue card */}
+      <div className="w-full max-w-3xl flex justify-center min-h-[44px]">
+        {isLast && isComplete ? (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation(); // Avoid triggering pause toggle
+              onComplete();
+            }}
+            className="rounded-full bg-white px-6 py-2.5 text-xs font-extrabold text-slate-950 hover:bg-slate-100 shadow-xl transition-all duration-200 pointer-events-auto"
+          >
+            {finalButtonLabel ?? (line.type === "cta" ? line.label : "Continue →")}
+          </button>
+        ) : (
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/35 backdrop-blur-sm border border-white/5 pointer-events-none select-none">
+            <span className={`w-1.5 h-1.5 rounded-full ${isPaused ? "bg-amber-500 animate-pulse" : "bg-emerald-500"}`} />
+            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+              {isPaused ? "Paused · Tap to Continue" : "Auto-playing · Tap to Pause"}
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import {
 } from "../content/act1Hook.js";
 import { getChatDefinition } from "../content/chatRegistry.js";
 import HomeScreen from "../screens/HomeScreen.jsx";
+import { playVoiceoverForText, stopVoiceover } from "../utils/voiceover.js";
 
 const ACT1_HOOK_CHAT = getChatDefinition("act1-hook");
 
@@ -70,7 +71,7 @@ function BlackIntrusion({ onComplete, speedRef }) {
   const speed = speedRef.current;
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-black">
+    <div className="relative h-full w-full overflow-hidden bg-transparent">
       {cardVisible && (
         <div
           className="absolute inset-x-0 bottom-[14%] flex justify-center px-6"
@@ -127,7 +128,7 @@ function BlackOpening({ onContinue, speedRef }) {
     <button
       type="button"
       onClick={handleStart}
-      className="flex h-full w-full flex-col items-center justify-center bg-black text-white"
+      className="flex h-full w-full flex-col items-center justify-center bg-transparent text-white"
     >
       <p className="animate-pulse text-xs text-white/40">Tap to continue</p>
     </button>
@@ -231,6 +232,13 @@ function HookPhase({ onComplete, speed }) {
   const [phoneLayout, setPhoneLayout] = useState(() => computeHookPhoneLayout(360, 420));
 
   useEffect(() => {
+    playVoiceoverForText(ACT1_TRANSITION_B);
+    return () => {
+      stopVoiceover();
+    };
+  }, []);
+
+  useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
 
@@ -245,7 +253,7 @@ function HookPhase({ onComplete, speed }) {
   }, []);
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-black px-4 py-4">
+    <div className="flex h-full min-h-0 flex-col bg-transparent px-4 py-4">
       <p
         className="mb-4 w-full max-w-lg shrink-0 self-center text-center text-base leading-relaxed text-white/90 italic sm:text-lg"
         style={{ animation: `fadeIn ${animDuration(0.8, speed)} ease-out both` }}
@@ -337,6 +345,16 @@ export default function Act1Hook({ onComplete, focusPhaseId, onFocusPhaseChange 
     };
   }, []);
 
+  // Voiceover playback for ACT1_TRANSITION_A
+  useEffect(() => {
+    if (phase === "transition" && transitionStep === 0) {
+      playVoiceoverForText(ACT1_TRANSITION_A);
+    }
+    return () => {
+      stopVoiceover();
+    };
+  }, [phase, transitionStep]);
+
   useEffect(() => {
     if (!focusPhaseId) return;
     if (focusPhaseId === "intrusion") {
@@ -402,7 +420,7 @@ export default function Act1Hook({ onComplete, focusPhaseId, onFocusPhaseChange 
             setTransitionStep(1);
             onFocusPhaseChange?.("waiting");
           }}
-          className="flex h-full w-full items-center justify-center bg-black px-8 text-center"
+          className="flex h-full w-full items-center justify-center bg-transparent px-8 text-center"
         >
           <p
             className="max-w-xl text-xl leading-relaxed text-white/90 italic"

@@ -100,7 +100,7 @@ export default function Act2ScenarioExperience({
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-black">
+    <div className="flex h-full min-h-0 flex-col bg-transparent">
       <Act2ProgressHeader
         scenarioNumber={scenario.number}
         scenarioCount={ACT2_SCENARIO_COUNT}

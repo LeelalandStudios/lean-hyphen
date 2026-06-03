@@ -177,7 +177,7 @@ export default function Act4Challenge({
 
   if (stage === "intro") {
     return (
-      <div className="flex h-full min-h-0 flex-col overflow-hidden bg-gradient-to-b from-slate-900 via-slate-950 to-black">
+      <div className="flex h-full min-h-0 flex-col overflow-hidden bg-transparent">
         <div className="flex flex-1 flex-col items-center justify-center px-6 py-10">
           <p className="text-center text-[11px] font-extrabold uppercase tracking-[0.25em] text-amber-400">
             {ACT4_CHALLENGE_INTRO.eyebrow}

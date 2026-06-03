@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { playVoiceoverForText, stopVoiceover } from "../../utils/voiceover.js";
 
 /**
  * Internal thought with delay, thinking dots, and line-by-line reveal.
@@ -7,7 +8,7 @@ import { useEffect, useState } from "react";
 export default function Act2ThoughtBubble({
   lines,
   delayMs = 700,
-  typingSpeedMs = 24,
+  typingSpeedMs = 35,
   onComplete,
 }) {
   const [phase, setPhase] = useState("waiting");
@@ -47,8 +48,17 @@ export default function Act2ThoughtBubble({
       setPhase("done");
       onComplete?.();
     }, 350);
-    return () => window.clearTimeout(t);
   }, [phase, lines, lineIndex, charIndex, typingSpeedMs, onComplete]);
+
+  // Voiceover playback for current thought line
+  useEffect(() => {
+    if (phase === "typing" && lines && lines[lineIndex]) {
+      playVoiceoverForText(lines[lineIndex]);
+    }
+    return () => {
+      stopVoiceover();
+    };
+  }, [phase, lineIndex, lines]);
 
   if (!lines?.length) return null;
 
