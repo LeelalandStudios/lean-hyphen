@@ -14,12 +14,16 @@ export default function Act2ThoughtBubble({
   const [phase, setPhase] = useState("waiting");
   const [lineIndex, setLineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
+  const [dynamicInterval, setDynamicInterval] = useState(typingSpeedMs);
+  const [audioDuration, setAudioDuration] = useState(0);
 
   useEffect(() => {
     if (!lines?.length) return;
     setPhase("waiting");
     setLineIndex(0);
     setCharIndex(0);
+    setDynamicInterval(typingSpeedMs);
+    setAudioDuration(0);
     const t = window.setTimeout(() => setPhase("thinking"), delayMs);
     return () => window.clearTimeout(t);
   }, [lines, delayMs]);
@@ -34,26 +38,38 @@ export default function Act2ThoughtBubble({
     if (phase !== "typing" || !lines?.length) return;
     const line = lines[lineIndex] ?? "";
     if (charIndex < line.length) {
-      const t = window.setTimeout(() => setCharIndex((c) => c + 1), typingSpeedMs);
+      const t = window.setTimeout(() => setCharIndex((c) => c + 1), dynamicInterval);
       return () => window.clearTimeout(t);
     }
+    
+    let readingDelay = 400;
+    if (audioDuration > 0) {
+      const timeSpentTyping = line.length * dynamicInterval;
+      readingDelay = Math.max(400, (audioDuration * 1000) - timeSpentTyping + 400);
+    }
+
     if (lineIndex < lines.length - 1) {
       const t = window.setTimeout(() => {
         setLineIndex((i) => i + 1);
         setCharIndex(0);
-      }, 400);
+        setAudioDuration(0);
+        setDynamicInterval(typingSpeedMs);
+      }, readingDelay);
       return () => window.clearTimeout(t);
     }
     const t = window.setTimeout(() => {
       setPhase("done");
       onComplete?.();
-    }, 350);
-  }, [phase, lines, lineIndex, charIndex, typingSpeedMs, onComplete]);
+    }, readingDelay);
+  }, [phase, lines, lineIndex, charIndex, dynamicInterval, onComplete, audioDuration, typingSpeedMs]);
 
   // Voiceover playback for current thought line
   useEffect(() => {
     if (phase === "typing" && lines && lines[lineIndex]) {
-      playVoiceoverForText(lines[lineIndex]);
+      playVoiceoverForText(lines[lineIndex], (durationSecs) => {
+        setAudioDuration(durationSecs);
+        setDynamicInterval(20);
+      });
     }
     return () => {
       stopVoiceover();
