@@ -58,6 +58,8 @@ export default function RoomDialogue({ script, onComplete, finalButtonLabel, hea
   const [isPaused, setIsPaused] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
   const [isComplete, setIsComplete] = useState(false);
+  const [dynamicInterval, setDynamicInterval] = useState(45);
+  const [audioDuration, setAudioDuration] = useState(0);
 
   const line = script[idx] ?? script[0];
   const isLast = idx >= script.length - 1;
@@ -67,6 +69,8 @@ export default function RoomDialogue({ script, onComplete, finalButtonLabel, hea
   useEffect(() => {
     setDisplayedText("");
     setIsComplete(false);
+    setDynamicInterval(45);
+    setAudioDuration(0);
   }, [idx, targetText]);
 
   // 2. Typewriter Effect (Pauseable)
@@ -84,33 +88,43 @@ export default function RoomDialogue({ script, onComplete, finalButtonLabel, hea
         clearInterval(interval);
         setIsComplete(true);
       }
-    }, 35);
+    }, dynamicInterval);
 
     return () => clearInterval(interval);
-  }, [targetText, isPaused, isComplete, displayedText.length]);
+  }, [targetText, isPaused, isComplete, displayedText.length, dynamicInterval]);
 
   // 3. Auto-Advance Timer (Pauseable, skipped on last line)
   useEffect(() => {
     if (!isComplete || isPaused || isLast) return;
 
-    // Calculate reading delay dynamically based on text length
-    const baseDelay = 1200;
-    const msPerChar = 25;
-    const readingDelay = Math.max(1500, baseDelay + targetText.length * msPerChar);
+    // Use exact audio duration if available, else fallback
+    let readingDelay = 800;
+    if (audioDuration === 0) {
+      const baseDelay = 800;
+      const msPerChar = 18;
+      readingDelay = Math.max(1200, baseDelay + targetText.length * msPerChar);
+    } else {
+      const timeSpentTyping = targetText.length * dynamicInterval;
+      readingDelay = Math.max(800, (audioDuration * 1000) - timeSpentTyping + 800);
+    }
 
     const timeout = setTimeout(() => {
       setIdx((prev) => prev + 1);
     }, readingDelay);
 
     return () => clearTimeout(timeout);
-  }, [isComplete, isPaused, isLast, idx, targetText]);
+  }, [isComplete, isPaused, isLast, idx, targetText, audioDuration, dynamicInterval]);
 
   // 4. Voiceover Playback Integration
   useEffect(() => {
     if (!targetText) return;
 
     if (!isPaused) {
-      playVoiceoverForText(targetText);
+      playVoiceoverForText(targetText, (durationSecs) => {
+        setAudioDuration(durationSecs);
+        // User requested text to appear fast so it can be read while audio plays
+        setDynamicInterval(20);
+      });
     } else {
       pauseVoiceover();
     }

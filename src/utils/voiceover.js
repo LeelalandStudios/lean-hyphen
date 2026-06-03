@@ -42,7 +42,7 @@ export function resumeVoiceover() {
   }
 }
 
-export function playVoiceoverForText(text) {
+export function playVoiceoverForText(text, onDuration) {
   if (!text) {
     stopVoiceover();
     return;
@@ -77,6 +77,13 @@ export function playVoiceoverForText(text) {
     audio.playbackRate = 1.15;
     currentAudio = audio;
     currentText = target;
+    
+    if (onDuration) {
+      audio.addEventListener("loadedmetadata", () => {
+        onDuration(audio.duration / audio.playbackRate);
+      });
+    }
+
     audio.play().catch((err) => {
       console.warn(`Voiceover play blocked or failed for index ${index}`, err);
     });
