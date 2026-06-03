@@ -453,12 +453,6 @@ export default function Act1Hook({ onComplete, focusPhaseId, onFocusPhaseChange 
   return (
     <div className="relative h-full w-full">
       {body}
-      <Act1FastForward
-        speed={speedMultiplier}
-        onSingleClick={bumpSpeed}
-        onDoubleClick={phase === "chat" ? skipToChatEnd : () => {}}
-        onResetSpeed={resetSpeed}
-      />
     </div>
   );
 }
