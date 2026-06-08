@@ -170,6 +170,7 @@ function ScriptedChat(
       <WhatsAppShell
         title={definition.header.title}
         subtitle={buildSubtitle(definition.header)}
+        time={definition.header.currentTime}
         bodyRef={scrollRef}
         onBodyScroll={mode === "scripted" ? handleScroll : undefined}
         footer={definition.settings.inputBar ? <ChatInputBar /> : undefined}

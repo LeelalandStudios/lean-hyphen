@@ -9,7 +9,7 @@ import { appIdFromNotification, renderPhoneApp } from "./appRegistry.jsx";
 
 /**
  * Phone Explorer — the navigable phone OS (lock → home → apps).
- * @param {{ embedded?: boolean, phone?: ReturnType<typeof usePhoneStore>, onUnlocked?: () => void, onNotificationOpened?: (notification: { app?: string, from?: string, body?: string } | null) => void, onScamReached?: () => void, scenarioThreadId?: string, onPhonepeClaim?: () => void, openAppId?: string | null, lockNotification?: { appId?: string, appLabel?: string, from?: string, body?: string } | null, badgeApp?: string, homeApps?: { id: string, emoji: string, label: string }[], phoneSessionKey?: number }} props
+ * @param {{ embedded?: boolean, phone?: ReturnType<typeof usePhoneStore>, onUnlocked?: () => void, onNotificationOpened?: (notification: { app?: string, from?: string, body?: string } | null) => void, onScamReached?: () => void, scenarioThreadId?: string, onPhonepeClaim?: () => void, openAppId?: string | null, lockNotification?: { appId?: string, appLabel?: string, from?: string, body?: string } | null, badgeApp?: string, homeApps?: { id: string, emoji: string, label: string }[], phoneSessionKey?: number, showHomeButton?: boolean }} props
  */
 export default function PhoneExplorer({
   embedded = false,
@@ -24,6 +24,7 @@ export default function PhoneExplorer({
   badgeApp,
   homeApps = EXPLORER_APPS,
   phoneSessionKey = 0,
+  showHomeButton = true,
 }) {
   const internalPhone = usePhoneStore();
   const phone = phoneOverride ?? internalPhone;
@@ -138,7 +139,8 @@ export default function PhoneExplorer({
     openApp(openAppId);
   }, [openAppId, openApp]);
 
-  const showHomeButton = route.screen !== "lock" && route.screen !== "home";
+  const shouldShowHomeButton =
+    showHomeButton && route.screen !== "lock" && route.screen !== "home";
 
   const shell = (
     <PhoneShell>
@@ -161,7 +163,7 @@ export default function PhoneExplorer({
         )}
         {content}
 
-        {showHomeButton && (
+        {shouldShowHomeButton && (
           <button
             type="button"
             onClick={goHome}

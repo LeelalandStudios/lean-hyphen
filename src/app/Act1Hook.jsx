@@ -29,86 +29,177 @@ function animDuration(seconds, speed) {
   return `${seconds / speed}s`;
 }
 
-import { unlockAudio, playScamNotification as playNotificationPing, playTyping as playTypingClick } from "../utils/sound.js";
+import { unlockAudio } from "../utils/sound.js";
 
 function BlackIntrusion({ onComplete, speedRef }) {
-  const [cardVisible, setCardVisible] = useState(false);
-  const [typed, setTyped] = useState("");
-  const [typingDone, setTypingDone] = useState(false);
+  const [progress, setProgress] = useState(0);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
+  const { maxSpreadRatio } = ACT1_INTRUSION;
 
   useEffect(() => {
     let cancelled = false;
-    const { text, delayBeforeNotifyMs, charMs } = ACT1_INTRUSION;
+    let frameId = null;
+    let completionTimerId = null;
+    let intrusionAudio = null;
+    let intrusionSource = null;
+    let intrusionGain = null;
+    const {
+      delayBeforeStartMs,
+      durationMs,
+      holdAfterMs,
+      maxSpreadRatio,
+    } = ACT1_INTRUSION;
 
     async function run() {
-      await scaledWait(delayBeforeNotifyMs, speedRef);
+      await scaledWait(delayBeforeStartMs, speedRef);
       if (cancelled) return;
 
-      playNotificationPing();
-      setCardVisible(true);
-      await scaledWait(450, speedRef);
+      const ctx = await unlockAudio();
       if (cancelled) return;
 
-      for (let i = 0; i < text.length; i++) {
-        if (cancelled) return;
-        if (text[i] !== " ") playTypingClick();
-        setTyped(text.slice(0, i + 1));
-        await scaledWait(charMs, speedRef);
+      intrusionAudio = new Audio("/sfx/act1-typewriter.mp3");
+      intrusionAudio.loop = true;
+      intrusionAudio.volume = 1;
+      intrusionAudio.playbackRate = 0.96;
+      if (ctx && ctx.state === "running") {
+        intrusionSource = ctx.createMediaElementSource(intrusionAudio);
+        intrusionGain = ctx.createGain();
+        intrusionGain.gain.value = 4.2;
+        intrusionSource.connect(intrusionGain);
+        intrusionGain.connect(ctx.destination);
       }
+      void intrusionAudio.play().catch(() => {});
 
-      if (cancelled) return;
-      setTypingDone(true);
+      let phaseElapsed = 0;
+      let lastTime = null;
+
+      const step = (now) => {
+        if (cancelled) return;
+        if (lastTime == null) {
+          lastTime = now;
+        }
+
+        const realDelta = now - lastTime;
+        lastTime = now;
+        const delta = realDelta * speedRef.current;
+        phaseElapsed += delta;
+
+        const nextProgress = Math.min(1, phaseElapsed / durationMs);
+        setProgress(nextProgress);
+
+        if (intrusionAudio) {
+          intrusionAudio.playbackRate = 0.96 + nextProgress * 0.1;
+        }
+        if (intrusionGain) {
+          intrusionGain.gain.value = 4.2 + nextProgress * 0.8;
+        }
+
+        if (nextProgress >= 1) {
+          completionTimerId = window.setTimeout(() => {
+            if (!cancelled) onCompleteRef.current();
+          }, scaledMs(holdAfterMs, speedRef.current));
+          return;
+        }
+
+        frameId = window.requestAnimationFrame(step);
+      };
+
+      frameId = window.requestAnimationFrame(step);
     }
 
     void run();
     return () => {
       cancelled = true;
+      if (frameId) window.cancelAnimationFrame(frameId);
+      if (completionTimerId) window.clearTimeout(completionTimerId);
+      if (intrusionAudio) {
+        intrusionAudio.pause();
+        intrusionAudio.currentTime = 0;
+      }
+      intrusionSource?.disconnect();
+      intrusionGain?.disconnect();
     };
   }, [speedRef]);
 
-  const speed = speedRef.current;
+  const easedProgress = Math.pow(progress, 1.9);
+  const spread = easedProgress * maxSpreadRatio;
+  const edgeY = spread * 100;
+  const edgeX = spread * 100;
+  const smokeOpacity = 0.12 + easedProgress * 0.34;
+  const glowOpacity = 0.05 + easedProgress * 0.16;
+  const blurPx = 24 + easedProgress * 38;
+  const drift = 6 + easedProgress * 10;
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-transparent">
-      {cardVisible && (
-        <div
-          className="absolute inset-x-0 bottom-[14%] flex justify-center px-6"
-          style={{ animation: `slideUp ${animDuration(0.5, speed)} ease-out both` }}
-        >
-          <button
-            type="button"
-            disabled={!typingDone}
-            onClick={() => typingDone && onCompleteRef.current()}
-            className={`w-full max-w-md overflow-hidden rounded-2xl border bg-[#0a0a0a] text-left transition ${typingDone
-                ? "cursor-pointer border-red-500/45 shadow-[0_0_20px_rgba(239,68,68,0.08)] hover:border-red-500/60 active:scale-[0.99]"
-                : "cursor-default border-red-500/35"
-              }`}
-          >
-            <div className="flex gap-3 p-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#5f259f] text-xs font-bold text-white">
-                Pe
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-baseline justify-between gap-2">
-                  <p className="truncate text-sm font-semibold text-white/95">
-                    {ACT1_INTRUSION.from}
-                  </p>
-                  <span className="shrink-0 text-[10px] text-white/40">now</span>
-                </div>
-                <p className="mt-0.5 text-[10px] text-white/25">{ACT1_INTRUSION.subtitle}</p>
-                <p className="mt-2 text-[13px] leading-relaxed text-white/90">
-                  {typed}
-                  {!typingDone && (
-                    <span className="ml-px inline-block h-[1em] w-0.5 animate-pulse bg-white/70 align-middle" />
-                  )}
-                </p>
-              </div>
-            </div>
-          </button>
-        </div>
-      )}
+    <div className="relative h-full w-full overflow-hidden bg-black">
+      <div
+        className="absolute left-0 right-0 top-0"
+        style={{
+          height: `${edgeY}%`,
+          opacity: smokeOpacity,
+          filter: `blur(${blurPx}px)`,
+          background: `linear-gradient(180deg, rgba(170,10,18,0.95) 0%, rgba(120,0,8,0.55) 42%, rgba(60,0,0,0.08) 100%)`,
+          transform: `translateY(${-drift * (1 - progress)}px)`,
+        }}
+      />
+      <div
+        className="absolute bottom-0 left-0 right-0"
+        style={{
+          height: `${edgeY}%`,
+          opacity: smokeOpacity,
+          filter: `blur(${blurPx}px)`,
+          background: `linear-gradient(0deg, rgba(170,10,18,0.95) 0%, rgba(120,0,8,0.55) 42%, rgba(60,0,0,0.08) 100%)`,
+          transform: `translateY(${drift * (1 - progress)}px)`,
+        }}
+      />
+      <div
+        className="absolute left-0"
+        style={{
+          top: `${Math.max(0, edgeY * 0.4)}%`,
+          bottom: `${Math.max(0, edgeY * 0.4)}%`,
+          width: `${edgeX}%`,
+          opacity: smokeOpacity,
+          filter: `blur(${blurPx}px)`,
+          background: `linear-gradient(90deg, rgba(170,10,18,0.92) 0%, rgba(120,0,8,0.52) 42%, rgba(60,0,0,0.08) 100%)`,
+          transform: `translateX(${-drift * (1 - progress)}px)`,
+        }}
+      />
+      <div
+        className="absolute right-0"
+        style={{
+          top: `${Math.max(0, edgeY * 0.4)}%`,
+          bottom: `${Math.max(0, edgeY * 0.4)}%`,
+          width: `${edgeX}%`,
+          opacity: smokeOpacity,
+          filter: `blur(${blurPx}px)`,
+          background: `linear-gradient(270deg, rgba(170,10,18,0.92) 0%, rgba(120,0,8,0.52) 42%, rgba(60,0,0,0.08) 100%)`,
+          transform: `translateX(${drift * (1 - progress)}px)`,
+        }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: `radial-gradient(circle at center, rgba(0,0,0,0) 42%, rgba(120,0,0,${glowOpacity}) 100%)`,
+        }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0) 20%),
+            repeating-linear-gradient(
+              180deg,
+              rgba(255,255,255,0.012) 0px,
+              rgba(255,255,255,0.012) 2px,
+              rgba(0,0,0,0.01) 3px,
+              rgba(0,0,0,0.01) 5px
+            )
+          `,
+          opacity: 0.28 + easedProgress * 0.14,
+          mixBlendMode: "screen",
+        }}
+      />
     </div>
   );
 }
@@ -358,9 +449,11 @@ export default function Act1Hook({ onComplete, focusPhaseId, onFocusPhaseChange 
   useEffect(() => {
     if (!focusPhaseId) return;
     if (focusPhaseId === "intrusion") {
+      setChatFading(false);
       setPhase("black");
       setTransitionStep(0);
     } else if (focusPhaseId === "chat") {
+      setChatFading(false);
       setPhase("chat");
       setTransitionStep(0);
     } else if (focusPhaseId === "quote") {

@@ -1,0 +1,60 @@
+id: act3-outro
+type: whatsapp-chat
+
+header:
+  title: "🔥 Squad Goals"
+  subtitle: "5 members"
+  currentTime: "12:14 AM"
+  showBack: false
+  showMenu: true
+
+settings:
+  autoStart: true
+  autoScroll: true
+  fastForward: false
+  defaultMessageDelayMs: auto
+  defaultTypingMs: 1200
+  defaultTime: "12:14 AM"
+  encryptedNotice: false
+  inputBar: true
+
+senders:
+  Kabir:
+    color: "#e542a3"
+  Priya:
+    color: "#25d366"
+
+beats:
+  - type: message
+    sender: Priya
+    text: "one thing is underneath all of this. every single scenario."
+
+  - type: message
+    sender: Priya
+    text: "urgency."
+
+  - type: message
+    sender: Priya
+    text: '"5 minutes." "87 spots left." "Permanent ban." "Quick bro." "2 hours or we send it."'
+
+  - type: message
+    sender: Priya
+    text: "that feeling of rush — the slight panic in your chest — that is not a reason to act faster. that is the warning. that feeling IS the trick."
+
+  - type: message
+    sender: Priya
+    text: "whenever something feels urgent and you didn't start it — stop completely. that pause is your defence."
+
+  - type: pause
+    durationMs: 1500
+
+  - type: message
+    sender: Kabir
+    text: "i'm sending these scam cards to Rohan — he needs to see this"
+
+  - type: message
+    sender: Priya
+    text: "yeah. send him the whole lesson."
+
+  - type: pause
+    durationMs: 1500

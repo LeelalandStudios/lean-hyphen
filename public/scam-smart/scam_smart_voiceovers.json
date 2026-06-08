@@ -1,188 +1,192 @@
 [
-    {
-        "text": "[serious] What happened to Rohan happens to thousands of students every week. [focused] Now you're going to walk through it yourself — and learn to spot it in real time.",
-        "voice_id": "QTKSa2Iyv0yoxvXY2V8a",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[tense] 5 messages are waiting for you. Some are fine. Some will try to take everything. [challenging] Can you tell the difference?",
-        "voice_id": "QTKSa2Iyv0yoxvXY2V8a",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[shocked] That's actually him. The voice. The face. Everything.",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[skeptical] But... Virat Kohli doing a UPI giveaway on a random link?",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[suspicious] And why does the channel only have 3 videos?",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[confused] I haven't done anything.",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[anxious] But what if people believe it?",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[worried] What if the school sees it?",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[uneasy] They said don't tell anyone.",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[confused] 847291... that code came to MY phone though.",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[suspicious] Why would their account send to me?",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[hesitant] They seem nice. But.",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[realizing] Wait.",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[thinking fast] Kabir. Ranked match. He'd be panicking.",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[suspicious] But this isn't his number.",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[alert] And why would his OTP come to me?",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[realizing] Wait — didn't I just see this same setup?",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[panicked] Banned. 15 minutes. I've spent two years on this account.",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[stressed] I haven't done anything. But what if they made a mistake?",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[afraid] What if I don't reply and I lose everything?",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[doubtful] Wait. Would real Krafton staff ever...?",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[calm] ok. you just walked through 5 scenarios. real ones. messages that get sent to thousands of students every single day.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[reassuring] some of you got all of them. some didn't. both are fine. that's what this is for — so it happens here first.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[confident] now let me show you the patterns underneath all of it. once you see them, you'll never unsee them.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[serious] one thing is underneath all of this. every single scenario.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[emphatic] urgency.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[warning] '5 minutes.' '87 spots left.' 'Permanent ban.' 'Quick bro.' '2 hours or we send it.'",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[grounded] that feeling of rush — the slight panic in your chest — that is not a reason to act faster. that is the warning. [emphatic] that feeling IS the trick.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[firm] whenever something feels urgent and you didn't start it — stop completely. [reassuring] that pause is your defence.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[resolved] i'm sending this to Rohan",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[approving] yeah. send it.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[understanding] ok. I get it now. Rohan didn't do anything wrong. [serious] they built the whole thing to catch him.",
-        "voice_id": "7b9mYhmnp0y2qSH1FnBL",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[affirming] exactly. and now you know the build.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[sheepish] i failed the speed round lol. [admitting] the deepfake one got me",
-        "voice_id": "3gsg3cxXyFLcGIfNbM6C",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[proud] i found all 4 things in the email 👀",
-        "voice_id": "yLldDJzoAIYirDpSiBvy",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[clear] here. the 5 things you keep. forever.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    },
-    {
-        "text": "[confident] Here come the scam cards — tap through each one.",
-        "voice_id": "Pc57DSBXmCXyEAmow7lW",
-        "model_id": "eleven_v3"
-    }
+  {
+    "text": "[serious] What happened to Rohan happens to thousands of students every week. [focused] Now you're going to walk through the scams yourself \u2014 and learn to spot their tricks in real time.",
+    "voice_id": "QTKSa2Iyv0yoxvXY2V8a",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[tense] 5 messages are waiting for you. Some are fine. Some will try to take everything. [challenging] Can you tell the difference?",
+    "voice_id": "QTKSa2Iyv0yoxvXY2V8a",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[shocked] That's actually him. The voice. The face. Everything.",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[skeptical] But... Virat Kohli doing a UPI giveaway on a random link?",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[suspicious] And why does the channel only have 3 videos?",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[confused] I haven't done anything.",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[anxious] But what if people believe it?",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[worried] What if the school sees it?",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[uneasy] They said don't tell anyone.",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[confused] 847291... that code came to MY phone though.",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[suspicious] Why would their account send to me?",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[hesitant] They seem nice. But.",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[realizing] Wait.",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[thinking fast] Kabir. Ranked match. He'd be panicking.",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[suspicious] But this isn't his number.",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[alert] And why would his OTP come to me?",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[realizing] Wait \u2014 didn't I just see this same setup?",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[panicked] Banned. 15 minutes. I've spent two years on this account.",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[stressed] I haven't done anything. But what if they made a mistake?",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[afraid] What if I don't reply and I lose everything?",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[doubtful] Wait. Would real Krafton staff ever...?",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[calm] ok. you just walked through 5 scenarios. real ones. messages that get sent to thousands of students every single day.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[reassuring] some of you got all of them. some didn't. both are fine. that's what this is for \u2014 so it happens here first.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[clear] three big patterns: deepfakes and AI scams, OTP scams, and gaming and social tricks. same tricks, different apps.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[confident] now let me show you the patterns underneath all of it. once you see them, you'll never unsee them.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[serious] one thing is underneath all of this. every single scenario.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[emphatic] urgency.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[warning] '5 minutes.' '87 spots left.' 'Permanent ban.' 'Quick bro.' '2 hours or we send it.'",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[grounded] that feeling of rush \u2014 the slight panic in your chest \u2014 that is not a reason to act faster. that is the warning. [emphatic] that feeling IS the trick.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[firm] whenever something feels urgent and you didn't start it \u2014 stop completely. [reassuring] that pause is your defence.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[resolved] i'm sending these scam cards to Rohan \u2014 he needs to see this",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[approving] yeah. send him the whole lesson.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[understanding] ok. I get it now. Rohan didn't do anything wrong. [serious] they built the whole thing to catch him.",
+    "voice_id": "7b9mYhmnp0y2qSH1FnBL",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[affirming] exactly. and now you know the build.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[sheepish] i failed the speed round lol. [admitting] the deepfake one got me",
+    "voice_id": "3gsg3cxXyFLcGIfNbM6C",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[proud] i found all 4 things in the email \ud83d\udc40",
+    "voice_id": "yLldDJzoAIYirDpSiBvy",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[clear] here. the 5 things you keep. forever.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  },
+  {
+    "text": "[confident] Here come the scam cards \u2014 tap through each one.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3"
+  }
 ]
-

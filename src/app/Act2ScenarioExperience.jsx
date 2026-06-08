@@ -31,7 +31,6 @@ export default function Act2ScenarioExperience({
   const completedScenarioIds = onCompletedScenarioIdsChange ? completedScenarioIdsProp : localCompletedScenarioIds;
   const setCompletedScenarioIds = onCompletedScenarioIdsChange || setLocalCompletedScenarioIds;
   const shieldCount = completedScenarioIds.length;
-  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (!focusScenarioId) return;
@@ -40,7 +39,6 @@ export default function Act2ScenarioExperience({
       setScenarioIndex(idx);
       setSelectedChoiceId(null);
       setOutcomeVisible(false);
-      setAttempt(0);
     }
   }, [focusScenarioId, scenarioIndex]);
 
@@ -64,7 +62,6 @@ export default function Act2ScenarioExperience({
         playIncorrect();
       } else {
         if (!completedScenarioIds.includes(scenario.id)) {
-          setShieldCount((n) => n + 1);
           setCompletedScenarioIds((prev) => [...prev, scenario.id]);
         }
         playCorrect();
@@ -76,7 +73,6 @@ export default function Act2ScenarioExperience({
   const handleRetry = useCallback(() => {
     setSelectedChoiceId(null);
     setOutcomeVisible(false);
-    setAttempt((a) => a + 1);
   }, []);
 
   const handleNext = useCallback(() => {
@@ -88,7 +84,6 @@ export default function Act2ScenarioExperience({
     setScenarioIndex(nextIdx);
     setSelectedChoiceId(null);
     setOutcomeVisible(false);
-    setAttempt(0);
     const nextScenario = ACT2_SCENARIOS[nextIdx];
     if (nextScenario) {
       onFocusScenarioChange?.(nextScenario.id);
@@ -109,7 +104,7 @@ export default function Act2ScenarioExperience({
       />
       <div className="min-h-0 flex-1 overflow-hidden">
         <Act2ScenarioLayout
-          key={`${scenario.id}_${attempt}`}
+          key={scenario.id}
           scenario={scenario}
           selectedChoiceId={selectedChoiceId}
           outcomeVisible={outcomeVisible}

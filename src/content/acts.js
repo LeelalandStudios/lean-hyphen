@@ -35,7 +35,7 @@ export const ACTS = [
     id: "act3",
     number: 3,
     title: "Act 3",
-    subtitle: "Priya explains",
+    subtitle: "Scam Card Sequence",
     summary:
       "Back in the group chat, Priya deals three pattern cards — deepfakes, OTP scams, gaming & social — then names urgency as the trick underneath.",
     beats: [
@@ -51,12 +51,11 @@ export const ACTS = [
     title: "Act 4",
     subtitle: "Scam Detective",
     summary:
-      "Timed challenge round: spot fake links, speed-classify messages, find email red flags, match safe responses, and pass the boss scenario. Score up to 200 and earn shields.",
+      "Timed challenge round: spot fake links, speed-classify messages, find email red flags, and match safe responses. Score up to 200 and earn shields.",
     beats: [
       "SCAM DETECTIVE — level unlocked",
       "Spot the Fake Link · Real or Scam speed round",
       "What's Wrong Here · What Do You Do Now",
-      "Boss level — coordinated giveaway scam",
       "Scoreboard, 5 rules, and final close",
     ],
   },

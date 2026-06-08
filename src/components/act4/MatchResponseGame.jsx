@@ -7,6 +7,30 @@ import {
 import { scoreMatchResponses } from "./answerScoring.js";
 import ChallengeButton from "./ChallengeButton.jsx";
 
+function shuffled(items) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+function createMatchDisplayOrder() {
+  const situations = shuffled(MATCH_SITUATIONS);
+  let responses = shuffled(MATCH_RESPONSES);
+
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    const hasAdjacentAnswer = situations.some(
+      (situation, index) => MATCH_CORRECT[situation.id] === responses[index]?.id
+    );
+    if (!hasAdjacentAnswer) break;
+    responses = shuffled(MATCH_RESPONSES);
+  }
+
+  return { situations, responses };
+}
+
 function PairConnector({ onUnmatch, disabled }) {
   return (
     <button
@@ -26,34 +50,39 @@ function PairConnector({ onUnmatch, disabled }) {
 }
 
 /**
- * @param {{ active: boolean, onComplete: (result: object) => void }} props
+ * @param {{ active: boolean, playSessionKey?: number, onComplete: (result: object) => void }} props
  */
-export default function MatchResponseGame({ active, onComplete }) {
+export default function MatchResponseGame({ active, playSessionKey = 0, onComplete }) {
   const [selectedSituationId, setSelectedSituationId] = useState(null);
   const [matches, setMatches] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [displayOrder, setDisplayOrder] = useState(createMatchDisplayOrder);
 
   useEffect(() => {
     if (active) {
       setSelectedSituationId(null);
       setMatches({});
       setSubmitted(false);
+      setDisplayOrder(createMatchDisplayOrder());
     }
-  }, [active]);
+  }, [active, playSessionKey]);
+
+  const displaySituations = displayOrder.situations;
+  const displayResponses = displayOrder.responses;
 
   const matchedSituationIds = useMemo(
-    () => MATCH_SITUATIONS.filter((s) => matches[s.id]).map((s) => s.id),
-    [matches]
+    () => displaySituations.filter((s) => matches[s.id]).map((s) => s.id),
+    [displaySituations, matches]
   );
 
   const unmatchedSituations = useMemo(
-    () => MATCH_SITUATIONS.filter((s) => !matches[s.id]),
-    [matches]
+    () => displaySituations.filter((s) => !matches[s.id]),
+    [displaySituations, matches]
   );
 
   const unmatchedResponses = useMemo(
-    () => MATCH_RESPONSES.filter((r) => !Object.values(matches).includes(r.id)),
-    [matches]
+    () => displayResponses.filter((r) => !Object.values(matches).includes(r.id)),
+    [displayResponses, matches]
   );
 
   const clearMatch = useCallback(
@@ -118,7 +147,7 @@ export default function MatchResponseGame({ active, onComplete }) {
       roundId: "response-match",
       title: "What Do You Do Now?",
       pointsEarned: scoreMatchResponses(correctCount),
-      maxPoints: 40,
+      maxPoints: 50,
       shieldEarned: correctCount >= 4,
       closeCalls: 5 - correctCount,
       correctCount,
@@ -145,7 +174,7 @@ export default function MatchResponseGame({ active, onComplete }) {
             const sit = MATCH_SITUATIONS.find((s) => s.id === sitId);
             const respId = matches[sitId];
             const resp = MATCH_RESPONSES.find((r) => r.id === respId);
-            const sitNum = MATCH_SITUATIONS.findIndex((s) => s.id === sitId) + 1;
+            const sitNum = displaySituations.findIndex((s) => s.id === sitId) + 1;
             if (!sit || !resp) return null;
 
             return (
@@ -177,7 +206,7 @@ export default function MatchResponseGame({ active, onComplete }) {
               Situations
             </p>
             {unmatchedSituations.map((sit) => {
-              const i = MATCH_SITUATIONS.findIndex((s) => s.id === sit.id);
+              const i = displaySituations.findIndex((s) => s.id === sit.id);
               const selected = selectedSituationId === sit.id;
               return (
                 <button

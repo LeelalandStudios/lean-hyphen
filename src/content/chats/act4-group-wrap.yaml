@@ -1,0 +1,53 @@
+id: act4-group-wrap
+type: whatsapp-chat
+
+header:
+  title: "🔥 Squad Goals"
+  subtitle: "5 members"
+  currentTime: "12:31 AM"
+  showBack: false
+  showMenu: true
+
+settings:
+  autoStart: true
+  autoScroll: true
+  fastForward: false
+  defaultMessageDelayMs: auto
+  defaultTypingMs: 1200
+  defaultTime: "12:31 AM"
+  encryptedNotice: false
+  inputBar: true
+
+senders:
+  Kabir:
+    color: "#e542a3"
+  Aryan:
+    color: "#53bdeb"
+  Diya:
+    color: "#e542a3"
+  Priya:
+    color: "#25d366"
+
+beats:
+  - type: message
+    sender: Kabir
+    text: "ok. I get it now. Rohan didn't do anything wrong. they built the whole thing to catch him."
+
+  - type: message
+    sender: Priya
+    text: "exactly. and now you know the build."
+
+  - type: message
+    sender: Aryan
+    text: "i failed the speed round lol. the deepfake one got me"
+
+  - type: message
+    sender: Diya
+    text: "i found all 4 things in the email 👀"
+
+  - type: message
+    sender: Priya
+    text: "here. the 5 things you keep. forever."
+
+  - type: pause
+    durationMs: 1500

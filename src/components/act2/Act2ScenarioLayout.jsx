@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { playScamNotification } from "../../utils/sound.js";
 import {
   ACT2_LIFECYCLE,
@@ -35,6 +35,11 @@ function scrollToBottom(el) {
   return () => cancelAnimationFrame(frameId);
 }
 
+function jumpToBottom(el) {
+  if (!el) return;
+  el.scrollTop = el.scrollHeight;
+}
+
 export default function Act2ScenarioLayout({
   scenario,
   selectedChoiceId,
@@ -50,15 +55,21 @@ export default function Act2ScenarioLayout({
   const [phoneSessionKey, setPhoneSessionKey] = useState(0);
   const [thoughtComplete, setThoughtComplete] = useState(false);
   const [scamReached, setScamReached] = useState(false);
+  const [retryChoiceOnly, setRetryChoiceOnly] = useState(false);
   const layoutScrollRef = useRef(null);
   const sidePanelRef = useRef(null);
   const thoughtFlowStartedRef = useRef(false);
   const phoneApi = phone.api;
+  const phoneApiRef = useRef(phoneApi);
+  const scenarioRef = useRef(scenario);
+
+  phoneApiRef.current = phoneApi;
+  scenarioRef.current = scenario;
 
   const showAnimatedThought =
     !outcomeVisible && lifecycle === ACT2_LIFECYCLE.THOUGHT_TYPING && !thoughtComplete;
 
-  const showStaticThought = !outcomeVisible && thoughtComplete;
+  const showStaticThought = thoughtComplete;
 
   const showChoices =
     !outcomeVisible && thoughtComplete && lifecycle === ACT2_LIFECYCLE.CHOICES_VISIBLE;
@@ -74,14 +85,17 @@ export default function Act2ScenarioLayout({
   const seedTimersRef = useRef([]);
 
   const resetScenarioFlow = useCallback(() => {
+    const currentPhoneApi = phoneApiRef.current;
+    const currentScenario = scenarioRef.current;
     seedTimersRef.current.forEach((t) => window.clearTimeout(t));
-    seedTimersRef.current = seedAct2ScenarioPhone({ api: phoneApi }, scenario);
+    seedTimersRef.current = seedAct2ScenarioPhone({ api: currentPhoneApi }, currentScenario);
     setLifecycle(ACT2_LIFECYCLE.LOCKED_WAITING);
     setThoughtComplete(false);
     setScamReached(false);
+    setRetryChoiceOnly(false);
     thoughtFlowStartedRef.current = false;
     setPhoneSessionKey((k) => k + 1);
-  }, [phoneApi, scenario]);
+  }, []);
 
   useEffect(() => {
     resetScenarioFlow();
@@ -93,6 +107,7 @@ export default function Act2ScenarioLayout({
   const beginThoughtFlow = useCallback(() => {
     if (outcomeVisible || thoughtFlowStartedRef.current) return;
     thoughtFlowStartedRef.current = true;
+    setRetryChoiceOnly(false);
     setScamReached(true);
     setLifecycle(ACT2_LIFECYCLE.THOUGHT_TYPING);
     requestAnimationFrame(() => {
@@ -126,14 +141,26 @@ export default function Act2ScenarioLayout({
 
   useEffect(() => {
     if (!showChoices) return;
+    if (retryChoiceOnly) return;
     const t = window.setTimeout(() => scrollToBottom(layoutScrollRef.current), 200);
     return () => window.clearTimeout(t);
-  }, [showChoices]);
+  }, [showChoices, retryChoiceOnly]);
+
+  useLayoutEffect(() => {
+    if (!showChoices || !retryChoiceOnly) return;
+    jumpToBottom(layoutScrollRef.current);
+  }, [showChoices, retryChoiceOnly]);
 
   const handleRetry = useCallback(() => {
+    seedTimersRef.current.forEach((t) => window.clearTimeout(t));
+    seedTimersRef.current = [];
+    setLifecycle(ACT2_LIFECYCLE.CHOICES_VISIBLE);
+    setThoughtComplete(true);
+    setScamReached(true);
+    setRetryChoiceOnly(true);
+    thoughtFlowStartedRef.current = true;
     onRetry();
-    resetScenarioFlow();
-  }, [onRetry, resetScenarioFlow]);
+  }, [onRetry]);
 
   const handleNext = useCallback(() => {
     phoneApi.closeChoiceGate();
@@ -170,6 +197,7 @@ export default function Act2ScenarioLayout({
             onUnlocked={handleUnlock}
             onNotificationOpened={openAppFromNotification}
             onScamReached={beginThoughtFlow}
+            showHomeButton={false}
           />
         </div>
 
@@ -191,16 +219,29 @@ export default function Act2ScenarioLayout({
           )}
 
           {showStaticThought && (
-            <aside className="rounded-2xl border border-slate-700/80 bg-slate-800/60 p-4 shadow-lg">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-slate-500">
-                Internal thought
-              </p>
-              <div className="space-y-2 text-sm italic leading-relaxed text-slate-300">
-                {scenario.thought.map((line, i) => (
-                  <p key={i}>&ldquo;{line}&rdquo;</p>
-                ))}
+            <div className={`flex items-end gap-3 pl-1 transition-opacity duration-500 ${outcomeVisible ? 'opacity-50' : 'opacity-100'}`}>
+              <div className="shrink-0 mb-1">
+                <img
+                  src="https://api.dicebear.com/7.x/micah/svg?seed=John&backgroundColor=transparent&baseColor=f9c9b6"
+                  alt="You thinking"
+                  className="h-20 w-auto object-contain drop-shadow-md"
+                  style={{ transform: "scaleX(-1)" }}
+                />
               </div>
-            </aside>
+              <aside className="relative flex-1 rounded-2xl rounded-bl-none border border-slate-700/80 bg-slate-800/60 p-4 shadow-lg">
+                <div className="absolute -left-3 bottom-0 h-5 w-4 overflow-hidden">
+                  <div className="absolute bottom-0 left-2 h-4 w-4 origin-bottom-left -rotate-45 transform border-b border-l border-slate-700/80 bg-slate-800/60" />
+                </div>
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-slate-500">
+                  Internal thought
+                </p>
+                <div className="space-y-2 text-sm italic leading-relaxed text-slate-300">
+                  {scenario.thought.map((line, i) => (
+                    <p key={i}>&ldquo;{line}&rdquo;</p>
+                  ))}
+                </div>
+              </aside>
+            </div>
           )}
 
           {showChoices && (

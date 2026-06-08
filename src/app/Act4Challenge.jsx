@@ -5,7 +5,6 @@ import {
   ACT4_ROUNDS,
 } from "../content/act4Challenge.js";
 import Act4GroupWrap from "../components/act4/Act4GroupWrap.jsx";
-import BossLevelGame from "../components/act4/BossLevelGame.jsx";
 import ChallengeButton from "../components/act4/ChallengeButton.jsx";
 import ChallengeShell from "../components/act4/ChallengeShell.jsx";
 import EmailRedFlagGame from "../components/act4/EmailRedFlagGame.jsx";
@@ -25,7 +24,6 @@ const ROUND_GAMES = {
   "speed-round": RealOrScamSpeedRound,
   "email-red-flags": EmailRedFlagGame,
   "response-match": MatchResponseGame,
-  "boss-level": BossLevelGame,
 };
 
 /**
@@ -52,6 +50,7 @@ export default function Act4Challenge({
   const roundResults = onRoundResultsChange ? roundResultsProp : localRoundResults;
   const setRoundResults = onRoundResultsChange || setLocalRoundResults;
   const [feedbackResult, setFeedbackResult] = useState(null);
+  const [playSessionKey, setPlaySessionKey] = useState(0);
 
   const applyResults = useCallback((results) => {
     const stats = statsFromRoundResults(results);
@@ -77,6 +76,7 @@ export default function Act4Challenge({
     setCloseCalls(0);
     setRoundResults([]);
     setFeedbackResult(null);
+    setPlaySessionKey((key) => key + 1);
     onFocusRoundChange?.(null);
   }, [onFocusRoundChange, setRoundResults]);
 
@@ -88,6 +88,7 @@ export default function Act4Challenge({
     setCloseCalls(0);
     setRoundResults([]);
     setFeedbackResult(null);
+    setPlaySessionKey((key) => key + 1);
     setStage("round");
     onFocusRoundChange?.(ACT4_ROUNDS[0]?.id ?? null);
   }, [onFocusRoundChange, setRoundResults]);
@@ -99,6 +100,7 @@ export default function Act4Challenge({
         setRoundIndex(roundIdx);
         setRoundPhase("rules");
         setFeedbackResult(null);
+        setPlaySessionKey((key) => key + 1);
         setStage("round");
         onFocusRoundChange?.(phaseId);
       } else {
@@ -157,6 +159,7 @@ export default function Act4Challenge({
     });
     setFeedbackResult(null);
     setRoundPhase("rules");
+    setPlaySessionKey((key) => key + 1);
     setStage("round");
   }, [feedbackResult, setRoundResults]);
 
@@ -171,6 +174,7 @@ export default function Act4Challenge({
     setRoundIndex(nextIndex);
     setFeedbackResult(null);
     setRoundPhase("rules");
+    setPlaySessionKey((key) => key + 1);
     setStage("round");
     onFocusRoundChange?.(ACT4_ROUNDS[nextIndex]?.id ?? null);
   }, [roundIndex, onFocusRoundChange]);
@@ -254,14 +258,18 @@ export default function Act4Challenge({
               ? `${currentRound.timerSeconds} seconds`
               : undefined
           }
-          onBegin={() => setRoundPhase("play")}
+          onBegin={() => {
+            setPlaySessionKey((key) => key + 1);
+            setRoundPhase("play");
+          }}
         />
       );
     } else if (GameComponent) {
       body = (
         <GameComponent
-          key={`${currentRound.id}-${roundResults.length}`}
+          key={`${currentRound.id}-${playSessionKey}`}
           active={roundPhase === "play"}
+          playSessionKey={playSessionKey}
           onComplete={handleRoundComplete}
         />
       );

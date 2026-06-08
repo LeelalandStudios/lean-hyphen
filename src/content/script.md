@@ -504,7 +504,7 @@ A — **phonepe.com/cashback/offer22** B — **ph0nepe-rewards.in/claim** C — 
 
 *Why A?* ✦ It uses the real domain: **phonepe.com** ✦ B has a zero instead of 'o' — classic phishing ✦ C adds extra words to a fake domain — another phishing trick
 
-*\+20 points*
+*\+30 points*
 
 ---
 
@@ -584,7 +584,7 @@ You must act within 1 hour or your account will be permanently closed.
 
 🔴 **1\. The email domain** — sbi-custservice.org is not SBI's real domain (onlinesbi.sbi) 🔴 **2\. Spelling mistakes** — "activty", "temporarly" — real banks proofread 🔴 **3\. The link** — sbi-account-unfreeze-now.com is a fake phishing domain 🔴 **4\. The urgency** — "1 hour or permanent closure" — designed to panic you
 
-*Find 4/4: \+40 points* *Find 3/4: \+25 points* *Find 2/4: \+10 points*
+*Find 4/4: \+50 points* *Find 3/4: \+35 points* *Find 2/4: \+15 points*
 
 ---
 
@@ -614,44 +614,6 @@ A. Ignore the message. Don't reply. Don't forward. B. Call your friend on their 
 
 *Perfect: \+50 points* *4/5: \+35 points* *3/5: \+20 points*
 
----
-
-#### **🏁 FINAL CHALLENGE — THE BOSS LEVEL**
-
-**"One full scenario. No hints. No second chances. This is the real test."**
-
----
-
-*SCREEN: Late evening. You're studying. Two messages arrive.*
-
-📱 **YouTube** 🔴 LIVE — **MS Dhoni Fans Official** *"Surprise\! Giving ₹8,000 to 200 subscribers RIGHT NOW to celebrate retirement anniversary\!"*
-
-*Immediately after:*
-
-📱 **\+91 94827 10293 (Unknown)** Bro did you see this Dhoni giveaway?? I already registered and it's asking for a friend referral — use my link and we BOTH get extra. hurry only 12 spots → dhoni-fan-gift.in/refer
-
-**Internal thought:**
-
-*"Two messages at once.* *A 'friend' I don't recognise pushing the same link.* *A countdown.* *Something about this feels coordinated."*
-
----
-
-**Write your answer** *(open text field — 2 sentences):*
-
-*"What are the red flags here and what do you do?"*
-
----
-
-**MODEL ANSWER** *(shown after):*
-
-*"This is a coordinated scam — a deepfake celebrity giveaway backed by a fake 'friend' account to create extra pressure and urgency. Red flags: unknown YouTube channel, external link, unknown number pushing the same link, countdown timer, UPI registration. You ignore both messages, check the real Dhoni channel directly, and report both accounts."*
-
-*If student's answer includes: deepfake / fake channel \+ don't click the link \+ verify directly \= **Full marks***
-
----
-
----
-
 ### **📊 SCOREBOARD & FINAL**
 
 **SCREEN: Results board. Group chat notification pings.**
@@ -662,9 +624,9 @@ A. Ignore the message. Don't reply. Don't forward. B. Call your friend on their 
 
 | Score | Shield Count | Verdict |
 | ----- | ----- | ----- |
-| 150–200 | 🛡️🛡️🛡️🛡️🛡️ | **Scam Proof** — They won't get through you. |
-| 100–149 | 🛡️🛡️🛡️🛡️ | **Sharp Eyes** — You caught most of it. Find the one that slipped and lock it down. |
-| 60–99 | 🛡️🛡️🛡️ | **Getting Wired** — The patterns are starting to click. One more round and nothing gets past you. |
+| 150–200 | 🛡️🛡️🛡️🛡️ | **Scam Proof** — They won't get through you. |
+| 100–149 | 🛡️🛡️🛡️ | **Sharp Eyes** — You caught most of it. Find the one that slipped and lock it down. |
+| 60–99 | 🛡️🛡️ | **Getting Wired** — The patterns are starting to click. One more round and nothing gets past you. |
 | Below 60 | 🛡️ | **Not Yet — But That's the Point** — This is exactly why you play here first, before it's real. Go again. |
 
 ---
@@ -716,4 +678,3 @@ Tell a parent or trusted adult **immediately** — not tomorrow, now. Don't dele
 ---
 
 **\[Play again\] \[Share with a friend\] \[Tell someone who needs this\]**
-

@@ -1,10 +1,8 @@
 let sharedCtx = null;
-let bossOsc1 = null;
-let bossOsc2 = null;
-let bossGain = null;
 
 let finalTimerId = null;
 let finalGainNode = null;
+let livestreamPromoTimerId = null;
 
 function getContext() {
   if (typeof window === "undefined") return null;
@@ -161,6 +159,70 @@ export function playTyping() {
 
     noiseSource.start(t);
     noiseSource.stop(t + noiseLength + 0.002);
+  });
+}
+
+// Heavier mechanical keyboard thock used for the Act 1 intrusion beat.
+export function playMechanicalTyping() {
+  withAudio((ctx) => {
+    const t = ctx.currentTime;
+
+    const bodyOsc = ctx.createOscillator();
+    const bodyGain = ctx.createGain();
+    bodyOsc.type = "triangle";
+    const basePitch = 210 + Math.random() * 40;
+    bodyOsc.frequency.setValueAtTime(basePitch, t);
+    bodyOsc.frequency.exponentialRampToValueAtTime(82, t + 0.04);
+    bodyGain.gain.setValueAtTime(0.0001, t);
+    bodyGain.gain.exponentialRampToValueAtTime(0.95, t + 0.003);
+    bodyGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+    bodyOsc.connect(bodyGain);
+    bodyGain.connect(ctx.destination);
+    bodyOsc.start(t);
+    bodyOsc.stop(t + 0.07);
+
+    const strikeOsc = ctx.createOscillator();
+    const strikeGain = ctx.createGain();
+    strikeOsc.type = "square";
+    strikeOsc.frequency.setValueAtTime(1180 + Math.random() * 160, t);
+    strikeOsc.frequency.exponentialRampToValueAtTime(180, t + 0.014);
+    strikeGain.gain.setValueAtTime(0.0001, t);
+    strikeGain.gain.exponentialRampToValueAtTime(0.22, t + 0.002);
+    strikeGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.018);
+    strikeOsc.connect(strikeGain);
+    strikeGain.connect(ctx.destination);
+    strikeOsc.start(t);
+    strikeOsc.stop(t + 0.022);
+
+    const noiseLength = 0.022;
+    const bufferSize = Math.max(1, Math.floor(ctx.sampleRate * noiseLength));
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+    }
+    const noiseSource = ctx.createBufferSource();
+    noiseSource.buffer = buffer;
+
+    const highpass = ctx.createBiquadFilter();
+    highpass.type = "highpass";
+    highpass.frequency.setValueAtTime(1350, t);
+
+    const lowpass = ctx.createBiquadFilter();
+    lowpass.type = "lowpass";
+    lowpass.frequency.setValueAtTime(4200, t);
+
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.3, t);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, t + noiseLength);
+
+    noiseSource.connect(highpass);
+    highpass.connect(lowpass);
+    lowpass.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
+
+    noiseSource.start(t);
+    noiseSource.stop(t + noiseLength + 0.004);
   });
 }
 
@@ -438,59 +500,71 @@ export function playScorePerfect() {
   });
 }
 
-export function startBossAmbient() {
-  const ctx = getContext();
-  if (!ctx || ctx.state !== "running") return;
+function pulseLivestreamPromo(ctx, startTime) {
+  const duration = 1.4;
 
-  try {
-    stopBossAmbient();
-
-    const t = ctx.currentTime;
-    bossOsc1 = ctx.createOscillator();
-    bossOsc2 = ctx.createOscillator();
-    bossGain = ctx.createGain();
-    const filter = ctx.createBiquadFilter();
-
-    bossOsc1.type = "sawtooth";
-    bossOsc1.frequency.setValueAtTime(55, t);
-
-    bossOsc2.type = "triangle";
-    bossOsc2.frequency.setValueAtTime(55.6, t);
-
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(130, t);
-
-    bossGain.gain.setValueAtTime(0.0001, t);
-    bossGain.gain.linearRampToValueAtTime(0.18, t + 2.0);
-
-    bossOsc1.connect(filter);
-    bossOsc2.connect(filter);
-    filter.connect(bossGain);
-    bossGain.connect(ctx.destination);
-
-    bossOsc1.start(t);
-    bossOsc2.start(t);
-  } catch (e) {
-    console.error("Audio playback error", e);
+  const bufferSize = Math.floor(ctx.sampleRate * duration);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i += 1) {
+    data[i] = Math.random() * 2 - 1;
   }
+
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const filter = ctx.createBiquadFilter();
+  filter.type = "bandpass";
+  filter.frequency.setValueAtTime(880, startTime);
+  filter.Q.setValueAtTime(1.1, startTime);
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0.0001, startTime);
+  noiseGain.gain.linearRampToValueAtTime(0.06, startTime + 0.08);
+  noiseGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+  noise.connect(filter);
+  filter.connect(noiseGain);
+  noiseGain.connect(ctx.destination);
+  noise.start(startTime);
+  noise.stop(startTime + duration);
+
+  const formants = [
+    { freq: 180, type: "sawtooth", gain: 0.028 },
+    { freq: 340, type: "triangle", gain: 0.018 },
+    { freq: 520, type: "sine", gain: 0.012 },
+  ];
+
+  formants.forEach(({ freq, type, gain: peak }) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, startTime);
+    osc.frequency.linearRampToValueAtTime(freq * 1.08, startTime + 0.35);
+    osc.frequency.linearRampToValueAtTime(freq * 0.92, startTime + duration);
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.linearRampToValueAtTime(peak, startTime + 0.06);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(startTime);
+    osc.stop(startTime + duration);
+  });
 }
 
-export function stopBossAmbient() {
-  try {
-    if (bossOsc1) {
-      bossOsc1.stop();
-      bossOsc1 = null;
-    }
-    if (bossOsc2) {
-      bossOsc2.stop();
-      bossOsc2 = null;
-    }
-    if (bossGain) {
-      bossGain.disconnect();
-      bossGain = null;
-    }
-  } catch (e) {
-    /* ignore */
+/** Loop a generic promo voice bed while the deepfake livestream is visible. */
+export function startLivestreamPromoLoop() {
+  stopLivestreamPromoLoop();
+  withAudio((ctx) => {
+    pulseLivestreamPromo(ctx, ctx.currentTime);
+    livestreamPromoTimerId = window.setInterval(() => {
+      if (ctx.state !== "running") return;
+      pulseLivestreamPromo(ctx, ctx.currentTime);
+    }, 1600);
+  });
+}
+
+export function stopLivestreamPromoLoop() {
+  if (livestreamPromoTimerId) {
+    window.clearInterval(livestreamPromoTimerId);
+    livestreamPromoTimerId = null;
   }
 }
 

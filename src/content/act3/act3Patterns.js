@@ -58,12 +58,12 @@ export const ACT3_OUTRO_SCRIPT = [
   {
     speaker: "kabir",
     type: "text",
-    text: "i'm sending this to Rohan",
+    text: "i'm sending these scam cards to Rohan — he needs to see this",
   },
   {
     speaker: "priya",
     type: "text",
-    text: "yeah. send it.",
+    text: "yeah. send him the whole lesson.",
   },
 ];
 

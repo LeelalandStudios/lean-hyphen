@@ -1,12 +1,15 @@
 import Act1Hook from "../app/Act1Hook.jsx";
+import Act1LegacyIntrusion from "../app/Act1LegacyIntrusion.jsx";
 import Act1RoomChat from "../app/Act1RoomChat.jsx";
 import Act2ScenarioExperience from "../app/Act2ScenarioExperience.jsx";
 import Act2PhoneSimulation from "../app/Act2PhoneSimulation.jsx";
 import Act3PriyaExplains from "../app/Act3PriyaExplains.jsx";
+import Act3UrgencyOutroLegacy from "../app/Act3UrgencyOutroLegacy.jsx";
 import Act3KidsInfographic from "../app/Act3KidsInfographic.jsx";
 import Act3CommonScams from "../app/Act3CommonScams.jsx";
 import Act3Infographic from "../app/Act3Infographic.jsx";
 import Act4Challenge from "../app/Act4Challenge.jsx";
+import Act4GroupWrapLegacy from "../app/Act4GroupWrapLegacy.jsx";
 import Act4SpotTheIssue from "../app/Act4SpotTheIssue.jsx";
 import ScriptDrivenGame from "../game/ScriptDrivenGame.jsx";
 import PhoneRuntime from "../game/PhoneRuntime.jsx";
@@ -71,7 +74,7 @@ export const SCENE_SECTIONS = [
       },
       {
         id: "live-act3-priya-explains",
-        label: "Act 3 — Priya explains the patterns",
+        label: "Act 3 — Scam Card Sequence",
         status: "live",
         act: 3,
         summary:
@@ -87,7 +90,7 @@ export const SCENE_SECTIONS = [
         status: "live",
         act: 4,
         summary:
-          "Timed challenge: fake link, speed round, email red flags, response matching, boss level, scoreboard, group wrap, 5 rules, safety help.",
+          "Timed challenge: fake link, speed round, email red flags, response matching, scoreboard, group wrap, 5 rules, safety help.",
         source: "src/app/Act4Challenge.jsx · src/content/act4Challenge.js",
         supersedes: "legacy-act4-spot-the-issue",
         Component: Act4Challenge,
@@ -99,6 +102,17 @@ export const SCENE_SECTIONS = [
     title: "Legacy",
     description: "Preserved earlier implementations. Kept in the index when live scenes are replaced.",
     scenes: [
+      {
+        id: "legacy-act1-phonepe-intrusion",
+        label: "Act 1 — Legacy PhonePe intrusion",
+        status: "legacy",
+        act: 1,
+        summary:
+          "Previous black-screen PhonePe Risk & Verification intrusion, preserved with the newer typewriter audio bed.",
+        source: "src/app/Act1LegacyIntrusion.jsx",
+        supersededBy: "live-act1-hook",
+        Component: Act1LegacyIntrusion,
+      },
       {
         id: "legacy-act1-room-chat",
         label: "Act 1 — Room chat (Free Fire hook)",
@@ -164,6 +178,18 @@ export const SCENE_SECTIONS = [
         Component: Act3Infographic,
       },
       {
+        id: "legacy-act3-urgency-outro-room",
+        label: "Act 3 — Urgency outro (room dialogue)",
+        status: "legacy",
+        act: 3,
+        summary:
+          "Pre-chat urgency debrief shown as RoomDialogue cards instead of a WhatsApp group chat.",
+        source: "src/app/Act3UrgencyOutroLegacy.jsx",
+        supersededBy: "live-act3-priya-explains",
+        Component: Act3UrgencyOutroLegacy,
+        props: { onComplete: noop },
+      },
+      {
         id: "legacy-act4-spot-the-issue",
         label: "Act 4 — Spot the Issue",
         status: "legacy",
@@ -173,6 +199,18 @@ export const SCENE_SECTIONS = [
         source: "src/app/Act4SpotTheIssue.jsx",
         supersededBy: "live-act4-challenge",
         Component: Act4SpotTheIssue,
+      },
+      {
+        id: "legacy-act4-group-wrap-room",
+        label: "Act 4 — Group wrap (room dialogue)",
+        status: "legacy",
+        act: 4,
+        summary:
+          "Pre-chat squad wrap shown in the room-dialogue presentation instead of a WhatsApp group thread.",
+        source: "src/app/Act4GroupWrapLegacy.jsx",
+        supersededBy: "live-act4-challenge",
+        Component: Act4GroupWrapLegacy,
+        props: { onComplete: noop },
       },
       {
         id: "legacy-phone-runtime",

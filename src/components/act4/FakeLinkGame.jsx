@@ -95,8 +95,8 @@ export default function FakeLinkGame({ active, onComplete }) {
       onComplete({
         roundId: "fake-link",
         title: "Spot the Fake Link",
-        pointsEarned: selectedCorrect ? 20 : 0,
-        maxPoints: 20,
+        pointsEarned: selectedCorrect ? 30 : 0,
+        maxPoints: 30,
         shieldEarned: selectedCorrect,
         closeCalls: selectedCorrect ? 0 : 1,
         correctCount: selectedCorrect ? 1 : 0,

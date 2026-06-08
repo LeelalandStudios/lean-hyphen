@@ -3,6 +3,7 @@ import {
   INFOGRAPHIC_SRC,
 } from "../../content/act1Scene2.js";
 import { DEFAULT_SENDER_COLOR } from "../../chat/chatSchema.js";
+import { FRIEND_AVATAR_BY_NAME } from "../../content/friends.js";
 
 /**
  * @param {Record<string, import("../../chat/chatSchema.js").ChatSender>} senders
@@ -31,10 +32,37 @@ function senderColor(senders, sender) {
  * @property {boolean} [receipts]
  */
 
+function Avatar({ sender, color }) {
+  if (!sender) return <div className="mr-2 w-7 shrink-0" />;
+
+  const avatarSrc = FRIEND_AVATAR_BY_NAME[sender];
+  
+  if (avatarSrc) {
+    return (
+      <img
+        src={avatarSrc}
+        alt={sender}
+        className="mr-2 mt-0.5 h-7 w-7 shrink-0 rounded-full object-cover shadow-sm"
+      />
+    );
+  }
+
+  const initial = sender.charAt(0).toUpperCase();
+  return (
+    <div 
+      className="mr-2 mt-0.5 flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full text-[11px] font-bold text-white shadow-sm" 
+      style={{ backgroundColor: color }}
+    >
+      {initial}
+    </div>
+  );
+}
+
 function TextBubble({ msg, senders, receipts }) {
   const color = senderColor(senders, msg.sender ?? "");
   return (
     <div className={`flex ${msg.mine ? "justify-end" : "justify-start"}`}>
+      {!msg.mine && <Avatar sender={msg.sender} color={color} />}
       <div
         className={`max-w-[88%] rounded-lg px-3 py-2 shadow-sm ${
           msg.mine
@@ -65,6 +93,7 @@ function ForwardedBubble({ msg, senders }) {
   const color = senderColor(senders, msg.sender ?? "");
   return (
     <div className={`flex ${msg.mine ? "justify-end" : "justify-start"}`}>
+      {!msg.mine && <Avatar sender={msg.sender} color={color} />}
       <div
         className={`max-w-[88%] rounded-lg px-3 py-2 shadow-sm ${
           msg.mine
@@ -98,6 +127,7 @@ function LinkBubble({ msg, senders }) {
   const color = senderColor(senders, msg.sender ?? "");
   return (
     <div className={`flex ${msg.mine ? "justify-end" : "justify-start"}`}>
+      {!msg.mine && <Avatar sender={msg.sender} color={color} />}
       <div className="max-w-[92%] rounded-lg rounded-tl-none bg-white px-2 py-2 shadow-sm">
         {msg.sender && (
           <p className="mb-1 px-1 text-xs font-semibold" style={{ color }}>
@@ -133,6 +163,7 @@ function InfographicBubble({ msg, senders, highlightSave }) {
 
   return (
     <div className={`flex ${msg.mine ? "justify-end" : "justify-start"}`}>
+      {!msg.mine && <Avatar sender={msg.sender} color={color} />}
       <div className="max-w-[92%] rounded-lg rounded-tl-none bg-white px-2 py-2 shadow-sm">
         {msg.sender && (
           <p className="mb-1 px-1 text-xs font-semibold" style={{ color }}>

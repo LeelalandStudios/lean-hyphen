@@ -218,14 +218,18 @@ export function useChatTimeline(definition, options = {}) {
       }
 
       if (beat.type === "typing" || beat.type === "pause") {
-        setTyping(true);
+        if (beat.type === "typing") {
+          setTyping(true);
+        }
         const duration =
           beat.type === "typing"
             ? beat.durationMs ?? settings.defaultTypingMs
             : beat.durationMs;
         await scaledWait(duration, speedRef);
         if (!mountedRef.current || skipRef.current) return;
-        setTyping(false);
+        if (beat.type === "typing") {
+          setTyping(false);
+        }
         await waitUntilFollowing();
         if (!mountedRef.current || skipRef.current) return;
         beatRunning.current = false;

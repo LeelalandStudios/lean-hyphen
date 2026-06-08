@@ -4,6 +4,7 @@ import StatusBar from "../phone/StatusBar.jsx";
 export default function WhatsAppShell({
   title,
   subtitle,
+  time,
   showSearch = false,
   onBack,
   bodyRef,
@@ -11,9 +12,15 @@ export default function WhatsAppShell({
   footer,
   children,
 }) {
+  let resolvedTime = time;
+  if (!resolvedTime && typeof subtitle === "string") {
+    const timeMatch = subtitle.match(/\b(1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm])\b/i);
+    if (timeMatch) resolvedTime = timeMatch[0];
+  }
+
   return (
     <div className="relative flex h-full flex-col bg-[#e5ddd5] pt-12">
-      <StatusBar dark />
+      <StatusBar dark time={resolvedTime} />
       <header className="shrink-0 bg-[#075e54] shadow-md">
         <div className="flex items-center gap-3 px-4 pb-2 pt-1 text-white">
           {onBack ? (

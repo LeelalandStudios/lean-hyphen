@@ -1,14 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Act3CardTable from "../components/act3/Act3CardTable.jsx";
+import GuideAvatar from "../components/act2/GuideAvatar.jsx";
+import ScriptedChat from "../components/chat/ScriptedChat.jsx";
 import RoomDialogue from "../components/room/RoomDialogue.jsx";
+import { getChatDefinition } from "../content/chatRegistry.js";
 import {
   ACT3_CARDS,
   ACT3_INTRO_SCRIPT,
-  ACT3_OUTRO_SCRIPT,
 } from "../content/act3/act3Patterns.js";
 
+const ACT3_OUTRO_CHAT = getChatDefinition("act3-outro");
+
 /**
- * Act 3 — Priya explains patterns (room dialogue + sequential scam card stacks).
+ * Act 3 — Scam Card Sequence (room dialogue + sequential scam card stacks).
  * @param {{ onComplete?: () => void }} props
  */
 export default function Act3PriyaExplains({ onComplete, focusPhaseId, onFocusPhaseChange }) {
@@ -40,6 +44,12 @@ export default function Act3PriyaExplains({ onComplete, focusPhaseId, onFocusPha
   const frameClass =
     "relative flex h-full min-h-0 flex-col overflow-hidden bg-transparent";
 
+  const guideChip = (
+    <div className="mx-auto w-full max-w-3xl px-4">
+      <GuideAvatar label="Priya guides you" />
+    </div>
+  );
+
   if (phase === "intro") {
     return (
       <div className={frameClass}>
@@ -48,39 +58,44 @@ export default function Act3PriyaExplains({ onComplete, focusPhaseId, onFocusPha
           script={ACT3_INTRO_SCRIPT}
           onComplete={() => setPhase("cards")}
           header={
-            <div className="text-center select-none pb-2">
-              <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white/50">
-                🔥 Squad Goals · 12:14 AM
-              </p>
-              <h2 className="mt-2 text-2xl font-extrabold text-white">
-                Priya explains the patterns
-              </h2>
-            </div>
+            <>
+              {guideChip}
+              <div className="text-center select-none pb-2">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white/50">
+                  🔥 Squad Goals · 12:14 AM
+                </p>
+                <h2 className="mt-2 text-2xl font-extrabold text-white">
+                  Scam Card Sequence
+                </h2>
+              </div>
+            </>
           }
         />
       </div>
     );
   }
 
+  const [chatFading, setChatFading] = useState(false);
+
+  const handleChatComplete = useCallback(() => {
+    setChatFading(true);
+    window.setTimeout(() => {
+      onComplete?.();
+    }, 700);
+  }, [onComplete]);
+
   if (phase === "outro") {
     return (
       <div className={frameClass}>
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-indigo-950/30 via-transparent to-black/60" />
-        <RoomDialogue
-          script={ACT3_OUTRO_SCRIPT}
-          finalButtonLabel="Test yourself →"
-          onComplete={() => onComplete?.()}
-          header={
-            <div className="text-center select-none pb-2">
-              <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white/50">
-                🔥 Squad Goals
-              </p>
-              <h2 className="mt-2 text-2xl font-extrabold text-white">
-                The pattern
-              </h2>
-            </div>
-          }
-        />
+        <div className="relative mx-auto h-full w-full max-w-lg">
+          <ScriptedChat
+            definition={ACT3_OUTRO_CHAT}
+            onComplete={handleChatComplete}
+            fading={chatFading}
+            fadeDurationMs={700}
+          />
+        </div>
       </div>
     );
   }
@@ -106,6 +121,9 @@ export default function Act3PriyaExplains({ onComplete, focusPhaseId, onFocusPha
 
       <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden py-5 pl-5 pr-0">
         <header className="shrink-0 pb-2 text-center">
+          <div className="mx-auto mb-2 w-full max-w-md pr-5 text-left">
+            <GuideAvatar label="Priya deals the cards" />
+          </div>
           <p className="text-[11px] font-extrabold uppercase tracking-wider text-amber-200/80">
             Scam cards
           </p>

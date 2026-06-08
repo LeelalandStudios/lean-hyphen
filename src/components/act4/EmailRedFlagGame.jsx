@@ -12,7 +12,7 @@ function IssueButton({ found, onFound, children }) {
       className={`inline rounded-sm px-0.5 text-left transition-colors duration-150 ${
         found
           ? "cursor-default font-semibold text-red-700"
-          : "cursor-pointer text-[#6b7280] hover:text-[#57534e] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-amber-400/50"
+          : "cursor-pointer text-inherit focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-amber-400/50"
       }`}
     >
       {children}
@@ -51,7 +51,7 @@ export default function EmailRedFlagGame({ active, onComplete }) {
         roundId: "email-red-flags",
         title: "What's Wrong Here?",
         pointsEarned: scoreEmailRedFlags(foundCount),
-        maxPoints: 40,
+        maxPoints: 50,
         shieldEarned: foundCount === 4,
         closeCalls: 4 - foundCount,
         correctCount: foundCount,
@@ -100,7 +100,7 @@ export default function EmailRedFlagGame({ active, onComplete }) {
         Red flags found: {foundCount} / 4
       </div>
       <p className="text-center text-[11px] text-slate-500">
-        Tap anything that looks wrong — subtle hints only until you select.
+        Tap anything that looks wrong in the email.
       </p>
       <div className="mx-auto w-full max-w-lg overflow-hidden rounded-xl border border-slate-600 bg-white text-slate-800 shadow-lg">
         <div className="border-b border-slate-200 bg-slate-50 px-4 py-2 text-xs text-slate-600">

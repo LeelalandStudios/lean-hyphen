@@ -16,19 +16,19 @@ export const ACT4_SCORE_BANDS = [
   {
     minScore: 150,
     title: "Scam Proof",
-    shieldLabel: "5 shields",
+    shieldLabel: "4 shields",
     copy: "They won't get through you.",
   },
   {
     minScore: 100,
     title: "Sharp Eyes",
-    shieldLabel: "4 shields",
+    shieldLabel: "3 shields",
     copy: "You caught most of it. Find the one that slipped and lock it down.",
   },
   {
     minScore: 60,
     title: "Getting Wired",
-    shieldLabel: "3 shields",
+    shieldLabel: "2 shields",
     copy: "The patterns are starting to click. One more round and nothing gets past you.",
   },
   {
@@ -47,7 +47,7 @@ export const ACT4_ROUNDS = [
     prompt:
       "3 phones are on screen. Each has one notification. Tap the phone/notification you trust.",
     timerSeconds: 15,
-    maxPoints: 20,
+    maxPoints: 30,
     type: "fake-link",
   },
   {
@@ -65,7 +65,7 @@ export const ACT4_ROUNDS = [
     title: "What's Wrong Here?",
     prompt: "This email is fake. Find 4 things wrong with it. Tap each one.",
     timerSeconds: 30,
-    maxPoints: 40,
+    maxPoints: 50,
     type: "email-red-flags",
   },
   {
@@ -73,16 +73,8 @@ export const ACT4_ROUNDS = [
     number: 4,
     title: "What Do You Do Now?",
     prompt: "Match each situation to the correct response. Tap a situation, then tap a response.",
-    maxPoints: 40,
+    maxPoints: 50,
     type: "response-match",
-  },
-  {
-    id: "boss-level",
-    number: 5,
-    title: "The Boss Level",
-    prompt: "One full scenario. No hints. No second chances. This is the real test.",
-    maxPoints: 30,
-    type: "boss-level",
   },
 ];
 
@@ -276,75 +268,6 @@ export const MATCH_CORRECT = {
   password: "c",
   prize: "d",
   threat: "e",
-};
-
-export const BOSS_SCENARIO = {
-  setting: "Late evening. You're studying. Two messages arrive.",
-  messages: [
-    {
-      app: "YouTube",
-      sender: "MS Dhoni Fans Official",
-      badge: "LIVE",
-      body: "Surprise! Giving ₹8,000 to 200 subscribers RIGHT NOW to celebrate retirement anniversary!",
-    },
-    {
-      app: "Unknown",
-      sender: "+91 94827 10293",
-      body: "Bro did you see this Dhoni giveaway?? I already registered and it's asking for a friend referral — use my link and we BOTH get extra. hurry only 12 spots → dhoni-fan-gift.in/refer",
-    },
-  ],
-  thought:
-    "Two messages at once. A 'friend' I don't recognise pushing the same link. A countdown. Something about this feels coordinated.",
-  question: "What are the red flags here and what do you do?",
-  modelAnswer:
-    "This is a coordinated scam — a deepfake celebrity giveaway backed by a fake 'friend' account to create extra pressure and urgency. Red flags: unknown YouTube channel, external link, unknown number pushing the same link, countdown timer, UPI registration. You ignore both messages, check the real Dhoni channel directly, and report both accounts.",
-  concepts: [
-    {
-      id: "fake-celebrity",
-      label: "Fake celebrity / deepfake giveaway",
-      keywords: [
-        "deepfake",
-        "fake channel",
-        "fake celebrity",
-        "fake giveaway",
-        "celebrity scam",
-        "dhoni scam",
-        "coordinated",
-        "coordinated scam",
-        "fake youtube",
-        "unknown channel",
-      ],
-    },
-    {
-      id: "dont-click",
-      label: "Do not click the link",
-      keywords: [
-        "don't click",
-        "do not click",
-        "not click",
-        "ignore",
-        "avoid link",
-        "don't open",
-        "dont click",
-        "ignore both",
-        "don't register",
-      ],
-    },
-    {
-      id: "verify-report",
-      label: "Verify directly / report",
-      keywords: [
-        "official channel",
-        "verify",
-        "check directly",
-        "real channel",
-        "report",
-        "block",
-        "tell parent",
-        "trusted adult",
-      ],
-    },
-  ],
 };
 
 export const ACT4_GROUP_WRAP_SCRIPT = [

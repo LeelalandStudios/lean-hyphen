@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import { ACT4_FINAL_COPY, ACT4_SHARE_TEXT } from "../../content/act4Challenge.js";
-import ChallengeButton from "./ChallengeButton.jsx";
 
 /**
  * @param {{
@@ -10,6 +9,12 @@ import ChallengeButton from "./ChallengeButton.jsx";
  */
 export default function FinalScreen({ onPlayAgain, onShowRules }) {
   const [shareNote, setShareNote] = useState("");
+  const [rohanLine1, rohanLine2, rohanLine3, rohanLine4, , ...remainingLines] =
+    ACT4_FINAL_COPY.lines;
+  const bodyParagraphs = [
+    [rohanLine1, rohanLine2, rohanLine3, rohanLine4].filter(Boolean).join(" "),
+    ...remainingLines.filter(Boolean),
+  ];
 
   const handleShare = useCallback(async () => {
     if (navigator.share) {
@@ -33,31 +38,54 @@ export default function FinalScreen({ onPlayAgain, onShowRules }) {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto bg-black px-6 py-10">
-      <div className="mx-auto w-full max-w-lg text-center">
-        {ACT4_FINAL_COPY.lines.map((line, i) =>
-          line === "" ? (
-            <div key={i} className="h-4" />
-          ) : (
-            <p key={i} className="text-sm leading-relaxed text-slate-300">
+    <div className="flex flex-1 flex-col justify-center overflow-y-auto bg-black px-6 py-10">
+      <div className="mx-auto w-full max-w-xl text-center">
+        <div className="mx-auto max-w-md space-y-5">
+          {bodyParagraphs.map((line, i) => (
+            <p
+              key={line}
+              className={
+                i === 0
+                  ? "text-base font-semibold leading-relaxed text-white"
+                  : "text-sm leading-7 text-slate-300"
+              }
+            >
               {line}
             </p>
-          )
-        )}
-        <p className="mt-10 text-lg font-bold text-white">{ACT4_FINAL_COPY.headline}</p>
-        <p className="mt-2 text-base font-semibold text-amber-400">{ACT4_FINAL_COPY.subhead}</p>
+          ))}
+        </div>
 
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <ChallengeButton onClick={onPlayAgain}>Play again</ChallengeButton>
-          <ChallengeButton variant="secondary" onClick={handleShare}>
+        <div className="mt-12 border-t border-white/10 pt-8">
+          <p className="text-lg font-bold leading-snug text-white">
+            {ACT4_FINAL_COPY.headline}
+          </p>
+          <p className="mt-2 text-xl font-extrabold leading-tight text-amber-300">
+            {ACT4_FINAL_COPY.subhead}
+          </p>
+        </div>
+
+        <div className="mt-9 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm font-semibold">
+          <button
+            type="button"
+            onClick={onPlayAgain}
+            className="text-amber-300 underline-offset-4 transition hover:text-amber-200 hover:underline"
+          >
+            Play again
+          </button>
+          <button
+            type="button"
+            onClick={handleShare}
+            className="text-slate-300 underline-offset-4 transition hover:text-white hover:underline"
+          >
             Share with a friend
-          </ChallengeButton>
-          <ChallengeButton
-            variant="secondary"
+          </button>
+          <button
+            type="button"
             onClick={() => onShowRules?.()}
+            className="text-slate-300 underline-offset-4 transition hover:text-white hover:underline"
           >
             Tell someone who needs this
-          </ChallengeButton>
+          </button>
         </div>
         {shareNote && (
           <p className="mt-4 text-xs text-slate-500">{shareNote}</p>

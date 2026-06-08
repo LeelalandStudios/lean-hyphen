@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { playVoiceoverForText, stopVoiceover } from "../../utils/voiceover.js";
+import GuideAvatar from "./GuideAvatar.jsx";
 
 /**
  * Internal thought with delay, thinking dots, and line-by-line reveal.
@@ -84,36 +85,53 @@ export default function Act2ThoughtBubble({
   });
 
   return (
-    <aside className="rounded-2xl border border-slate-700/80 bg-slate-800/60 p-4 shadow-lg">
-      <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-slate-500">
-        Internal thought
-      </p>
+    <div className="flex items-end gap-3 pl-1">
+      {/* Player Character Avatar (Transparent, not a circle/icon) */}
+      <div className="shrink-0 mb-1">
+        <img
+          src="https://api.dicebear.com/7.x/micah/svg?seed=John&backgroundColor=transparent&baseColor=f9c9b6"
+          alt="You thinking"
+          className="h-20 w-auto object-contain drop-shadow-md"
+          style={{ transform: "scaleX(-1)" }} // Face the bubble
+        />
+      </div>
 
-      {phase === "thinking" && (
-        <div className="flex items-center gap-1 py-2" aria-hidden>
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="inline-block h-2 w-2 animate-pulse rounded-full bg-slate-400"
-              style={{ animationDelay: `${i * 150}ms` }}
-            />
-          ))}
+      <aside className="relative flex-1 rounded-2xl rounded-bl-none border border-slate-700/80 bg-slate-800/60 p-4 shadow-lg">
+        {/* Thought Bubble Tail */}
+        <div className="absolute -left-3 bottom-0 h-5 w-4 overflow-hidden">
+          <div className="absolute bottom-0 left-2 h-4 w-4 origin-bottom-left -rotate-45 transform border-b border-l border-slate-700/80 bg-slate-800/60" />
         </div>
-      )}
 
-      {(phase === "typing" || phase === "done") && (
-        <div className="space-y-2 text-sm italic leading-relaxed text-slate-300">
-          {visibleLines.map((line, i) => (
-            <p key={i}>
-              &ldquo;{line}
-              {phase === "typing" && i === lineIndex && charIndex < (lines[lineIndex]?.length ?? 0) ? (
-                <span className="ml-0.5 inline-block h-3 w-0.5 animate-pulse bg-slate-400 align-middle" />
-              ) : null}
-              &rdquo;
-            </p>
-          ))}
-        </div>
-      )}
-    </aside>
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-slate-500">
+          Internal thought
+        </p>
+
+        {phase === "thinking" && (
+          <div className="flex items-center gap-1 py-2" aria-hidden>
+            {[0, 1, 2].map((i) => (
+              <span
+                key={i}
+                className="inline-block h-2 w-2 animate-pulse rounded-full bg-slate-400"
+                style={{ animationDelay: `${i * 150}ms` }}
+              />
+            ))}
+          </div>
+        )}
+
+        {(phase === "typing" || phase === "done") && (
+          <div className="space-y-2 text-sm italic leading-relaxed text-slate-300">
+            {visibleLines.map((line, i) => (
+              <p key={i}>
+                &ldquo;{line}
+                {phase === "typing" && i === lineIndex && charIndex < (lines[lineIndex]?.length ?? 0) ? (
+                  <span className="ml-0.5 inline-block h-3 w-0.5 animate-pulse bg-slate-400 align-middle" />
+                ) : null}
+                &rdquo;
+              </p>
+            ))}
+          </div>
+        )}
+      </aside>
+    </div>
   );
 }

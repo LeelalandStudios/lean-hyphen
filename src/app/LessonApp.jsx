@@ -25,9 +25,8 @@ export const ACT4_SUB_SCENES = [
   { id: "speed-round", number: 2, title: "Real or Scam?" },
   { id: "email-red-flags", number: 3, title: "What's Wrong Here?" },
   { id: "response-match", number: 4, title: "What Do You Do Now?" },
-  { id: "boss-level", number: 5, title: "The Boss Level" },
-  { id: "group", number: 6, title: "Squad Goals Wrap up" },
-  { id: "rules", number: 7, title: "What to do if it happens to you" },
+  { id: "group", number: 5, title: "Squad Goals Wrap up" },
+  { id: "rules", number: 6, title: "What to do if it happens to you" },
 ];
 
 function actIdFromSearch() {
