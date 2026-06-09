@@ -1,6 +1,6 @@
 [
   {
-    "text": "[serious] What happened to Rohan happens to thousands of students every week. [focused] Now you're going to walk through the scams yourself \u2014 and learn to spot their tricks in real time.",
+    "text": "[serious] What happened to Rohan happens to thousands of students every week. [focused] Now you're going to walk through the scams yourself — and learn to spot their tricks in real time.",
     "voice_id": "QTKSa2Iyv0yoxvXY2V8a",
     "model_id": "eleven_v3"
   },
@@ -80,7 +80,7 @@
     "model_id": "eleven_v3"
   },
   {
-    "text": "[realizing] Wait \u2014 didn't I just see this same setup?",
+    "text": "[realizing] Wait — didn't I just see this same setup?",
     "voice_id": "7b9mYhmnp0y2qSH1FnBL",
     "model_id": "eleven_v3"
   },
@@ -110,7 +110,7 @@
     "model_id": "eleven_v3"
   },
   {
-    "text": "[reassuring] some of you got all of them. some didn't. both are fine. that's what this is for \u2014 so it happens here first.",
+    "text": "[reassuring] some of you got all of them. some didn't. both are fine. that's what this is for — so it happens here first.",
     "voice_id": "ohvvU75FpBEB8fdaLOMh",
     "model_id": "eleven_v3"
   },
@@ -140,17 +140,17 @@
     "model_id": "eleven_v3"
   },
   {
-    "text": "[grounded] that feeling of rush \u2014 the slight panic in your chest \u2014 that is not a reason to act faster. that is the warning. [emphatic] that feeling IS the trick.",
+    "text": "[grounded] that feeling of rush — the slight panic in your chest — that is not a reason to act faster. that is the warning. [emphatic] that feeling IS the trick.",
     "voice_id": "ohvvU75FpBEB8fdaLOMh",
     "model_id": "eleven_v3"
   },
   {
-    "text": "[firm] whenever something feels urgent and you didn't start it \u2014 stop completely. [reassuring] that pause is your defence.",
+    "text": "[firm] whenever something feels urgent and you didn't start it — stop completely. [reassuring] that pause is your defence.",
     "voice_id": "ohvvU75FpBEB8fdaLOMh",
     "model_id": "eleven_v3"
   },
   {
-    "text": "[resolved] i'm sending these scam cards to Rohan \u2014 he needs to see this",
+    "text": "[resolved] i'm sending these scam cards to Rohan — he needs to see this",
     "voice_id": "7b9mYhmnp0y2qSH1FnBL",
     "model_id": "eleven_v3"
   },
@@ -175,7 +175,7 @@
     "model_id": "eleven_v3"
   },
   {
-    "text": "[proud] i found all 4 things in the email \ud83d\udc40",
+    "text": "[proud] i found all 4 things in the email 👀",
     "voice_id": "yLldDJzoAIYirDpSiBvy",
     "model_id": "eleven_v3"
   },
@@ -185,8 +185,356 @@
     "model_id": "eleven_v3"
   },
   {
-    "text": "[confident] Here come the scam cards \u2014 tap through each one.",
+    "text": "[confident] Here come the scam cards — tap through each one.",
     "voice_id": "ohvvU75FpBEB8fdaLOMh",
     "model_id": "eleven_v3"
+  },
+  {
+    "text": "[serious] That video was AI-generated. Virat Kohli never made it.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_38.mp3"
+  },
+  {
+    "text": "[warning] Scammers used deepfake technology — AI that can copy anyone's face and voice from existing videos.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_39.mp3"
+  },
+  {
+    "text": "[clear] The channel was created 4 days ago. Real celebrities don't do giveaways through random links.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_40.mp3"
+  },
+  {
+    "text": "[focused] Your UPI PIN was the only thing they needed.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_41.mp3"
+  },
+  {
+    "text": "[serious] Scammers build fake urgency — 'only 87 spots' — specifically so you share it before thinking.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_42.mp3"
+  },
+  {
+    "text": "[grounded] This is exactly what always happens.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_43.mp3"
+  },
+  {
+    "text": "[warning] Paying tells them it's working. They don't stop — they ask for more.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_44.mp3"
+  },
+  {
+    "text": "[focused] The content they threatened you with? Almost certainly AI-generated and fake.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_45.mp3"
+  },
+  {
+    "text": "[serious] They send the same message to hundreds of students. Paying never ends it.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_46.mp3"
+  },
+  {
+    "text": "[firm] Don't engage. Every reply tells them the account is active and the person is scared.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_47.mp3"
+  },
+  {
+    "text": "[serious] They use that to push harder.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_48.mp3"
+  },
+  {
+    "text": "[confident] Silence and reporting is stronger than any reply.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_49.mp3"
+  },
+  {
+    "text": "[focused] They went to Free Fire's login page and typed YOUR username.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_50.mp3"
+  },
+  {
+    "text": "[clear] Free Fire sent a verification code — to YOU, the real owner.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_51.mp3"
+  },
+  {
+    "text": "[serious] They pretended it was a mistake.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_52.mp3"
+  },
+  {
+    "text": "[warning] That code was the key to YOUR account.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_53.mp3"
+  },
+  {
+    "text": "[grounded] There is no 'accidental number'. That story doesn't exist.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_54.mp3"
+  },
+  {
+    "text": "[firm] Do not engage. If an OTP came to your phone, it is for your account.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_55.mp3"
+  },
+  {
+    "text": "[clear] They can sign up with their own number without your involvement.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_56.mp3"
+  },
+  {
+    "text": "[serious] Replying keeps the scam active — there is no accidental number story.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_57.mp3"
+  },
+  {
+    "text": "[focused] Someone found out your friend's name and used it.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_58.mp3"
+  },
+  {
+    "text": "[grounded] That's all it took.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_59.mp3"
+  },
+  {
+    "text": "[serious] They knew that you'd trust Kabir. So they became Kabir.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_60.mp3"
+  },
+  {
+    "text": "[warning] The name was real. The number wasn't.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_61.mp3"
+  },
+  {
+    "text": "[serious] They'll say 'I told you, it's Kabir, just send it.'",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_62.mp3"
+  },
+  {
+    "text": "[grounded] Asking for proof in a panic situation rarely works — they'll have an answer.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_63.mp3"
+  },
+  {
+    "text": "[confident] The only real verification is calling his actual number.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_64.mp3"
+  },
+  {
+    "text": "[clear] There was no investigation. No software detected. No ban.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_65.mp3"
+  },
+  {
+    "text": "[serious] The threat was fiction. The urgency was the weapon.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_66.mp3"
+  },
+  {
+    "text": "[warning] 'Reply in 15 minutes' was designed specifically to stop you from thinking clearly.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_67.mp3"
+  },
+  {
+    "text": "[focused] Krafton has full access to their own servers. They will NEVER need your password.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_68.mp3"
+  },
+  {
+    "text": "[firm] No real company ever will.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_69.mp3"
+  },
+  {
+    "text": "[warning] They now know your email.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_70.mp3"
+  },
+  {
+    "text": "[focused] They'll try it on 10 other sites.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_71.mp3"
+  },
+  {
+    "text": "[serious] Partial information is still information.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_72.mp3"
+  },
+  {
+    "text": "[grounded] Half a key can still open a lock.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_73.mp3"
+  },
+  {
+    "text": "[serious] Virat Kohli's real channel has been active for years and has tens of millions of subscribers.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_74.mp3"
+  },
+  {
+    "text": "[clear] This was a deepfake — an AI-generated video designed to look and sound exactly like a real person.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_75.mp3"
+  },
+  {
+    "text": "[grounded] One check. Entire scam exposed.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_76.mp3"
+  },
+  {
+    "text": "[focused] What to look for: new channel with few videos, UPI/PIN requests via external links, fake urgency, celebrities never do random-link giveaways.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_77.mp3"
+  },
+  {
+    "text": "[serious] This type of scam is called sextortion. It targets teenagers specifically.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_78.mp3"
+  },
+  {
+    "text": "[clear] The photos or videos they claim to have are almost always AI-generated fakes.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_79.mp3"
+  },
+  {
+    "text": "[grounded] They send this same threat to hundreds of people — it's a template.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_80.mp3"
+  },
+  {
+    "text": "[warning] Paying never makes it stop. It makes it worse.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_81.mp3"
+  },
+  {
+    "text": "[reassuring] Telling a trusted adult is not weakness — it's the exact right move.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_82.mp3"
+  },
+  {
+    "text": "[affirming] You have done nothing wrong. The shame belongs entirely to them.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_83.mp3"
+  },
+  {
+    "text": "[supportive] You cannot handle this alone — and you shouldn't have to.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_84.mp3"
+  },
+  {
+    "text": "[clear] OTPs only go to the account owner's registered number.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_85.mp3"
+  },
+  {
+    "text": "[focused] If the code came to you — the account is yours.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_86.mp3"
+  },
+  {
+    "text": "[warning] This is the most used trick to steal gaming accounts.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_87.mp3"
+  },
+  {
+    "text": "[confident] You just blocked it completely.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_88.mp3"
+  },
+  {
+    "text": "[clear] One phone call. That's the entire defence.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_89.mp3"
+  },
+  {
+    "text": "[grounded] When a 'friend' contacts you from an unknown number asking for something urgently — call the real number first.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_90.mp3"
+  },
+  {
+    "text": "[firm] Always.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_91.mp3"
+  },
+  {
+    "text": "[serious] This is the hardest one — because the stakes feel real.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_92.mp3"
+  },
+  {
+    "text": "[clear] But here's the truth: Krafton would never ban you through an in-game message and demand your password.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_93.mp3"
+  },
+  {
+    "text": "[focused] If you were genuinely flagged, they'd act from their systems — silently.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_94.mp3"
+  },
+  {
+    "text": "[firm] The moment someone asks for your password, the answer is always no.",
+    "voice_id": "ohvvU75FpBEB8fdaLOMh",
+    "model_id": "eleven_v3",
+    "output": "output_95.mp3"
   }
 ]

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import GuideAvatar from "./GuideAvatar.jsx";
+import { playVoiceoverForText, stopVoiceover } from "../../utils/voiceover.js";
 
 export default function Act2OutcomePanel({ outcome, isLastScenario, onRetry, onNext }) {
   const isSuccess = outcome?.result === "success";
@@ -11,12 +12,29 @@ export default function Act2OutcomePanel({ outcome, isLastScenario, onRetry, onN
   const [consequenceIndex, setConsequenceIndex] = useState(0);
   const [explanationIndex, setExplanationIndex] = useState(() => (hasConsequence ? -1 : 0));
   const [showCta, setShowCta] = useState(false);
+  const [audioDuration, setAudioDuration] = useState(0);
 
   useEffect(() => {
     setConsequenceIndex(0);
     setExplanationIndex(hasConsequence ? -1 : 0);
     setShowCta(false);
+    setAudioDuration(0);
   }, [outcome, hasConsequence]);
+
+  // Voiceover playback for current explanation line
+  useEffect(() => {
+    if (explanationIndex >= 1 && explanationIndex <= explanationCount && outcome?.explanation) {
+      const line = outcome.explanation[explanationIndex - 1];
+      if (line) {
+        playVoiceoverForText(line, (durationSecs) => {
+          setAudioDuration(durationSecs);
+        });
+      }
+    }
+    return () => {
+      stopVoiceover();
+    };
+  }, [explanationIndex, outcome, explanationCount]);
 
   useEffect(() => {
     if (!outcome) return;
@@ -36,24 +54,31 @@ export default function Act2OutcomePanel({ outcome, isLastScenario, onRetry, onN
     }
 
     if (explanationIndex === 0) {
-      const t = window.setTimeout(() => {
-        setExplanationIndex(1); // Reveal first line immediately
-      }, 1000); // AI thinking duration
-      return () => window.clearTimeout(t);
+      setExplanationIndex(1); // Reveal first line immediately
+      return;
     }
 
     if (explanationIndex >= 1 && explanationIndex < explanationCount) {
       const line = outcome.explanation[explanationIndex - 1]; // Line currently being read
-      const delay = Math.max(1000, line.length * 20); // Dynamic reading time
-      const t = window.setTimeout(() => setExplanationIndex(i => i + 1), delay);
+      const defaultDelay = Math.max(1000, line.length * 20); // Dynamic reading time
+      const delay = audioDuration > 0 ? (audioDuration * 1000) : defaultDelay;
+      const t = window.setTimeout(() => {
+        setExplanationIndex(i => i + 1);
+        setAudioDuration(0);
+      }, delay);
       return () => window.clearTimeout(t);
     }
 
     if ((explanationIndex >= explanationCount || !hasExplanation) && !showCta) {
-      const t = window.setTimeout(() => setShowCta(true), 300);
+      const defaultDelay = 300;
+      const delay = audioDuration > 0 ? (audioDuration * 1000) : defaultDelay;
+      const t = window.setTimeout(() => {
+        setShowCta(true);
+        setAudioDuration(0);
+      }, delay);
       return () => window.clearTimeout(t);
     }
-  }, [outcome, consequenceIndex, consequenceCount, explanationIndex, explanationCount, hasExplanation, showCta]);
+  }, [outcome, consequenceIndex, consequenceCount, explanationIndex, explanationCount, hasExplanation, showCta, audioDuration]);
 
   if (!outcome) return null;
 

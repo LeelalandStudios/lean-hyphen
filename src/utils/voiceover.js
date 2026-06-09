@@ -70,8 +70,18 @@ export function playVoiceoverForText(text, onDuration) {
     (item) => normalizeText(item.text) === target
   );
 
+  const VOICE_MAP = {
+    "QTKSa2Iyv0yoxvXY2V8a": "neha",
+    "7b9mYhmnp0y2qSH1FnBL": "bunty",
+    "ohvvU75FpBEB8fdaLOMh": "monika",
+    "3gsg3cxXyFLcGIfNbM6C": "raju",
+    "yLldDJzoAIYirDpSiBvy": "tripti"
+  };
+
   if (index !== -1) {
-    const src = `/scam-smart/output/output_${index}.mp3`;
+    const item = voiceoverData[index];
+    const voiceName = VOICE_MAP[item.voice_id] || "neha";
+    const src = `/audio/voices/${voiceName}/output_${index}.mp3`;
     const audio = new Audio(src);
     audio.volume = 1.0;
     audio.playbackRate = 1.15;
