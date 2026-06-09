@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import StatusBar from "../../phone/StatusBar.jsx";
+import { triggerAct2Choice } from "../../../content/act2ChoiceTrigger.js";
 
 /** Two back-to-back OTP messages (Garena + unknown number). */
-export default function OtpMessagesScreen() {
+export default function OtpMessagesScreen({ phone }) {
   const [showSecond, setShowSecond] = useState(false);
 
   useEffect(() => {
@@ -44,6 +45,25 @@ export default function OtpMessagesScreen() {
           </div>
         )}
       </div>
+
+      {phone && (
+        <div className="shrink-0 flex gap-2 border-t border-slate-200 bg-white p-3">
+          <button
+            type="button"
+            onClick={() => triggerAct2Choice(phone, "send")}
+            className="flex-1 rounded-xl bg-blue-600 px-3 py-2.5 text-xs font-bold text-white"
+          >
+            Forward OTP
+          </button>
+          <button
+            type="button"
+            onClick={() => triggerAct2Choice(phone, "ignore")}
+            className="flex-1 rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-700"
+          >
+            Ignore
+          </button>
+        </div>
+      )}
     </div>
   );
 }

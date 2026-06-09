@@ -49,26 +49,30 @@ export default function Act2ScenarioExperience({
 
   const handleChoose = useCallback(
     (choiceId) => {
-      if (outcomeVisible || !scenario) return;
+      if (outcomeVisible || selectedChoiceId || !scenario) return;
 
       const choice = scenario.choices.find((c) => c.id === choiceId);
       if (!choice) return;
 
       setSelectedChoiceId(choiceId);
-      setOutcomeVisible(true);
 
       if (choice.result === "fail") {
         setCloseCalls((n) => n + 1);
         playIncorrect();
       } else {
+        setOutcomeVisible(true);
         if (!completedScenarioIds.includes(scenario.id)) {
           setCompletedScenarioIds((prev) => [...prev, scenario.id]);
         }
         playCorrect();
       }
     },
-    [outcomeVisible, scenario, completedScenarioIds]
+    [outcomeVisible, selectedChoiceId, scenario, completedScenarioIds]
   );
+
+  const handleConsequenceComplete = useCallback(() => {
+    setOutcomeVisible(true);
+  }, []);
 
   const handleRetry = useCallback(() => {
     setSelectedChoiceId(null);
@@ -111,6 +115,7 @@ export default function Act2ScenarioExperience({
           outcome={outcome}
           isLastScenario={isLastScenario}
           onChoose={handleChoose}
+          onConsequenceComplete={handleConsequenceComplete}
           onRetry={handleRetry}
           onNext={handleNext}
         />

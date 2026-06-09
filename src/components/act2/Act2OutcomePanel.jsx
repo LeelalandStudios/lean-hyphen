@@ -2,22 +2,21 @@ import { useEffect, useState } from "react";
 import GuideAvatar from "./GuideAvatar.jsx";
 
 export default function Act2OutcomePanel({ outcome, isLastScenario, onRetry, onNext }) {
+  const isSuccess = outcome?.result === "success";
+  const hasConsequence = isSuccess && outcome?.consequence?.length > 0;
+  const consequenceCount = hasConsequence ? outcome.consequence.length : 0;
+  const hasExplanation = outcome?.explanation?.length > 0;
+  const explanationCount = hasExplanation ? outcome.explanation.length : 0;
+
   const [consequenceIndex, setConsequenceIndex] = useState(0);
-  const [showAiTyping, setShowAiTyping] = useState(false);
-  const [explanationIndex, setExplanationIndex] = useState(-1);
+  const [explanationIndex, setExplanationIndex] = useState(() => (hasConsequence ? -1 : 0));
   const [showCta, setShowCta] = useState(false);
 
   useEffect(() => {
     setConsequenceIndex(0);
-    setShowAiTyping(false);
-    setExplanationIndex(-1);
+    setExplanationIndex(hasConsequence ? -1 : 0);
     setShowCta(false);
-  }, [outcome]);
-
-  const hasConsequence = outcome?.consequence?.length > 0;
-  const consequenceCount = hasConsequence ? outcome.consequence.length : 0;
-  const hasExplanation = outcome?.explanation?.length > 0;
-  const explanationCount = hasExplanation ? outcome.explanation.length : 0;
+  }, [outcome, hasConsequence]);
 
   useEffect(() => {
     if (!outcome) return;
@@ -31,21 +30,20 @@ export default function Act2OutcomePanel({ outcome, isLastScenario, onRetry, onN
       return () => window.clearTimeout(t);
     }
 
-    if (consequenceIndex === consequenceCount && hasExplanation && !showAiTyping && explanationIndex === -1) {
-      const t = window.setTimeout(() => setShowAiTyping(true), 500);
+    if (consequenceIndex === consequenceCount && hasExplanation && explanationIndex === -1) {
+      const t = window.setTimeout(() => setExplanationIndex(0), 500);
       return () => window.clearTimeout(t);
     }
 
-    if (showAiTyping) {
+    if (explanationIndex === 0) {
       const t = window.setTimeout(() => {
-        setShowAiTyping(false);
-        setExplanationIndex(0);
-      }, 1500); // AI thinking duration
+        setExplanationIndex(1); // Reveal first line immediately
+      }, 1000); // AI thinking duration
       return () => window.clearTimeout(t);
     }
 
-    if (explanationIndex >= 0 && explanationIndex < explanationCount) {
-      const line = outcome.explanation[explanationIndex];
+    if (explanationIndex >= 1 && explanationIndex < explanationCount) {
+      const line = outcome.explanation[explanationIndex - 1]; // Line currently being read
       const delay = Math.max(1000, line.length * 20); // Dynamic reading time
       const t = window.setTimeout(() => setExplanationIndex(i => i + 1), delay);
       return () => window.clearTimeout(t);
@@ -55,11 +53,10 @@ export default function Act2OutcomePanel({ outcome, isLastScenario, onRetry, onN
       const t = window.setTimeout(() => setShowCta(true), 300);
       return () => window.clearTimeout(t);
     }
-  }, [outcome, consequenceIndex, consequenceCount, showAiTyping, explanationIndex, explanationCount, hasExplanation, showCta]);
+  }, [outcome, consequenceIndex, consequenceCount, explanationIndex, explanationCount, hasExplanation, showCta]);
 
   if (!outcome) return null;
 
-  const isSuccess = outcome.result === "success";
   const accent = isSuccess
     ? "border-emerald-500/50 bg-emerald-950/30"
     : "border-red-500/40 bg-red-950/20";
@@ -71,7 +68,9 @@ export default function Act2OutcomePanel({ outcome, isLastScenario, onRetry, onN
       role="region"
       aria-label={outcome.title}
     >
-      <h3 className={`mb-3 text-base font-bold ${titleColor}`}>{outcome.title}</h3>
+      {isSuccess && (
+        <h3 className={`mb-3 text-base font-bold ${titleColor}`}>{outcome.title}</h3>
+      )}
 
       {hasConsequence && (
         <ul className="mb-4 space-y-2 text-sm text-slate-200">
@@ -107,11 +106,11 @@ export default function Act2OutcomePanel({ outcome, isLastScenario, onRetry, onN
         </ul>
       )}
 
-      {(showAiTyping || explanationIndex >= 0) && (
-        <div className="mt-4 border-t border-slate-700/50 pt-4">
+      {explanationIndex >= 0 && (
+        <div className={isSuccess ? "mt-4 border-t border-slate-700/50 pt-4" : ""}>
           <GuideAvatar label={isSuccess ? "Priya breaks it down" : "What went wrong"} />
           
-          {showAiTyping && (
+          {explanationIndex === 0 && (
             <div className="mt-2 flex w-16 items-center justify-center gap-1 rounded-full bg-slate-800 px-3 py-2">
               {[0, 1, 2].map((i) => (
                 <span
@@ -123,10 +122,10 @@ export default function Act2OutcomePanel({ outcome, isLastScenario, onRetry, onN
             </div>
           )}
 
-          {explanationIndex >= 0 && (
+          {explanationIndex >= 1 && (
             <div className="mt-3 space-y-2 text-sm leading-relaxed text-slate-300">
               {outcome.explanation.slice(0, explanationIndex).map((line, i) => (
-                <p key={i} className="animate-in fade-in slide-in-from-bottom-2 duration-300">{line}</p>
+                <p key={i} className="animate-explanation-line">{line}</p>
               ))}
             </div>
           )}
@@ -134,13 +133,13 @@ export default function Act2OutcomePanel({ outcome, isLastScenario, onRetry, onN
       )}
 
       {showCta && outcome.reward && (
-        <p className="mt-4 animate-in fade-in slide-in-from-bottom-2 text-sm font-bold text-emerald-400 duration-500">
+        <p className="mt-4 animate-explanation-line text-sm font-bold text-emerald-400">
           {outcome.reward}
         </p>
       )}
 
       {showCta && (
-        <div className="mt-5 animate-in fade-in zoom-in-95 duration-500">
+        <div className="mt-5 animate-explanation-cta">
           {isSuccess ? (
             <button
               type="button"

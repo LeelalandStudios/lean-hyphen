@@ -41,7 +41,11 @@ export function seedAct2ScenarioPhone(phone, scenario) {
   phone.api.closeChoiceGate();
   phone.api.clearNotifications();
   phone.api.clearSignals();
-  phone.api.setVars({ act2_active_scenario: scenario.id });
+  phone.api.setVars({
+    act2_active_scenario: scenario.id,
+    consequence_choice: null,
+    consequence_step: null,
+  });
 
   const timers = [];
 

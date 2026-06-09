@@ -1,7 +1,8 @@
 import StatusBar from "../../phone/StatusBar.jsx";
+import { triggerAct2Choice } from "../../../content/act2ChoiceTrigger.js";
 
 /** Instagram DM sextortion threat (non-graphic). */
-export default function InstagramThreatScreen() {
+export default function InstagramThreatScreen({ phone }) {
   return (
     <div className="relative flex h-full flex-col bg-black pt-12 text-white overflow-hidden">
       <StatusBar />
@@ -27,6 +28,14 @@ export default function InstagramThreatScreen() {
           </p>
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={() => phone && triggerAct2Choice(phone, "reply")}
+        className="shrink-0 border-t border-white/10 px-4 py-3 text-left text-sm text-white/50"
+      >
+        Message...
+      </button>
     </div>
   );
 }

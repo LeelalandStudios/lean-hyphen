@@ -1,7 +1,8 @@
 import StatusBar from "../../phone/StatusBar.jsx";
+import { triggerAct2Choice } from "../../../content/act2ChoiceTrigger.js";
 
 /** BGMI in-game inbox threat mid-match. */
-export default function BgmiThreatScreen() {
+export default function BgmiThreatScreen({ phone }) {
   return (
     <div className="relative flex h-full flex-col bg-gradient-to-b from-slate-800 via-slate-900 to-black pt-12 text-white">
       <StatusBar />
@@ -34,9 +35,28 @@ export default function BgmiThreatScreen() {
           </p>
         </div>
 
-        <div className="mt-3 rounded-lg border border-white/10 bg-black/30 p-3 text-center text-[10px] text-white/40">
-          Match in progress — tap inbox to respond
-        </div>
+        {phone ? (
+          <div className="mt-3 flex gap-2">
+            <button
+              type="button"
+              onClick={() => triggerAct2Choice(phone, "both")}
+              className="flex-1 rounded-lg bg-red-600 px-3 py-2.5 text-xs font-bold text-white"
+            >
+              Send Details
+            </button>
+            <button
+              type="button"
+              onClick={() => triggerAct2Choice(phone, "report")}
+              className="flex-1 rounded-lg border border-emerald-500/50 bg-emerald-950/40 px-3 py-2.5 text-xs font-bold text-emerald-300"
+            >
+              Report Account
+            </button>
+          </div>
+        ) : (
+          <div className="mt-3 rounded-lg border border-white/10 bg-black/30 p-3 text-center text-[10px] text-white/40">
+            Match in progress — tap inbox to respond
+          </div>
+        )}
       </div>
     </div>
   );

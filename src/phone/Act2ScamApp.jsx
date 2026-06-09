@@ -24,7 +24,7 @@ export default function Act2ScamApp({ phone, onBack, screenType, scenarioId, onS
           ‹ Back
         </button>
       )}
-      <Screen scenario={{ id: scenarioId }} />
+      <Screen phone={phone} scenario={{ id: scenarioId }} />
     </div>
   );
 }

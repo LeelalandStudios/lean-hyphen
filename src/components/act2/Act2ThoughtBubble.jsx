@@ -11,12 +11,22 @@ export default function Act2ThoughtBubble({
   delayMs = 700,
   typingSpeedMs = 35,
   onComplete,
+  skipTrigger = 0,
 }) {
   const [phase, setPhase] = useState("waiting");
   const [lineIndex, setLineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [dynamicInterval, setDynamicInterval] = useState(typingSpeedMs);
   const [audioDuration, setAudioDuration] = useState(0);
+
+  useEffect(() => {
+    if (skipTrigger > 0 && phase !== "done") {
+      setPhase("done");
+      setLineIndex(lines.length - 1);
+      setCharIndex(lines[lines.length - 1]?.length ?? 0);
+      onComplete?.();
+    }
+  }, [skipTrigger, lines, onComplete, phase]);
 
   useEffect(() => {
     if (!lines?.length) return;
@@ -27,7 +37,7 @@ export default function Act2ThoughtBubble({
     setAudioDuration(0);
     const t = window.setTimeout(() => setPhase("thinking"), delayMs);
     return () => window.clearTimeout(t);
-  }, [lines, delayMs]);
+  }, [lines, delayMs, typingSpeedMs]);
 
   useEffect(() => {
     if (phase !== "thinking") return;
@@ -77,6 +87,14 @@ export default function Act2ThoughtBubble({
     };
   }, [phase, lineIndex, lines]);
 
+  const handleSkip = () => {
+    if (phase === "done") return;
+    setPhase("done");
+    setLineIndex(lines.length - 1);
+    setCharIndex(lines[lines.length - 1]?.length ?? 0);
+    onComplete?.();
+  };
+
   if (!lines?.length) return null;
 
   const visibleLines = lines.slice(0, lineIndex + 1).map((full, i) => {
@@ -85,7 +103,10 @@ export default function Act2ThoughtBubble({
   });
 
   return (
-    <div className="flex items-end gap-3 pl-1">
+    <div
+      className={`flex items-end gap-3 pl-1 select-none ${phase !== "done" ? "cursor-pointer" : ""}`}
+      onClick={handleSkip}
+    >
       {/* Player Character Avatar (Transparent, not a circle/icon) */}
       <div className="shrink-0 mb-1">
         <img

@@ -47,6 +47,7 @@ export default function Act2ScenarioLayout({
   outcome,
   isLastScenario,
   onChoose,
+  onConsequenceComplete,
   onRetry,
   onNext,
 }) {
@@ -56,6 +57,7 @@ export default function Act2ScenarioLayout({
   const [thoughtComplete, setThoughtComplete] = useState(false);
   const [scamReached, setScamReached] = useState(false);
   const [retryChoiceOnly, setRetryChoiceOnly] = useState(false);
+  const [skipThoughtsTrigger, setSkipThoughtsTrigger] = useState(0);
   const layoutScrollRef = useRef(null);
   const sidePanelRef = useRef(null);
   const thoughtFlowStartedRef = useRef(false);
@@ -93,6 +95,7 @@ export default function Act2ScenarioLayout({
     setThoughtComplete(false);
     setScamReached(false);
     setRetryChoiceOnly(false);
+    setSkipThoughtsTrigger(0);
     thoughtFlowStartedRef.current = false;
     setPhoneSessionKey((k) => k + 1);
   }, []);
@@ -131,6 +134,18 @@ export default function Act2ScenarioLayout({
     setLifecycle(ACT2_LIFECYCLE.CHOICES_VISIBLE);
   }, []);
 
+  const handleSidePanelClick = useCallback(() => {
+    if (showAnimatedThought) {
+      setSkipThoughtsTrigger((prev) => prev + 1);
+    }
+  }, [showAnimatedThought]);
+
+  useEffect(() => {
+    if (selectedChoiceId && !thoughtComplete) {
+      handleThoughtComplete();
+    }
+  }, [selectedChoiceId, thoughtComplete, handleThoughtComplete]);
+
   useEffect(() => {
     if (!outcomeVisible) return;
     const t = window.setTimeout(() => {
@@ -151,16 +166,78 @@ export default function Act2ScenarioLayout({
     jumpToBottom(layoutScrollRef.current);
   }, [showChoices, retryChoiceOnly]);
 
+  const clearConsequenceVars = useCallback(() => {
+    phoneApi.setVars({
+      consequence_choice: null,
+      consequence_step: null,
+      act2_youtube_view: null,
+    });
+  }, [phoneApi]);
+
+  useEffect(() => {
+    if (!selectedChoiceId || outcomeVisible) return;
+    const choice = scenario.choices.find((c) => c.id === selectedChoiceId);
+    if (!choice || choice.result !== "fail") return;
+    phoneApi.setVars({
+      consequence_choice: selectedChoiceId,
+      consequence_step: "start",
+    });
+  }, [selectedChoiceId, outcomeVisible, scenario.choices, phoneApi]);
+
+  useEffect(() => {
+    if (selectedChoiceId === "check") {
+      phoneApi.setVars({ act2_youtube_view: "channel" });
+    } else {
+      phoneApi.setVars({ act2_youtube_view: null });
+    }
+  }, [selectedChoiceId, phoneApi]);
+
+  useEffect(() => {
+    const triggered = phone.state.signals["act2.choice.triggered"];
+    if (!triggered || outcomeVisible || selectedChoiceId) return;
+    if (!scenario.choices.some((c) => c.id === triggered)) return;
+    phoneApi.signal("act2.choice.triggered", "");
+    onChoose(triggered);
+  }, [
+    phone.state.signals,
+    outcomeVisible,
+    selectedChoiceId,
+    scenario.choices,
+    phoneApi,
+    onChoose,
+  ]);
+
+  useEffect(() => {
+    const exited = phone.state.signals["consequence.exit"];
+    if (!exited) return;
+    phoneApi.signal("consequence.exit", "");
+    clearConsequenceVars();
+    onRetry();
+  }, [phone.state.signals, phoneApi, clearConsequenceVars, onRetry]);
+
+  useEffect(() => {
+    const completed = phone.state.signals["consequence.complete"];
+    if (!completed || outcomeVisible) return;
+    phoneApi.signal("consequence.complete", "");
+    onConsequenceComplete?.();
+  }, [
+    phone.state.signals,
+    outcomeVisible,
+    phoneApi,
+    onConsequenceComplete,
+  ]);
+
   const handleRetry = useCallback(() => {
     seedTimersRef.current.forEach((t) => window.clearTimeout(t));
     seedTimersRef.current = [];
+    clearConsequenceVars();
     setLifecycle(ACT2_LIFECYCLE.CHOICES_VISIBLE);
     setThoughtComplete(true);
     setScamReached(true);
     setRetryChoiceOnly(true);
     thoughtFlowStartedRef.current = true;
     onRetry();
-  }, [onRetry]);
+  }, [onRetry, clearConsequenceVars]);
 
   const handleNext = useCallback(() => {
     phoneApi.closeChoiceGate();
@@ -204,6 +281,7 @@ export default function Act2ScenarioLayout({
         <div
           ref={sidePanelRef}
           className="flex w-full min-w-0 max-w-md flex-col gap-3 lg:w-[min(100%,28rem)]"
+          onClick={handleSidePanelClick}
         >
           {!scamReached && !outcomeVisible && (
             <p className="rounded-2xl border border-slate-700/60 bg-slate-800/40 px-4 py-3 text-sm text-slate-400">
@@ -215,6 +293,7 @@ export default function Act2ScenarioLayout({
             <Act2ThoughtBubble
               lines={scenario.thought}
               onComplete={handleThoughtComplete}
+              skipTrigger={skipThoughtsTrigger}
             />
           )}
 

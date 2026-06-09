@@ -10,6 +10,7 @@ export default function WhatsAppShell({
   bodyRef,
   onBodyScroll,
   footer,
+  headerAction,
   children,
 }) {
   let resolvedTime = time;
@@ -41,6 +42,7 @@ export default function WhatsAppShell({
               <p className="truncate text-xs text-white/75">{subtitle}</p>
             )}
           </div>
+          {headerAction}
           <span className="text-lg opacity-90">⋮</span>
         </div>
         {showSearch && (

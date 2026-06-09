@@ -10,6 +10,7 @@ import NewsFeedScreen from "../screens/apps/NewsFeedScreen.jsx";
 import MLBBLobbyScenario5Screen from "../screens/act3/scenario5/MLBBLobbyScenario5Screen.jsx";
 import Act2ScamApp from "./Act2ScamApp.jsx";
 import Act2WhatsAppKabirApp from "./Act2WhatsAppKabirApp.jsx";
+import Act2ConsequenceScreen from "../components/act2/screens/Act2ConsequenceScreen.jsx";
 import { ACT2_SCENARIOS } from "../content/act2Scenarios.js";
 
 /** Active Act 2 scenario when vars.act2_active_scenario is set. */
@@ -31,6 +32,15 @@ export function renderPhoneApp(appId, ctx) {
   } = ctx;
 
   const act2 = activeAct2Scenario(phone);
+
+  if (phone?.state?.vars?.consequence_choice) {
+    return (
+      <Act2ConsequenceScreen
+        phone={phone}
+        onBack={onBack}
+      />
+    );
+  }
 
   if (act2?.targetAppId === appId && act2.screenType) {
     if (appId === "whatsapp" && act2.id === "friend-help") {
